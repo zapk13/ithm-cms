@@ -76,21 +76,16 @@ class NavigationManager {
 
     logout() {
         localStorage.removeItem('demoUser');
-        // Get current base URL and construct proper redirect path
-        const currentUrl = window.location.href;
-        const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
-        
         // Check if we're in a subdirectory and adjust path accordingly
         const currentPath = window.location.pathname;
         if (currentPath.includes('/super-admin/') || currentPath.includes('/admin/') ||
             currentPath.includes('/accounts/') || currentPath.includes('/teacher/') ||
             currentPath.includes('/student/') || currentPath.includes('/auth/')) {
             // We're in a subdirectory, go up one level
-            const parentUrl = baseUrl.substring(0, baseUrl.lastIndexOf('/', baseUrl.length - 2) + 1);
-            window.location.href = parentUrl + 'index.html';
+            window.location.href = '../index.html';
         } else {
             // We're in the root directory
-            window.location.href = baseUrl + 'index.html';
+            window.location.href = 'index.html';
         }
     }
 
@@ -349,24 +344,13 @@ function demoLogin(role) {
         // Show loading
         showNotification('Logging in...', 'info');
         
-        // Get current base URL and construct proper redirect path
-        const currentUrl = window.location.href;
-        const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
-        const redirectUrl = baseUrl + creds.redirect;
-        
-        console.log('Current URL:', currentUrl);
-        console.log('Base URL:', baseUrl);
-        console.log('Redirect URL:', redirectUrl);
-        
         // Redirect to appropriate dashboard
         setTimeout(() => {
             try {
-                window.location.href = redirectUrl;
+                window.location.href = creds.redirect;
             } catch (error) {
                 console.error('Redirect error:', error);
                 showNotification('Redirect failed. Please try again.', 'error');
-                // Fallback: try direct path
-                window.location.href = creds.redirect;
             }
         }, 500);
     }
