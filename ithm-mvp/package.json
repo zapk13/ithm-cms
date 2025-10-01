@@ -1,0 +1,13 @@
+{
+  "name": "ithm-cms-mvp",
+  "version": "1.0.0",
+  "description": "ITHM College Management System MVP",
+  "scripts": {
+    "build-css": "tailwindcss -i ./assets/css/tailwind.css -o ./assets/css/tailwind-built.css --watch",
+    "build-css-prod": "tailwindcss -i ./assets/css/tailwind.css -o ./assets/css/tailwind-built.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0",
+    "@tailwindcss/forms": "^0.5.7"
+  }
+}

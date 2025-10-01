@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - ITHM CMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../assets/css/tailwind-built.css">
+    <script src="../assets/js/demo-data.js"></script>
+    <script src="../assets/js/navigation.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-indigo-600">ITHM CMS</h1>
+                    </div>
+                    <nav class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a href="dashboard.html" class="text-gray-500 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Dashboard</a>
+                        <a href="user-management.html" class="text-indigo-600 border-b-2 border-indigo-600 px-1 pt-1 text-sm font-medium">User Management</a>
+                    </nav>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-600">Welcome, <span class="user-info font-medium">Loading...</span></span>
+                    <span class="text-xs text-gray-500 user-role">Loading...</span>
+                    <button onclick="navigationManager.logout()" class="logout-btn text-sm text-gray-500 hover:text-gray-700">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Page Header -->
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-900">User Management</h1>
+            <p class="text-gray-600">Manage users, roles, and permissions</p>
+        </div>
+
+        <!-- Filters and Search -->
+        <div class="bg-white shadow rounded-lg mb-6">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="form-label">Search Users</label>
+                        <input type="text" class="form-input" placeholder="Search by name, email, or ID">
+                    </div>
+                    <div>
+                        <label class="form-label">Filter by Role</label>
+                        <select class="form-select">
+                            <option>All Roles</option>
+                            <option>Super Admin</option>
+                            <option>Admin</option>
+                            <option>Accounts</option>
+                            <option>Teacher</option>
+                            <option>Student</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Filter by Status</label>
+                        <select class="form-select">
+                            <option>All Status</option>
+                            <option>Active</option>
+                            <option>Inactive</option>
+                            <option>Suspended</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button class="btn btn-primary w-full">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="bg-white shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Users</h3>
+                    <button class="btn btn-primary">Add New User</button>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="table">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="table-header-cell">User</th>
+                                <th class="table-header-cell">Role</th>
+                                <th class="table-header-cell">Campus</th>
+                                <th class="table-header-cell">Status</th>
+                                <th class="table-header-cell">Last Login</th>
+                                <th class="table-header-cell">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-body">
+                            <tr class="table-row">
+                                <td class="table-cell">
+                                    <div class="flex items-center">
+                                        <div class="h-10 w-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-medium">
+                                            MA
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium text-gray-900">Dr. Muhammad Ali Khan</div>
+                                            <div class="text-sm text-gray-500">super@ithm.edu.pk</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="table-cell">
+                                    <span class="status-badge status-active">Super Admin</span>
+                                </td>
+                                <td class="table-cell">All Campuses</td>
+                                <td class="table-cell">
+                                    <span class="status-badge status-active">Active</span>
+                                </td>
+                                <td class="table-cell">March 20, 2024</td>
+                                <td class="table-cell">
+                                    <div class="flex space-x-2">
+                                        <button class="btn btn-sm btn-secondary">Edit</button>
+                                        <button class="btn btn-sm btn-warning">Suspend</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="table-row">
+                                <td class="table-cell">
+                                    <div class="flex items-center">
+                                        <div class="h-10 w-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-medium">
+                                            AH
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium text-gray-900">Prof. Ahmed Hassan</div>
+                                            <div class="text-sm text-gray-500">admin.lahore@ithm.edu.pk</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="table-cell">
+                                    <span class="status-badge status-active">Campus Admin</span>
+                                </td>
+                                <td class="table-cell">Lahore Campus</td>
+                                <td class="table-cell">
+                                    <span class="status-badge status-active">Active</span>
+                                </td>
+                                <td class="table-cell">March 19, 2024</td>
+                                <td class="table-cell">
+                                    <div class="flex space-x-2">
+                                        <button class="btn btn-sm btn-secondary">Edit</button>
+                                        <button class="btn btn-sm btn-warning">Suspend</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="table-row">
+                                <td class="table-cell">
+                                    <div class="flex items-center">
+                                        <div class="h-10 w-10 rounded-full bg-green-500 flex items-center justify-center text-white font-medium">
+                                            FS
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium text-gray-900">Ms. Fatima Sheikh</div>
+                                            <div class="text-sm text-gray-500">accounts.lahore@ithm.edu.pk</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="table-cell">
+                                    <span class="status-badge status-active">Accounts Officer</span>
+                                </td>
+                                <td class="table-cell">Lahore Campus</td>
+                                <td class="table-cell">
+                                    <span class="status-badge status-active">Active</span>
+                                </td>
+                                <td class="table-cell">March 18, 2024</td>
+                                <td class="table-cell">
+                                    <div class="flex space-x-2">
+                                        <button class="btn btn-sm btn-secondary">Edit</button>
+                                        <button class="btn btn-sm btn-warning">Suspend</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="table-row">
+                                <td class="table-cell">
+                                    <div class="flex items-center">
+                                        <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-medium">
+                                            UM
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium text-gray-900">Mr. Usman Malik</div>
+                                            <div class="text-sm text-gray-500">teacher.lahore@ithm.edu.pk</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="table-cell">
+                                    <span class="status-badge status-active">Teacher</span>
+                                </td>
+                                <td class="table-cell">Lahore Campus</td>
+                                <td class="table-cell">
+                                    <span class="status-badge status-active">Active</span>
+                                </td>
+                                <td class="table-cell">March 17, 2024</td>
+                                <td class="table-cell">
+                                    <div class="flex space-x-2">
+                                        <button class="btn btn-sm btn-secondary">Edit</button>
+                                        <button class="btn btn-sm btn-warning">Suspend</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="table-row">
+                                <td class="table-cell">
+                                    <div class="flex items-center">
+                                        <div class="h-10 w-10 rounded-full bg-orange-500 flex items-center justify-center text-white font-medium">
+                                            AK
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium text-gray-900">Ahmed Khan</div>
+                                            <div class="text-sm text-gray-500">student@ithm.edu.pk</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="table-cell">
+                                    <span class="status-badge status-active">Student</span>
+                                </td>
+                                <td class="table-cell">Lahore Campus</td>
+                                <td class="table-cell">
+                                    <span class="status-badge status-active">Active</span>
+                                </td>
+                                <td class="table-cell">March 16, 2024</td>
+                                <td class="table-cell">
+                                    <div class="flex space-x-2">
+                                        <button class="btn btn-sm btn-secondary">Edit</button>
+                                        <button class="btn btn-sm btn-warning">Suspend</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex items-center justify-between mt-6">
+                    <div class="text-sm text-gray-700">
+                        Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of <span class="font-medium">25</span> results
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="btn btn-sm btn-secondary">Previous</button>
+                        <button class="btn btn-sm btn-primary">1</button>
+                        <button class="btn btn-sm btn-secondary">2</button>
+                        <button class="btn btn-sm btn-secondary">3</button>
+                        <button class="btn btn-sm btn-secondary">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize navigation
+        const navigationManager = new NavigationManager();
+    </script>
+</body>
+</html>

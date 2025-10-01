@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - ITHM CMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../assets/css/tailwind-built.css">
+    <script src="../assets/js/demo-data.js"></script>
+    <script src="../assets/js/navigation.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center py-12">
+    <div class="max-w-md w-full space-y-8">
+        <!-- Header -->
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-indigo-600 mb-2">ITHM CMS</h1>
+            <h2 class="text-2xl font-bold text-gray-900">Create Account</h2>
+            <p class="text-gray-600 mt-2">Join the ITHM community</p>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="bg-white py-8 px-6 shadow-lg rounded-lg">
+            <form id="registerForm" class="space-y-6">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required 
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                               placeholder="First name">
+                    </div>
+                    <div>
+                        <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required 
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                               placeholder="Last name">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                    <input type="email" id="email" name="email" required 
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                           placeholder="Enter your email">
+                </div>
+
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required 
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                           placeholder="0300-1234567">
+                </div>
+
+                <div>
+                    <label for="role" class="block text-sm font-medium text-gray-700">Account Type</label>
+                    <select id="role" name="role" required 
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="">Select account type</option>
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="admin">Administrator</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="password" name="password" required 
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                           placeholder="Create a password">
+                </div>
+
+                <div>
+                    <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required 
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                           placeholder="Confirm your password">
+                </div>
+
+                <div class="flex items-center">
+                    <input id="terms" name="terms" type="checkbox" required 
+                           class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                    <label for="terms" class="ml-2 block text-sm text-gray-900">
+                        I agree to the <a href="#" class="text-indigo-600 hover:text-indigo-500">Terms of Service</a> and <a href="#" class="text-indigo-600 hover:text-indigo-500">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <div>
+                    <button type="submit" 
+                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Create Account
+                    </button>
+                </div>
+            </form>
+
+            <!-- Login Link -->
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                    Already have an account? 
+                    <a href="login.html" class="font-medium text-indigo-600 hover:text-indigo-500">
+                        Sign in here
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="text-center">
+            <a href="../index.html" class="text-indigo-600 hover:text-indigo-500 text-sm">
+                ← Back to Home
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Handle form submission
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Validation
+            if (data.password !== data.confirmPassword) {
+                showNotification('Passwords do not match', 'error');
+                return;
+            }
+            
+            if (data.password.length < 6) {
+                showNotification('Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            if (!data.terms) {
+                showNotification('Please accept the terms and conditions', 'error');
+                return;
+            }
+            
+            // Simulate registration
+            showNotification('Registration successful! Please check your email for verification.', 'success');
+            
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

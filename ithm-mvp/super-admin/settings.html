@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Settings - ITHM CMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../assets/css/tailwind-built.css">
+    <script src="../assets/js/demo-data.js"></script>
+    <script src="../assets/js/navigation.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-indigo-600">ITHM CMS</h1>
+                    </div>
+                    <nav class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a href="dashboard.html" class="text-gray-500 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Dashboard</a>
+                        <a href="settings.html" class="text-indigo-600 border-b-2 border-indigo-600 px-1 pt-1 text-sm font-medium">Settings</a>
+                    </nav>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-600">Welcome, <span class="user-info font-medium">Loading...</span></span>
+                    <span class="text-xs text-gray-500 user-role">Loading...</span>
+                    <button onclick="navigationManager.logout()" class="logout-btn text-sm text-gray-500 hover:text-gray-700">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Page Header -->
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-900">System Settings</h1>
+            <p class="text-gray-600">Configure system settings and preferences</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Settings Navigation -->
+            <div class="lg:col-span-1">
+                <nav class="space-y-1">
+                    <a href="#general" class="nav-item active">
+                        <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        General Settings
+                    </a>
+                    <a href="#security" class="nav-item">
+                        <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                        Security Settings
+                    </a>
+                    <a href="#notifications" class="nav-item">
+                        <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4.828 7l2.586 2.586a2 2 0 002.828 0L16 4.828V2H4.828z"></path>
+                        </svg>
+                        Notifications
+                    </a>
+                    <a href="#integrations" class="nav-item">
+                        <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                        </svg>
+                        Integrations
+                    </a>
+                    <a href="#backup" class="nav-item">
+                        <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                        </svg>
+                        Backup & Restore
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Settings Content -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- General Settings -->
+                <div id="general" class="bg-white shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">General Settings</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="form-label">Institution Name</label>
+                                <input type="text" class="form-input" value="Institute of Technology and Health Management">
+                            </div>
+                            <div>
+                                <label class="form-label">System URL</label>
+                                <input type="text" class="form-input" value="https://cms.ithm.edu.pk">
+                            </div>
+                            <div>
+                                <label class="form-label">Default Language</label>
+                                <select class="form-select">
+                                    <option>English</option>
+                                    <option>Urdu</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="form-label">Time Zone</label>
+                                <select class="form-select">
+                                    <option>Asia/Karachi (PKT)</option>
+                                    <option>UTC</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="form-label">Date Format</label>
+                                <select class="form-select">
+                                    <option>DD/MM/YYYY</option>
+                                    <option>MM/DD/YYYY</option>
+                                    <option>YYYY-MM-DD</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <button class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Settings -->
+                <div id="security" class="bg-white shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Security Settings</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="form-label">Password Policy</label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="form-checkbox" checked>
+                                        <span class="ml-2 text-sm text-gray-700">Require minimum 8 characters</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="form-checkbox" checked>
+                                        <span class="ml-2 text-sm text-gray-700">Require uppercase letters</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="form-checkbox" checked>
+                                        <span class="ml-2 text-sm text-gray-700">Require numbers</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="form-checkbox">
+                                        <span class="ml-2 text-sm text-gray-700">Require special characters</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label">Session Timeout (minutes)</label>
+                                <input type="number" class="form-input" value="30">
+                            </div>
+                            <div>
+                                <label class="form-label">Two-Factor Authentication</label>
+                                <div class="flex items-center">
+                                    <input type="checkbox" class="form-checkbox" checked>
+                                    <span class="ml-2 text-sm text-gray-700">Enable 2FA for all users</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <button class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification Settings -->
+                <div id="notifications" class="bg-white shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Notification Settings</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="form-label">Email Notifications</label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="form-checkbox" checked>
+                                        <span class="ml-2 text-sm text-gray-700">New application submissions</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="form-checkbox" checked>
+                                        <span class="ml-2 text-sm text-gray-700">Payment confirmations</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="form-checkbox">
+                                        <span class="ml-2 text-sm text-gray-700">System maintenance alerts</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label">SMS Notifications</label>
+                                <div class="flex items-center">
+                                    <input type="checkbox" class="form-checkbox">
+                                    <span class="ml-2 text-sm text-gray-700">Enable SMS notifications</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label">Notification Frequency</label>
+                                <select class="form-select">
+                                    <option>Immediate</option>
+                                    <option>Daily Digest</option>
+                                    <option>Weekly Summary</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <button class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integration Settings -->
+                <div id="integrations" class="bg-white shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Integration Settings</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="form-label">Payment Gateway</label>
+                                <select class="form-select">
+                                    <option>JazzCash</option>
+                                    <option>EasyPaisa</option>
+                                    <option>Bank Transfer</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="form-label">Email Service</label>
+                                <select class="form-select">
+                                    <option>SMTP</option>
+                                    <option>SendGrid</option>
+                                    <option>Mailgun</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="form-label">SMS Service</label>
+                                <select class="form-select">
+                                    <option>Twilio</option>
+                                    <option>Local SMS Provider</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <button class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backup Settings -->
+                <div id="backup" class="bg-white shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Backup & Restore</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="form-label">Automatic Backup</label>
+                                <div class="flex items-center">
+                                    <input type="checkbox" class="form-checkbox" checked>
+                                    <span class="ml-2 text-sm text-gray-700">Enable daily backups</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label">Backup Retention (days)</label>
+                                <input type="number" class="form-input" value="30">
+                            </div>
+                            <div>
+                                <label class="form-label">Last Backup</label>
+                                <p class="text-sm text-gray-600">March 20, 2024 at 2:00 AM</p>
+                            </div>
+                        </div>
+                        <div class="mt-6 flex space-x-3">
+                            <button class="btn btn-primary">Create Backup Now</button>
+                            <button class="btn btn-secondary">Restore from Backup</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize navigation
+        const navigationManager = new NavigationManager();
+        
+        // Settings navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const settingsSections = document.querySelectorAll('[id]');
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all items
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Hide all sections
+                    settingsSections.forEach(section => {
+                        section.style.display = 'none';
+                    });
+                    
+                    // Show target section
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.style.display = 'block';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
