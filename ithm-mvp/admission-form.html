@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <button onclick="generatePDF()" class="bg-blue-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl">
+                    <button onclick="testPDFGeneration()" class="bg-blue-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl">
                         <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
@@ -461,9 +461,41 @@
             }
         }
 
+        function testPDFGeneration() {
+            console.log('testPDFGeneration called');
+            alert('PDF generation test - check console for details');
+            
+            // Try simple PDF first
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                doc.text('Test PDF Generation', 20, 20);
+                doc.text('If you see this, PDF generation is working!', 20, 30);
+                doc.save('test-pdf.pdf');
+                alert('Test PDF generated successfully!');
+            } catch (error) {
+                console.error('Simple PDF test failed:', error);
+                alert('PDF generation failed: ' + error.message);
+            }
+            
+            // Now try the full PDF
+            generatePDF();
+        }
+        
         function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+            console.log('generatePDF function called');
+            
+            // Check if jsPDF is available
+            if (typeof window.jspdf === 'undefined') {
+                console.error('jsPDF library not loaded');
+                alert('PDF library not loaded. Please refresh the page and try again.');
+                return;
+            }
+            
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                console.log('jsPDF instance created successfully');
             
             // Add title
             doc.setFontSize(20);
@@ -550,6 +582,7 @@
                 };
                 reader.readAsDataURL(photoInput.files[0]);
             } else {
+                console.log('No photo uploaded, generating PDF without photo');
                 // No photo uploaded, add placeholder text
                 doc.setFontSize(10);
                 doc.text('Passport Photo: Not uploaded', 140, y);
@@ -559,7 +592,14 @@
                 addFormDataToPDF(doc, data, y);
                 
                 // Save the PDF
+                console.log('Saving PDF without photo...');
                 doc.save('admission-application.pdf');
+                console.log('PDF saved successfully');
+            }
+            
+            } catch (error) {
+                console.error('Error in generatePDF function:', error);
+                alert('Error generating PDF: ' + error.message);
             }
         }
         
