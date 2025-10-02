@@ -691,9 +691,6 @@
             y += 5;
             doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, y);
             
-            // Save PDF
-            doc.save('admission-form.pdf');
-            
             if (typeof showNotification === 'function') {
                 showNotification('PDF generated successfully with photo', 'success');
             }
@@ -1023,7 +1020,6 @@
                 }
             }, 100);
         }
-        });
     </script>
 </body>
 </html>
