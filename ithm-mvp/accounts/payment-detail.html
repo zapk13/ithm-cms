@@ -6,6 +6,7 @@
     <title>Payment Detail - ITHM CMS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../assets/css/tailwind-built.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../assets/js/demo-data.js"></script>
     <script src="../assets/js/navigation.js"></script>
 </head>
@@ -64,16 +65,72 @@
         </nav>
 
         <!-- Payment Header -->
-        <div class="bg-white shadow rounded-lg mb-6">
-            <div class="px-4 py-5 sm:p-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-900">Payment #PAY-2024-001</h1>
-                        <p class="text-sm text-gray-600">Transaction ID: TXN-123456789</p>
+        <div class="bg-gradient-to-r from-green-50 to-emerald-50 shadow-xl rounded-2xl border border-green-200 mb-8">
+            <div class="px-6 py-8">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                    <div class="mb-4 lg:mb-0">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center shadow-lg">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h1 class="text-3xl font-bold text-gray-900">Payment #FV2024001</h1>
+                                <p class="text-sm text-gray-600 flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h4a1 1 0 011 1v2m-6 0h6m-6 0a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V6a2 2 0 00-2-2M9 8h6m-6 4h6m-6 4h6"></path>
+                                    </svg>
+                                    Transaction ID: TXN-789456123
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-3">
-                        <span class="status-badge status-accepted">Verified</span>
-                        <button class="btn btn-primary">Update Status</button>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-200">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Verified
+                            </span>
+                            <div class="relative">
+                                <button onclick="togglePaymentActions()" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Payment Actions
+                                    <svg class="ml-2 -mr-0.5 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+                                <div id="paymentActionsDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200">
+                                    <div class="py-1">
+                                        <button onclick="verifyPayment()" class="flex items-center w-full px-4 py-2 text-sm text-green-700 hover:bg-green-50">
+                                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            Verify Payment
+                                        </button>
+                                        <button onclick="generateReceipt()" class="flex items-center w-full px-4 py-2 text-sm text-blue-700 hover:bg-blue-50">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                            </svg>
+                                            Generate Receipt
+                                        </button>
+                                        <button onclick="flagForReview()" class="flex items-center w-full px-4 py-2 text-sm text-yellow-700 hover:bg-yellow-50">
+                                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            Flag for Review
+                                        </button>
+                                        <button onclick="refundPayment()" class="flex items-center w-full px-4 py-2 text-sm text-red-700 hover:bg-red-50">
+                                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            Process Refund
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -234,14 +291,41 @@
             <!-- Sidebar -->
             <div class="space-y-6">
                 <!-- Quick Actions -->
-                <div class="bg-white shadow rounded-lg">
-                    <div class="px-4 py-5 sm:p-6">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Quick Actions</h3>
-                        <div class="space-y-3">
-                            <button class="btn btn-success w-full">Verify Payment</button>
-                            <button class="btn btn-warning w-full">Request Receipt</button>
-                            <button class="btn btn-danger w-full">Flag for Review</button>
-                            <button class="btn btn-secondary w-full">Generate Receipt</button>
+                <div class="bg-white shadow-xl rounded-2xl border border-gray-100 overflow-hidden">
+                    <div class="bg-gradient-to-r from-purple-500 to-pink-600 px-6 py-4">
+                        <h3 class="text-lg font-semibold text-white flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            Payment Actions
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <button onclick="verifyPayment()" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-3 rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Verify Payment
+                            </button>
+                            <button onclick="generateReceipt()" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-3 rounded-xl font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Generate Receipt
+                            </button>
+                            <button onclick="flagForReview()" class="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 py-3 rounded-xl font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                Flag for Review
+                            </button>
+                            <button onclick="refundPayment()" class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-xl font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                                Process Refund
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -304,6 +388,314 @@
     <script>
         // Initialize navigation
         const navigationManager = new NavigationManager();
+
+        // Payment actions management
+        function togglePaymentActions() {
+            const dropdown = document.getElementById('paymentActionsDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        function verifyPayment() {
+            if (confirm('Are you sure you want to verify this payment?')) {
+                showNotification('Payment verified successfully!', 'success');
+                updatePaymentStatus('verified');
+                addPaymentTimelineEvent('verified');
+                document.getElementById('paymentActionsDropdown').classList.add('hidden');
+            }
+        }
+
+        function generateReceipt() {
+            showNotification('Generating receipt...', 'info');
+            
+            // Simulate receipt generation
+            setTimeout(() => {
+                showNotification('Receipt generated successfully!', 'success');
+                showReceiptModal();
+            }, 2000);
+        }
+
+        function flagForReview() {
+            const reason = prompt('Please provide a reason for flagging this payment:');
+            if (reason) {
+                showNotification('Payment flagged for review.', 'warning');
+                updatePaymentStatus('flagged');
+                addPaymentTimelineEvent('flagged', reason);
+            }
+        }
+
+        function refundPayment() {
+            if (confirm('Are you sure you want to process a refund for this payment?')) {
+                const amount = prompt('Enter refund amount (PKR):');
+                if (amount && !isNaN(amount)) {
+                    showNotification(`Refund of PKR ${amount} processed successfully!`, 'success');
+                    updatePaymentStatus('refunded');
+                    addPaymentTimelineEvent('refunded', `Amount: PKR ${amount}`);
+                }
+            }
+        }
+
+        function updatePaymentStatus(status) {
+            const statusElement = document.querySelector('.inline-flex.items-center.px-3.py-1.rounded-full');
+            if (statusElement) {
+                statusElement.className = 'inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border';
+                
+                switch(status) {
+                    case 'verified':
+                        statusElement.classList.add('bg-green-100', 'text-green-800', 'border-green-200');
+                        statusElement.querySelector('span').textContent = 'Verified';
+                        break;
+                    case 'flagged':
+                        statusElement.classList.add('bg-yellow-100', 'text-yellow-800', 'border-yellow-200');
+                        statusElement.querySelector('span').textContent = 'Flagged';
+                        break;
+                    case 'refunded':
+                        statusElement.classList.add('bg-red-100', 'text-red-800', 'border-red-200');
+                        statusElement.querySelector('span').textContent = 'Refunded';
+                        break;
+                }
+            }
+        }
+
+        function addPaymentTimelineEvent(action, details = '') {
+            const timeline = document.querySelector('.flow-root ul');
+            const newEvent = document.createElement('li');
+            
+            let eventText = '';
+            let iconColor = '';
+            let iconSvg = '';
+            
+            switch(action) {
+                case 'verified':
+                    eventText = 'Payment verified';
+                    iconColor = 'bg-green-500';
+                    iconSvg = '<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>';
+                    break;
+                case 'flagged':
+                    eventText = 'Payment flagged for review';
+                    iconColor = 'bg-yellow-500';
+                    iconSvg = '<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>';
+                    break;
+                case 'refunded':
+                    eventText = 'Payment refunded';
+                    iconColor = 'bg-red-500';
+                    iconSvg = '<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>';
+                    break;
+            }
+            
+            newEvent.innerHTML = `
+                <div class="relative pb-8">
+                    <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
+                    <div class="relative flex space-x-3">
+                        <div>
+                            <span class="h-8 w-8 rounded-full ${iconColor} flex items-center justify-center ring-8 ring-white">
+                                <svg class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    ${iconSvg}
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                            <div>
+                                <p class="text-sm text-gray-500">${eventText}</p>
+                                ${details ? `<p class="text-xs text-gray-400 mt-1">${details}</p>` : ''}
+                            </div>
+                            <div class="text-right text-sm whitespace-nowrap text-gray-500">
+                                <time>Just now</time>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            timeline.insertBefore(newEvent, timeline.firstChild);
+        }
+
+        function showReceiptModal() {
+            // Create receipt modal
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50';
+            modal.innerHTML = `
+                <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+                    <div class="mt-3">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-medium text-gray-900">Payment Receipt</h3>
+                            <button onclick="this.parentElement.parentElement.parentElement.parentElement.remove()" class="text-gray-400 hover:text-gray-600">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="text-center mb-6">
+                                <h2 class="text-2xl font-bold text-gray-900">ITHM College</h2>
+                                <p class="text-gray-600">Institute of Tourism and Hospitality Management</p>
+                                <p class="text-sm text-gray-500">123 Gulberg III, Lahore, Pakistan</p>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Receipt Details</h4>
+                                    <p class="text-sm text-gray-600">Receipt #: RCP-${Date.now()}</p>
+                                    <p class="text-sm text-gray-600">Date: ${new Date().toLocaleDateString()}</p>
+                                    <p class="text-sm text-gray-600">Time: ${new Date().toLocaleTimeString()}</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Student Details</h4>
+                                    <p class="text-sm text-gray-600">Name: Ahmed Khan</p>
+                                    <p class="text-sm text-gray-600">ID: STU-2024-001</p>
+                                    <p class="text-sm text-gray-600">Program: Hotel Management</p>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t pt-4">
+                                <h4 class="font-semibold text-gray-900 mb-3">Payment Breakdown</h4>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Admission Fee</span>
+                                        <span class="font-medium">PKR 25,000</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Payment Method</span>
+                                        <span class="font-medium">Bank Transfer</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Transaction ID</span>
+                                        <span class="font-medium">TXN-789456123</span>
+                                    </div>
+                                    <div class="border-t pt-2 mt-4">
+                                        <div class="flex justify-between text-lg font-bold">
+                                            <span>Total Paid</span>
+                                            <span class="text-green-600">PKR 25,000</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 text-center">
+                                <p class="text-sm text-gray-500">Thank you for your payment!</p>
+                                <p class="text-xs text-gray-400 mt-2">This is a computer-generated receipt.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 flex justify-end space-x-3">
+                            <button onclick="printReceipt()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                Print Receipt
+                            </button>
+                            <button onclick="downloadReceipt()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                Download PDF
+                            </button>
+                            <button onclick="this.parentElement.parentElement.parentElement.parentElement.remove()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        function printReceipt() {
+            showNotification('Opening print dialog...', 'info');
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        }
+
+        function downloadReceipt() {
+            showNotification('Downloading receipt PDF...', 'info');
+            setTimeout(() => {
+                showNotification('Receipt downloaded successfully!', 'success');
+            }, 2000);
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden transform transition-all duration-300 ease-in-out`;
+            
+            let bgColor = '';
+            let iconSvg = '';
+            
+            switch(type) {
+                case 'success':
+                    bgColor = 'bg-green-50 border-green-200';
+                    iconSvg = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>';
+                    break;
+                case 'error':
+                    bgColor = 'bg-red-50 border-red-200';
+                    iconSvg = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>';
+                    break;
+                case 'warning':
+                    bgColor = 'bg-yellow-50 border-yellow-200';
+                    iconSvg = '<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>';
+                    break;
+                case 'info':
+                default:
+                    bgColor = 'bg-blue-50 border-blue-200';
+                    iconSvg = '<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>';
+                    break;
+            }
+            
+            notification.innerHTML = `
+                <div class="p-4 ${bgColor} border-l-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-${type === 'success' ? 'green' : type === 'error' ? 'red' : type === 'warning' ? 'yellow' : 'blue'}-400" fill="currentColor" viewBox="0 0 20 20">
+                                ${iconSvg}
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">${message}</p>
+                        </div>
+                        <div class="ml-auto pl-3">
+                            <div class="-mx-1.5 -my-1.5">
+                                <button onclick="this.parentElement.parentElement.parentElement.parentElement.remove()" class="inline-flex rounded-md p-1.5 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-600">
+                                    <span class="sr-only">Dismiss</span>
+                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('paymentActionsDropdown');
+            const button = event.target.closest('button');
+            
+            if (!button || !button.onclick || !button.onclick.toString().includes('togglePaymentActions')) {
+                if (dropdown && !dropdown.classList.contains('hidden')) {
+                    dropdown.classList.add('hidden');
+                }
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add fade-in animation to cards
+            const cards = document.querySelectorAll('.bg-white');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease-out';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
     </script>
 </body>
 </html>

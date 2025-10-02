@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Form - ITHM CMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ithm-primary': '#4f46e5',
+                        'ithm-secondary': '#7c3aed',
+                        'ithm-success': '#059669',
+                        'ithm-warning': '#d97706',
+                        'ithm-danger': '#dc2626',
+                        'ithm-info': '#0891b2'
+                    }
+                }
+            }
+        }
+        
+        // Debug: Check if Tailwind is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+            console.log('Tailwind available:', typeof tailwind !== 'undefined');
+            
+            // Test if Tailwind classes are working
+            const testElement = document.querySelector('.bg-red-500');
+            if (testElement) {
+                const styles = window.getComputedStyle(testElement);
+                console.log('Test element background color:', styles.backgroundColor);
+                console.log('Test element color:', styles.color);
+            }
+        });
+    </script>
+    <!-- <link rel="stylesheet" href="assets/css/tailwind-built.css"> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="assets/js/demo-data.js"></script>
+    <script src="assets/js/navigation.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-indigo-600">ITHM CMS</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="generatePDF()" class="bg-blue-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl">
+                        <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Generate PDF
+                    </button>
+                    <button onclick="saveForm()" class="bg-green-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-green-700 transition-all duration-200 shadow-lg hover:shadow-xl">
+                        Save Form
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <!-- Form Header -->
+        <div class="bg-white shadow rounded-lg mb-6">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h1 class="text-2xl font-bold text-gray-900">Admission Application Form</h1>
+                <p class="text-gray-600 mt-1">Institute of Tourism and Hospitality Management</p>
+                <div class="mt-4 flex items-center space-x-4">
+                    <span class="text-sm text-gray-500">Application ID: <span id="application-id">ADM2024001</span></span>
+                    <span class="text-sm text-gray-500">Status: <span id="application-status" class="text-yellow-600">Draft</span></span>
+                </div>
+            </div>
+        </div>
+
+        <form id="admissionForm" class="space-y-8">
+            <!-- Personal Information -->
+            <div class="bg-white shadow rounded-lg">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-medium text-gray-900">Personal Information</h2>
+                </div>
+                <div class="px-6 py-4 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Full Name *</label>
+                            <input type="text" name="full_name" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800 placeholder-gray-400">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">CNIC *</label>
+                            <input type="text" name="cnic" placeholder="12345-1234567-1" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800 placeholder-gray-400">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Date of Birth *</label>
+                            <input type="date" name="date_of_birth" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Gender *</label>
+                            <select name="gender" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800">
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Phone *</label>
+                            <input type="tel" name="phone" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800 placeholder-gray-400">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Email *</label>
+                            <input type="email" name="email" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800 placeholder-gray-400">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-800">Address *</label>
+                        <textarea name="address" rows="3" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800 placeholder-gray-400 resize-none"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guardian Information -->
+            <div class="bg-white shadow rounded-lg">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-medium text-gray-900">Guardian Information</h2>
+                </div>
+                <div class="px-6 py-4 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Guardian Name *</label>
+                            <input type="text" name="guardian_name" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800 placeholder-gray-400">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Relation *</label>
+                            <select name="guardian_relation" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800">
+                                <option value="">Select Relation</option>
+                                <option value="Father">Father</option>
+                                <option value="Mother">Mother</option>
+                                <option value="Brother">Brother</option>
+                                <option value="Sister">Sister</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Guardian Phone *</label>
+                            <input type="tel" name="guardian_phone" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800 placeholder-gray-400">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Occupation</label>
+                            <input type="text" name="guardian_occupation" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800 placeholder-gray-400">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Academic Information -->
+            <div class="bg-white shadow rounded-lg">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-medium text-gray-900">Academic Information</h2>
+                </div>
+                <div class="px-6 py-4 space-y-6">
+                    <!-- Matric -->
+                    <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                            <span class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                <span class="text-blue-600 font-bold">1</span>
+                            </span>
+                            Matriculation
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-800">Marks Obtained *</label>
+                                <input type="number" name="matric_marks" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white focus:bg-white text-gray-800 placeholder-gray-400">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-800">Total Marks *</label>
+                                <input type="number" name="matric_total" value="1100" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white focus:bg-white text-gray-800 placeholder-gray-400">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-800">Board *</label>
+                                <input type="text" name="matric_board" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white focus:bg-white text-gray-800 placeholder-gray-400">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intermediate -->
+                    <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                            <span class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                                <span class="text-green-600 font-bold">2</span>
+                            </span>
+                            Intermediate
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-800">Marks Obtained *</label>
+                                <input type="number" name="intermediate_marks" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white focus:bg-white text-gray-800 placeholder-gray-400">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-800">Total Marks *</label>
+                                <input type="number" name="intermediate_total" value="1100" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white focus:bg-white text-gray-800 placeholder-gray-400">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-800">Board *</label>
+                                <input type="text" name="intermediate_board" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white focus:bg-white text-gray-800 placeholder-gray-400">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bachelor's Degree -->
+                    <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                            <span class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                                <span class="text-purple-600 font-bold">3</span>
+                            </span>
+                            Bachelor's Degree (if applicable)
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-800">Degree Name</label>
+                                <input type="text" name="bachelor_degree" placeholder="e.g., BSc Computer Science" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white focus:bg-white text-gray-800 placeholder-gray-400">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-800">Institution</label>
+                                <input type="text" name="bachelor_institution" placeholder="e.g., University of Lahore" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white focus:bg-white text-gray-800 placeholder-gray-400">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-800">Year of Completion</label>
+                                <input type="number" name="bachelor_year" placeholder="e.g., 2023" min="1990" max="2030" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white focus:bg-white text-gray-800 placeholder-gray-400">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-800">CGPA/GPA</label>
+                                <input type="number" name="bachelor_cgpa" step="0.01" min="0" max="4" placeholder="e.g., 3.2" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white focus:bg-white text-gray-800 placeholder-gray-400">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Master's Degree -->
+                    <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                            <span class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center mr-3">
+                                <span class="text-orange-600 font-bold">4</span>
+                            </span>
+                            Master's Degree (if applicable)
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-800">Degree Name</label>
+                                <input type="text" name="master_degree" placeholder="e.g., MSc Computer Science" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white focus:bg-white text-gray-800 placeholder-gray-400">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-800">Institution</label>
+                                <input type="text" name="master_institution" placeholder="e.g., University of Punjab" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white focus:bg-white text-gray-800 placeholder-gray-400">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-800">Year of Completion</label>
+                                <input type="number" name="master_year" placeholder="e.g., 2024" min="1990" max="2030" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white focus:bg-white text-gray-800 placeholder-gray-400">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-800">CGPA/GPA</label>
+                                <input type="number" name="master_cgpa" step="0.01" min="0" max="4" placeholder="e.g., 3.5" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white focus:bg-white text-gray-800 placeholder-gray-400">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documents Upload -->
+            <div class="bg-white shadow rounded-lg">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-medium text-gray-900">Required Documents</h2>
+                </div>
+                <div class="px-6 py-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                            </svg>
+                            <p class="mt-2 text-sm text-gray-600">CNIC Copy</p>
+                            <input type="file" accept=".pdf,.jpg,.png" class="mt-2">
+                        </div>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                            </svg>
+                            <p class="mt-2 text-sm text-gray-600">Matric Certificate</p>
+                            <input type="file" accept=".pdf,.jpg,.png" class="mt-2">
+                        </div>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                            </svg>
+                            <p class="mt-2 text-sm text-gray-600">Intermediate Certificate</p>
+                            <input type="file" accept=".pdf,.jpg,.png" class="mt-2">
+                        </div>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                            </svg>
+                            <p class="mt-2 text-sm text-gray-600">Passport Size Photo</p>
+                            <p class="text-xs text-gray-500 mt-1">Required for PDF generation</p>
+                            <input type="file" accept=".jpg,.png" class="mt-2" id="passport-photo" onchange="previewPhoto(this)">
+                            <div id="photo-preview" class="mt-2 hidden">
+                                <img id="preview-img" class="w-16 h-16 object-cover rounded mx-auto border" alt="Photo preview">
+                                <p class="text-xs text-green-600 mt-1">Photo uploaded successfully</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Undertaking -->
+            <div class="bg-white shadow rounded-lg">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-medium text-gray-900">Declaration</h2>
+                </div>
+                <div class="px-6 py-4">
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <input type="checkbox" name="information_accurate" required class="mt-1 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                            <label class="ml-2 text-sm text-gray-700">I declare that all information provided is accurate and complete.</label>
+                        </div>
+                        <div class="flex items-start">
+                            <input type="checkbox" name="agree_to_terms" required class="mt-1 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                            <label class="ml-2 text-sm text-gray-700">I agree to the terms and conditions of admission.</label>
+                        </div>
+                        <div class="flex items-start">
+                            <input type="checkbox" name="agree_to_verification" required class="mt-1 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                            <label class="ml-2 text-sm text-gray-700">I consent to verification of my documents and information.</label>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-gray-700">Digital Signature</label>
+                        <input type="text" name="digital_signature" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-end space-x-4">
+                <button type="button" onclick="saveForm()" class="px-8 py-4 border-2 border-gray-300 rounded-xl text-base font-semibold text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 shadow-sm hover:shadow-md">
+                    Save Draft
+                </button>
+                <button type="submit" class="px-8 py-4 border-2 border-transparent rounded-xl text-base font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+                    Submit Application
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        // Initialize form
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFormData();
+            checkAdminMode();
+        });
+
+        function previewPhoto(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('photo-preview');
+                    const previewImg = document.getElementById('preview-img');
+                    previewImg.src = e.target.result;
+                    preview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function checkAdminMode() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const isAdminMode = urlParams.get('mode') === 'admin';
+            const isAdminFill = urlParams.get('admin_fill') === 'true';
+            
+            if (isAdminMode || isAdminFill) {
+                // Update page title and header for admin mode
+                document.title = 'In-Person Admission Form - ITHM CMS';
+                
+                // Add admin mode indicator
+                const header = document.querySelector('.px-6.py-4.border-b.border-gray-200');
+                if (header) {
+                    const adminIndicator = document.createElement('div');
+                    adminIndicator.className = 'mt-4 p-3 bg-green-50 border border-green-200 rounded-lg';
+                    adminIndicator.innerHTML = `
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-sm font-medium text-green-800">Admin Mode: Filling form on behalf of candidate</span>
+                        </div>
+                    `;
+                    header.appendChild(adminIndicator);
+                }
+                
+                // Update submit button text
+                const submitButton = document.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.textContent = 'Submit on Behalf of Candidate';
+                    submitButton.className = submitButton.className.replace('bg-indigo-600 hover:bg-indigo-700', 'bg-green-600 hover:bg-green-700');
+                }
+            }
+        }
+
+        function loadFormData() {
+            // Load existing form data if available
+            const urlParams = new URLSearchParams(window.location.search);
+            const applicationId = urlParams.get('id');
+            
+            if (applicationId && demoData.admissionForms) {
+                const application = demoData.admissionForms.find(app => app.id === applicationId);
+                if (application) {
+                    populateForm(application);
+                }
+            }
+        }
+
+        function populateForm(application) {
+            // Populate form fields with application data
+            const form = document.getElementById('admissionForm');
+            const fields = form.querySelectorAll('input, select, textarea');
+            
+            fields.forEach(field => {
+                const name = field.name;
+                if (application.personal_info && application.personal_info[name]) {
+                    field.value = application.personal_info[name];
+                } else if (application.guardian_info && application.guardian_info[name]) {
+                    field.value = application.guardian_info[name];
+                } else if (application.academic_info && application.academic_info[name]) {
+                    field.value = application.academic_info[name];
+                } else if (application.undertaking && application.undertaking[name]) {
+                    field.value = application.undertaking[name];
+                }
+            });
+            
+            document.getElementById('application-id').textContent = application.id;
+            document.getElementById('application-status').textContent = application.status.replace('_', ' ').toUpperCase();
+        }
+
+        function saveForm() {
+            const formData = new FormData(document.getElementById('admissionForm'));
+            const data = Object.fromEntries(formData);
+            
+            // Save to localStorage
+            localStorage.setItem('admissionFormDraft', JSON.stringify(data));
+            
+            if (typeof showNotification === 'function') {
+                showNotification('Form saved as draft', 'success');
+            } else {
+                alert('Form saved as draft');
+            }
+        }
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Add title
+            doc.setFontSize(20);
+            doc.text('Admission Application Form', 20, 20);
+            doc.setFontSize(12);
+            doc.text('Institute of Tourism and Hospitality Management', 20, 30);
+            
+            // Add form data
+            const formData = new FormData(document.getElementById('admissionForm'));
+            const data = Object.fromEntries(formData);
+            
+            let y = 50;
+            
+            // Add passport photo if available
+            const photoInput = document.getElementById('passport-photo');
+            if (photoInput && photoInput.files && photoInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        // Add photo to PDF (positioned on the right side)
+                        const img = new Image();
+                        img.onload = function() {
+                            // Calculate dimensions to fit in a 2x2 inch space
+                            const maxWidth = 60;
+                            const maxHeight = 60;
+                            let imgWidth = img.width;
+                            let imgHeight = img.height;
+                            
+                            // Scale image to fit
+                            if (imgWidth > maxWidth || imgHeight > maxHeight) {
+                                const ratio = Math.min(maxWidth / imgWidth, maxHeight / imgHeight);
+                                imgWidth *= ratio;
+                                imgHeight *= ratio;
+                            }
+                            
+                            // Position photo on the right side
+                            const photoX = 140;
+                            const photoY = y;
+                            
+                            doc.addImage(e.target.result, 'JPEG', photoX, photoY, imgWidth, imgHeight);
+                            
+                            // Add photo label
+                            doc.setFontSize(10);
+                            doc.text('Passport Photo:', photoX, photoY + imgHeight + 5);
+                            
+                            // Continue with form data
+                            addFormDataToPDF(doc, data, y);
+                        };
+                        img.src = e.target.result;
+                    } catch (error) {
+                        console.error('Error adding image to PDF:', error);
+                        // Continue without image
+                        addFormDataToPDF(doc, data, y);
+                    }
+                };
+                reader.readAsDataURL(photoInput.files[0]);
+            } else {
+                // No photo uploaded, add placeholder text
+                doc.setFontSize(10);
+                doc.text('Passport Photo: Not uploaded', 140, y);
+                doc.text('(Please upload photo for complete PDF)', 140, y + 5);
+                
+                // Continue with form data
+                addFormDataToPDF(doc, data, y);
+            }
+        }
+        
+        function addFormDataToPDF(doc, data, startY) {
+            let y = startY;
+            
+            doc.setFontSize(14);
+            doc.text('Personal Information:', 20, y);
+            y += 10;
+            
+            doc.setFontSize(10);
+            doc.text(`Name: ${data.full_name || ''}`, 20, y);
+            y += 5;
+            doc.text(`CNIC: ${data.cnic || ''}`, 20, y);
+            y += 5;
+            doc.text(`Date of Birth: ${data.date_of_birth || ''}`, 20, y);
+            y += 5;
+            doc.text(`Gender: ${data.gender || ''}`, 20, y);
+            y += 5;
+            doc.text(`Phone: ${data.phone || ''}`, 20, y);
+            y += 5;
+            doc.text(`Email: ${data.email || ''}`, 20, y);
+            y += 5;
+            doc.text(`Address: ${data.address || ''}`, 20, y);
+            y += 10;
+            
+            doc.setFontSize(14);
+            doc.text('Guardian Information:', 20, y);
+            y += 10;
+            
+            doc.setFontSize(10);
+            doc.text(`Guardian Name: ${data.guardian_name || ''}`, 20, y);
+            y += 5;
+            doc.text(`Relation: ${data.guardian_relation || ''}`, 20, y);
+            y += 5;
+            doc.text(`Phone: ${data.guardian_phone || ''}`, 20, y);
+            y += 5;
+            doc.text(`Occupation: ${data.guardian_occupation || ''}`, 20, y);
+            y += 10;
+            
+            doc.setFontSize(14);
+            doc.text('Academic Information:', 20, y);
+            y += 10;
+            
+            doc.setFontSize(10);
+            doc.text(`Matric Marks: ${data.matric_marks || ''}/${data.matric_total || ''}`, 20, y);
+            y += 5;
+            doc.text(`Intermediate Marks: ${data.intermediate_marks || ''}/${data.intermediate_total || ''}`, 20, y);
+            y += 10;
+            
+            // Bachelor's Degree
+            if (data.bachelor_degree || data.bachelor_institution) {
+                doc.setFontSize(12);
+                doc.text('Bachelor\'s Degree:', 20, y);
+                y += 8;
+                doc.setFontSize(10);
+                if (data.bachelor_degree) doc.text(`Degree: ${data.bachelor_degree}`, 20, y);
+                y += 5;
+                if (data.bachelor_institution) doc.text(`Institution: ${data.bachelor_institution}`, 20, y);
+                y += 5;
+                if (data.bachelor_year) doc.text(`Year: ${data.bachelor_year}`, 20, y);
+                y += 5;
+                if (data.bachelor_cgpa) doc.text(`CGPA: ${data.bachelor_cgpa}`, 20, y);
+                y += 10;
+            }
+            
+            // Master's Degree
+            if (data.master_degree || data.master_institution) {
+                doc.setFontSize(12);
+                doc.text('Master\'s Degree:', 20, y);
+                y += 8;
+                doc.setFontSize(10);
+                if (data.master_degree) doc.text(`Degree: ${data.master_degree}`, 20, y);
+                y += 5;
+                if (data.master_institution) doc.text(`Institution: ${data.master_institution}`, 20, y);
+                y += 5;
+                if (data.master_year) doc.text(`Year: ${data.master_year}`, 20, y);
+                y += 5;
+                if (data.master_cgpa) doc.text(`CGPA: ${data.master_cgpa}`, 20, y);
+                y += 10;
+            }
+            
+            doc.setFontSize(14);
+            doc.text('Declaration:', 20, y);
+            y += 10;
+            
+            doc.setFontSize(10);
+            doc.text(`Digital Signature: ${data.digital_signature || ''}`, 20, y);
+            y += 5;
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, y);
+            
+            // Save PDF
+            doc.save('admission-form.pdf');
+            
+            if (typeof showNotification === 'function') {
+                showNotification('PDF generated successfully with photo', 'success');
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('admissionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            // Create new application
+            const newApplication = {
+                id: 'ADM' + Date.now(),
+                intake_id: 1,
+                student_name: data.full_name,
+                student_email: data.email,
+                student_phone: data.phone,
+                status: 'pending_review',
+                submitted_by: 'student',
+                submitted_by_id: 5,
+                submitted_at: new Date().toISOString(),
+                personal_info: {
+                    full_name: data.full_name,
+                    cnic: data.cnic,
+                    date_of_birth: data.date_of_birth,
+                    gender: data.gender,
+                    phone: data.phone,
+                    email: data.email,
+                    address: data.address
+                },
+                guardian_info: {
+                    guardian_name: data.guardian_name,
+                    guardian_relation: data.guardian_relation,
+                    guardian_phone: data.guardian_phone,
+                    guardian_occupation: data.guardian_occupation
+                },
+                academic_info: {
+                    matric_marks: data.matric_marks,
+                    matric_total: data.matric_total,
+                    intermediate_marks: data.intermediate_marks,
+                    intermediate_total: data.intermediate_total,
+                    bachelor_degree: data.bachelor_degree,
+                    bachelor_institution: data.bachelor_institution,
+                    bachelor_year: data.bachelor_year,
+                    bachelor_cgpa: data.bachelor_cgpa,
+                    master_degree: data.master_degree,
+                    master_institution: data.master_institution,
+                    master_year: data.master_year,
+                    master_cgpa: data.master_cgpa
+                },
+                undertaking: {
+                    information_accurate: data.information_accurate,
+                    agree_to_terms: data.agree_to_terms,
+                    agree_to_verification: data.agree_to_verification,
+                    digital_signature: data.digital_signature
+                }
+            };
+            
+            // Add to demo data
+            if (demoData.admissionForms) {
+                demoData.admissionForms.push(newApplication);
+            }
+            
+            // Show success message
+            if (typeof showNotification === 'function') {
+                showNotification('Application submitted successfully!', 'success');
+            } else {
+                alert('Application submitted successfully!');
+            }
+            
+            // Update status
+            document.getElementById('application-status').textContent = 'SUBMITTED';
+            document.getElementById('application-status').className = 'text-green-600';
+        });
+    </script>
+</body>
+</html>

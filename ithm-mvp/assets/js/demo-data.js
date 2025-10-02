@@ -369,7 +369,305 @@ const demoData = {
             required_documents: 3,
             roll_number: 'HM24001'
         }
-    }
+    },
+
+    // Admission intakes
+    admissionIntakes: [
+        {
+            id: 1,
+            name: 'Fall 2024',
+            course_id: 1,
+            campus_id: 1,
+            start_date: '2024-08-01',
+            end_date: '2024-09-30',
+            status: 'active',
+            created_by: 2,
+            created_at: '2024-07-01T10:00:00Z',
+            max_applications: 100,
+            current_applications: 45
+        },
+        {
+            id: 2,
+            name: 'Spring 2025',
+            course_id: 2,
+            campus_id: 1,
+            start_date: '2025-01-01',
+            end_date: '2025-02-28',
+            status: 'active',
+            created_by: 2,
+            created_at: '2024-12-01T10:00:00Z',
+            max_applications: 80,
+            current_applications: 12
+        },
+        {
+            id: 3,
+            name: 'Summer 2024',
+            course_id: 3,
+            campus_id: 2,
+            start_date: '2024-06-01',
+            end_date: '2024-07-31',
+            status: 'closed',
+            created_by: 2,
+            created_at: '2024-05-01T10:00:00Z',
+            max_applications: 50,
+            current_applications: 50
+        }
+    ],
+
+    // Admission forms
+    admissionForms: [
+        {
+            id: 'ADM2024001',
+            intake_id: 1,
+            student_name: 'Ahmed Ali Khan',
+            student_email: 'ahmed.ali@email.com',
+            student_phone: '03001234567',
+            status: 'pending_review',
+            submitted_by: 'student',
+            submitted_by_id: 5,
+            submitted_at: '2024-08-15T14:30:00Z',
+            personal_info: {
+                full_name: 'Ahmed Ali Khan',
+                father_name: 'Muhammad Ali Khan',
+                mother_name: 'Fatima Khan',
+                cnic: '12345-1234567-1',
+                date_of_birth: '2000-05-15',
+                gender: 'Male',
+                marital_status: 'Single',
+                nationality: 'Pakistani',
+                religion: 'Islam',
+                blood_group: 'O+',
+                address: '123 Main Street, Lahore',
+                city: 'Lahore',
+                province: 'Punjab',
+                postal_code: '54000',
+                phone: '03001234567',
+                email: 'ahmed.ali@email.com',
+                emergency_contact: '03009876543',
+                emergency_relation: 'Brother'
+            },
+            guardian_info: {
+                guardian_name: 'Muhammad Ali Khan',
+                guardian_relation: 'Father',
+                guardian_cnic: '12345-1234567-2',
+                guardian_phone: '03001234568',
+                guardian_occupation: 'Business',
+                guardian_address: '123 Main Street, Lahore',
+                guardian_email: 'ali.khan@email.com'
+            },
+            academic_info: {
+                matric_marks: 850,
+                matric_total: 1100,
+                matric_percentage: 77.27,
+                matric_board: 'Lahore Board',
+                matric_year: 2018,
+                intermediate_marks: 750,
+                intermediate_total: 1100,
+                intermediate_percentage: 68.18,
+                intermediate_board: 'Lahore Board',
+                intermediate_year: 2020,
+                bachelor_degree: 'BSc Computer Science',
+                bachelor_institution: 'University of Lahore',
+                bachelor_year: 2024,
+                bachelor_cgpa: 3.2,
+                master_degree: null,
+                master_institution: null,
+                master_year: null,
+                master_cgpa: null
+            },
+            distinctions: [
+                {
+                    title: 'Best Student Award',
+                    institution: 'University of Lahore',
+                    year: 2023,
+                    description: 'Awarded for outstanding academic performance'
+                },
+                {
+                    title: 'Programming Competition Winner',
+                    institution: 'TechFest 2023',
+                    year: 2023,
+                    description: 'First place in national programming competition'
+                }
+            ],
+            certificates: [
+                {
+                    name: 'Web Development Certificate',
+                    institution: 'Coursera',
+                    year: 2023,
+                    duration: '6 months'
+                },
+                {
+                    name: 'Python Programming',
+                    institution: 'Udemy',
+                    year: 2022,
+                    duration: '3 months'
+                }
+            ],
+            previous_studentship: {
+                has_previous: true,
+                institution: 'University of Punjab',
+                program: 'BS Information Technology',
+                start_year: 2020,
+                end_year: 2022,
+                reason_for_leaving: 'Transferred to better program'
+            },
+            undertaking: {
+                information_accurate: true,
+                agree_to_terms: true,
+                agree_to_verification: true,
+                signature_date: '2024-08-15',
+                digital_signature: 'Ahmed Ali Khan'
+            },
+            documents: [
+                {
+                    type: 'CNIC',
+                    filename: 'ahmed_cnic.pdf',
+                    uploaded_at: '2024-08-15T14:25:00Z',
+                    status: 'verified'
+                },
+                {
+                    type: 'Matric Certificate',
+                    filename: 'ahmed_matric.pdf',
+                    uploaded_at: '2024-08-15T14:26:00Z',
+                    status: 'pending'
+                },
+                {
+                    type: 'Passport Size Photo',
+                    filename: 'ahmed_photo.jpg',
+                    uploaded_at: '2024-08-15T14:27:00Z',
+                    status: 'verified'
+                }
+            ],
+            timeline: [
+                {
+                    action: 'Form Submitted',
+                    user: 'Ahmed Ali Khan',
+                    timestamp: '2024-08-15T14:30:00Z',
+                    status: 'pending_review'
+                }
+            ]
+        },
+        {
+            id: 'ADM2024002',
+            intake_id: 1,
+            student_name: 'Sara Ahmed',
+            student_email: 'sara.ahmed@email.com',
+            student_phone: '03001234568',
+            status: 'under_review',
+            submitted_by: 'admin',
+            submitted_by_id: 2,
+            submitted_at: '2024-08-10T10:15:00Z',
+            personal_info: {
+                full_name: 'Sara Ahmed',
+                father_name: 'Muhammad Ahmed',
+                mother_name: 'Ayesha Ahmed',
+                cnic: '12345-1234567-3',
+                date_of_birth: '1999-03-20',
+                gender: 'Female',
+                marital_status: 'Single',
+                nationality: 'Pakistani',
+                religion: 'Islam',
+                blood_group: 'A+',
+                address: '456 Park Avenue, Karachi',
+                city: 'Karachi',
+                province: 'Sindh',
+                postal_code: '75000',
+                phone: '03001234568',
+                email: 'sara.ahmed@email.com',
+                emergency_contact: '03009876544',
+                emergency_relation: 'Father'
+            },
+            guardian_info: {
+                guardian_name: 'Muhammad Ahmed',
+                guardian_relation: 'Father',
+                guardian_cnic: '12345-1234567-4',
+                guardian_phone: '03001234569',
+                guardian_occupation: 'Engineer',
+                guardian_address: '456 Park Avenue, Karachi',
+                guardian_email: 'm.ahmed@email.com'
+            },
+            academic_info: {
+                matric_marks: 920,
+                matric_total: 1100,
+                matric_percentage: 83.64,
+                matric_board: 'Karachi Board',
+                matric_year: 2017,
+                intermediate_marks: 880,
+                intermediate_total: 1100,
+                intermediate_percentage: 80.00,
+                intermediate_board: 'Karachi Board',
+                intermediate_year: 2019,
+                bachelor_degree: 'BSc Software Engineering',
+                bachelor_institution: 'NED University',
+                bachelor_year: 2023,
+                bachelor_cgpa: 3.7,
+                master_degree: 'MSc Data Science',
+                master_institution: 'University of Karachi',
+                master_year: 2024,
+                master_cgpa: 3.8
+            },
+            distinctions: [
+                {
+                    title: 'Dean\'s List',
+                    institution: 'NED University',
+                    year: 2022,
+                    description: 'Maintained GPA above 3.5 for consecutive semesters'
+                }
+            ],
+            certificates: [
+                {
+                    name: 'Data Science Specialization',
+                    institution: 'Coursera',
+                    year: 2023,
+                    duration: '8 months'
+                }
+            ],
+            previous_studentship: {
+                has_previous: false
+            },
+            undertaking: {
+                information_accurate: true,
+                agree_to_terms: true,
+                agree_to_verification: true,
+                signature_date: '2024-08-10',
+                digital_signature: 'Sara Ahmed'
+            },
+            documents: [
+                {
+                    type: 'CNIC',
+                    filename: 'sara_cnic.pdf',
+                    uploaded_at: '2024-08-10T10:10:00Z',
+                    status: 'verified'
+                },
+                {
+                    type: 'Matric Certificate',
+                    filename: 'sara_matric.pdf',
+                    uploaded_at: '2024-08-10T10:11:00Z',
+                    status: 'verified'
+                },
+                {
+                    type: 'Passport Size Photo',
+                    filename: 'sara_photo.jpg',
+                    uploaded_at: '2024-08-10T10:12:00Z',
+                    status: 'verified'
+                }
+            ],
+            timeline: [
+                {
+                    action: 'Form Submitted',
+                    user: 'Prof. Ahmed Hassan',
+                    timestamp: '2024-08-10T10:15:00Z',
+                    status: 'under_review'
+                },
+                {
+                    action: 'Documents Verified',
+                    user: 'Prof. Ahmed Hassan',
+                    timestamp: '2024-08-12T14:30:00Z',
+                    status: 'under_review'
+                }
+            ]
+        }
+    ]
 };
 
 // Helper functions

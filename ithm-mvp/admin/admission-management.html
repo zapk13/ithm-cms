@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Management - ITHM CMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../assets/css/tailwind-built.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/js/demo-data.js"></script>
+    <script src="../assets/js/navigation.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-indigo-600">ITHM CMS</h1>
+                    </div>
+                    <nav class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a href="dashboard.html" class="text-gray-500 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Dashboard</a>
+                        <a href="admission-management.html" class="text-indigo-600 border-b-2 border-indigo-600 px-1 pt-1 text-sm font-medium">Admissions</a>
+                        <a href="user-management.html" class="text-gray-500 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Users</a>
+                    </nav>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-600">Welcome, <span class="user-info font-medium">Loading...</span></span>
+                    <span class="text-xs text-gray-500 user-role">Loading...</span>
+                    <button onclick="navigationManager.logout()" class="logout-btn text-sm text-gray-500 hover:text-gray-700">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <!-- Page Header -->
+        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 shadow-xl rounded-2xl border border-indigo-200 mb-8">
+            <div class="px-6 py-8">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                    <div class="mb-4 lg:mb-0">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <div class="w-12 h-12 bg-indigo-500 rounded-xl flex items-center justify-center shadow-lg">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h1 class="text-3xl font-bold text-gray-900">Admission Management</h1>
+                                <p class="text-sm text-gray-600 flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Manage admission intakes and applications
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                        <button onclick="showAdmissionStats()" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            View Stats
+                        </button>
+                        <button onclick="openCreateIntakeModal()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Create New Intake
+                        </button>
+                        <button onclick="openInPersonAdmission()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                            In-Person Admission
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Active Intakes</dt>
+                                <dd class="text-lg font-medium text-gray-900" id="active-intakes">2</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Total Applications</dt>
+                                <dd class="text-lg font-medium text-gray-900" id="total-applications">57</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Pending Review</dt>
+                                <dd class="text-lg font-medium text-gray-900" id="pending-review">12</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-purple-500 rounded-md flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Accepted</dt>
+                                <dd class="text-lg font-medium text-gray-900" id="accepted">35</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admission Intakes Table -->
+        <div class="bg-white shadow overflow-hidden sm:rounded-md">
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">Admission Intakes</h3>
+                        <p class="mt-1 max-w-2xl text-sm text-gray-500">Manage admission intakes for different courses and sessions</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-gray-500">Total: <span id="intake-count">3</span> intakes</span>
+                    </div>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Intake Details</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course & Campus</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applications</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="intakes-table-body" class="bg-white divide-y divide-gray-200">
+                        <!-- Intakes will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Admission Forms Table -->
+        <div class="bg-white shadow overflow-hidden sm:rounded-md mt-8">
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">Admission Applications</h3>
+                        <p class="mt-1 max-w-2xl text-sm text-gray-500">Review and manage submitted admission forms</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-gray-500">Total: <span id="application-count">2</span> applications</span>
+                    </div>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Application ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student Details</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Intake</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="applications-table-body" class="bg-white divide-y divide-gray-200">
+                        <!-- Applications will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- In-Person Admission Modal -->
+    <div id="inPersonAdmissionModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-4/5 lg:w-3/4 xl:w-2/3 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900">In-Person Admission Form</h3>
+                    <button onclick="closeInPersonAdmissionModal()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-blue-700">
+                                <strong>In-Person Admission:</strong> Fill out the admission form on behalf of a candidate who is physically present at the office. 
+                                This form will be submitted under your admin account with a note indicating it was filled in-person.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="max-h-96 overflow-y-auto">
+                    <iframe id="inPersonFormFrame" src="../admission-form.html?mode=admin&admin_fill=true" class="w-full h-96 border-0 rounded-lg"></iframe>
+                </div>
+                <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200 mt-4">
+                    <button onclick="closeInPersonAdmissionModal()" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Cancel
+                    </button>
+                    <button onclick="submitInPersonAdmission()" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        Submit on Behalf
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Intake Modal -->
+    <div id="createIntakeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900">Create New Admission Intake</h3>
+                    <button onclick="closeCreateIntakeModal()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <form id="createIntakeForm" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Intake Name</label>
+                            <input type="text" name="name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Course</label>
+                            <select name="course_id" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="">Select Course</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Start Date</label>
+                            <input type="date" name="start_date" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">End Date</label>
+                            <input type="date" name="end_date" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Max Applications</label>
+                            <input type="number" name="max_applications" required min="1" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Status</label>
+                            <select name="status" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="closed">Closed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" onclick="closeCreateIntakeModal()" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Create Intake
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadIntakes();
+            loadApplications();
+            loadCourses();
+            updateStatistics();
+        });
+
+        function loadIntakes() {
+            const intakes = demoData.admissionIntakes;
+            const tbody = document.getElementById('intakes-table-body');
+            
+            tbody.innerHTML = intakes.map(intake => {
+                const course = demoData.courses.find(c => c.id === intake.course_id);
+                const campus = demoData.campuses.find(c => c.id === intake.campus_id);
+                
+                return `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                                        <span class="text-sm font-medium text-indigo-600">${intake.id}</span>
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">${intake.name}</div>
+                                    <div class="text-sm text-gray-500">ID: ${intake.id}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">${course ? course.name : 'N/A'}</div>
+                            <div class="text-sm text-gray-500">${campus ? campus.name : 'N/A'}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${formatDate(intake.start_date)} - ${formatDate(intake.end_date)}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">${intake.current_applications}/${intake.max_applications}</div>
+                            <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                                <div class="bg-indigo-600 h-2 rounded-full" style="width: ${(intake.current_applications / intake.max_applications) * 100}%"></div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeClass(intake.status)}">
+                                ${intake.status.charAt(0).toUpperCase() + intake.status.slice(1)}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button onclick="viewIntake(${intake.id})" class="text-indigo-600 hover:text-indigo-900 mr-3">View</button>
+                            <button onclick="editIntake(${intake.id})" class="text-yellow-600 hover:text-yellow-900 mr-3">Edit</button>
+                            <button onclick="deleteIntake(${intake.id})" class="text-red-600 hover:text-red-900">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function loadApplications() {
+            const applications = demoData.admissionForms;
+            const tbody = document.getElementById('applications-table-body');
+            
+            tbody.innerHTML = applications.map(app => {
+                const intake = demoData.admissionIntakes.find(i => i.id === app.intake_id);
+                
+                return `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">${app.id}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">${app.student_name}</div>
+                            <div class="text-sm text-gray-500">${app.student_email}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${intake ? intake.name : 'N/A'}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            ${formatDate(app.submitted_at)}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeClass(app.status)}">
+                                ${app.status.replace('_', ' ').charAt(0).toUpperCase() + app.status.replace('_', ' ').slice(1)}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button onclick="viewApplication('${app.id}')" class="text-indigo-600 hover:text-indigo-900 mr-3">View</button>
+                            <button onclick="reviewApplication('${app.id}')" class="text-green-600 hover:text-green-900 mr-3">Review</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function loadCourses() {
+            const courseSelect = document.querySelector('select[name="course_id"]');
+            const courses = demoData.courses;
+            
+            courseSelect.innerHTML = '<option value="">Select Course</option>' + 
+                courses.map(course => `<option value="${course.id}">${course.name}</option>`).join('');
+        }
+
+        function updateStatistics() {
+            const intakes = demoData.admissionIntakes;
+            const applications = demoData.admissionForms;
+            
+            document.getElementById('active-intakes').textContent = intakes.filter(i => i.status === 'active').length;
+            document.getElementById('total-applications').textContent = applications.length;
+            document.getElementById('pending-review').textContent = applications.filter(a => a.status === 'pending_review').length;
+            document.getElementById('accepted').textContent = applications.filter(a => a.status === 'accepted').length;
+            document.getElementById('intake-count').textContent = intakes.length;
+            document.getElementById('application-count').textContent = applications.length;
+        }
+
+        function openCreateIntakeModal() {
+            document.getElementById('createIntakeModal').classList.remove('hidden');
+        }
+
+        function closeCreateIntakeModal() {
+            document.getElementById('createIntakeModal').classList.add('hidden');
+            document.getElementById('createIntakeForm').reset();
+        }
+
+        function openInPersonAdmission() {
+            document.getElementById('inPersonAdmissionModal').classList.remove('hidden');
+        }
+
+        function closeInPersonAdmissionModal() {
+            document.getElementById('inPersonAdmissionModal').classList.add('hidden');
+        }
+
+        function submitInPersonAdmission() {
+            // Get the iframe content
+            const iframe = document.getElementById('inPersonFormFrame');
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            
+            try {
+                // Try to get form data from iframe
+                const form = iframeDoc.getElementById('admissionForm');
+                if (form) {
+                    const formData = new FormData(form);
+                    const data = Object.fromEntries(formData);
+                    
+                    // Create in-person application
+                    const inPersonApplication = {
+                        id: 'ADM' + Date.now(),
+                        intake_id: 1,
+                        student_name: data.full_name,
+                        student_email: data.email,
+                        student_phone: data.phone,
+                        status: 'pending_review',
+                        submitted_by: 'admin',
+                        submitted_by_id: 2, // Current admin user
+                        submitted_at: new Date().toISOString(),
+                        submission_type: 'in_person',
+                        admin_notes: 'Application filled in-person by admin staff',
+                        personal_info: {
+                            full_name: data.full_name,
+                            cnic: data.cnic,
+                            date_of_birth: data.date_of_birth,
+                            gender: data.gender,
+                            phone: data.phone,
+                            email: data.email,
+                            address: data.address
+                        },
+                        guardian_info: {
+                            guardian_name: data.guardian_name,
+                            guardian_relation: data.guardian_relation,
+                            guardian_phone: data.guardian_phone,
+                            guardian_occupation: data.guardian_occupation
+                        },
+                        academic_info: {
+                            matric_marks: data.matric_marks,
+                            matric_total: data.matric_total,
+                            intermediate_marks: data.intermediate_marks,
+                            intermediate_total: data.intermediate_total
+                        },
+                        undertaking: {
+                            information_accurate: data.information_accurate,
+                            agree_to_terms: data.agree_to_terms,
+                            agree_to_verification: data.agree_to_verification,
+                            digital_signature: data.digital_signature
+                        },
+                        timeline: [
+                            {
+                                action: 'Form Submitted (In-Person)',
+                                user: 'Admin Staff',
+                                timestamp: new Date().toISOString(),
+                                status: 'pending_review',
+                                notes: 'Application filled by admin on behalf of candidate'
+                            }
+                        ]
+                    };
+                    
+                    // Add to demo data
+                    if (demoData.admissionForms) {
+                        demoData.admissionForms.push(inPersonApplication);
+                    }
+                    
+                    // Update UI
+                    loadApplications();
+                    updateStatistics();
+                    closeInPersonAdmissionModal();
+                    
+                    // Show success notification
+                    if (typeof showNotification === 'function') {
+                        showNotification('In-person admission submitted successfully!', 'success');
+                    } else {
+                        alert('In-person admission submitted successfully!');
+                    }
+                } else {
+                    alert('Please fill out the form completely before submitting.');
+                }
+            } catch (error) {
+                console.error('Error submitting in-person admission:', error);
+                alert('Error submitting form. Please try again.');
+            }
+        }
+
+        function closeCreateIntakeModal() {
+            document.getElementById('createIntakeModal').classList.add('hidden');
+        }
+
+        function showAdmissionStats() {
+            // Show admission statistics modal
+            alert('Admission statistics feature coming soon!');
+        }
+
+        function viewIntake(id) {
+            const intake = demoData.admissionIntakes.find(i => i.id === id);
+            if (intake) {
+                alert(`Viewing intake: ${intake.name}`);
+            }
+        }
+
+        function editIntake(id) {
+            const intake = demoData.admissionIntakes.find(i => i.id === id);
+            if (intake) {
+                alert(`Editing intake: ${intake.name}`);
+            }
+        }
+
+        function deleteIntake(id) {
+            if (confirm('Are you sure you want to delete this intake?')) {
+                alert(`Intake ${id} deleted successfully!`);
+                loadIntakes();
+                updateStatistics();
+            }
+        }
+
+        function viewApplication(id) {
+            window.location.href = `admission-form.html?id=${id}`;
+        }
+
+        function reviewApplication(id) {
+            window.location.href = `admission-form.html?id=${id}&mode=review`;
+        }
+
+        // Handle form submission
+        document.getElementById('createIntakeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const intakeData = Object.fromEntries(formData);
+            
+            // Add new intake to demo data
+            const newIntake = {
+                id: demoData.admissionIntakes.length + 1,
+                ...intakeData,
+                created_by: 2,
+                created_at: new Date().toISOString(),
+                current_applications: 0
+            };
+            
+            demoData.admissionIntakes.push(newIntake);
+            
+            // Update UI
+            loadIntakes();
+            updateStatistics();
+            closeCreateIntakeModal();
+            
+            // Show success notification
+            if (typeof showNotification === 'function') {
+                showNotification('Admission intake created successfully!', 'success');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="assets/css/tailwind-built.css">
     <script src="assets/js/demo-data.js"></script>
     <script src="assets/js/navigation.js"></script>
+    <script>
+        // Ensure scripts are loaded before initializing
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, checking demo login availability...');
+            console.log('demoLogin available:', typeof window.demoLogin);
+            console.log('navigationManager available:', typeof window.navigationManager);
+        });
+    </script>
 </head>
 <body class="bg-gray-50">
     <!-- Header -->
@@ -42,6 +50,9 @@
                     <a href="auth/login.html" class="btn btn-lg bg-white text-indigo-600 hover:bg-gray-100">
                         Access System
                     </a>
+                    <a href="admission-form.html" class="btn btn-lg border-2 border-white text-white hover:bg-white hover:text-indigo-600">
+                        Apply Now
+                    </a>
                     <a href="#features" class="btn btn-lg border-2 border-white text-white hover:bg-white hover:text-indigo-600">
                         Learn More
                     </a>
@@ -60,35 +71,35 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
                 <div class="text-center">
-                    <button onclick="demoLogin('super_admin')" class="demo-btn bg-red-500 text-white px-4 py-3 rounded-lg hover:bg-red-600 transition-colors w-full">
+                    <button onclick="handleDemoLogin('super_admin')" class="demo-btn bg-red-500 text-white px-4 py-3 rounded-lg hover:bg-red-600 transition-colors w-full">
                         <div class="text-2xl mb-2">👑</div>
                         <div class="font-semibold">Super Admin</div>
                         <div class="text-sm opacity-90">System Management</div>
                     </button>
                 </div>
                 <div class="text-center">
-                    <button onclick="demoLogin('admin')" class="demo-btn bg-purple-500 text-white px-4 py-3 rounded-lg hover:bg-purple-600 transition-colors w-full">
+                    <button onclick="handleDemoLogin('admin')" class="demo-btn bg-purple-500 text-white px-4 py-3 rounded-lg hover:bg-purple-600 transition-colors w-full">
                         <div class="text-2xl mb-2">🏢</div>
                         <div class="font-semibold">Campus Admin</div>
                         <div class="text-sm opacity-90">Campus Operations</div>
                     </button>
                 </div>
                 <div class="text-center">
-                    <button onclick="demoLogin('accounts')" class="demo-btn bg-green-500 text-white px-4 py-3 rounded-lg hover:bg-green-600 transition-colors w-full">
+                    <button onclick="handleDemoLogin('accounts')" class="demo-btn bg-green-500 text-white px-4 py-3 rounded-lg hover:bg-green-600 transition-colors w-full">
                         <div class="text-2xl mb-2">💰</div>
                         <div class="font-semibold">Accounts Officer</div>
                         <div class="text-sm opacity-90">Financial Management</div>
                     </button>
                 </div>
                 <div class="text-center">
-                    <button onclick="demoLogin('teacher')" class="demo-btn bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 transition-colors w-full">
+                    <button onclick="handleDemoLogin('teacher')" class="demo-btn bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 transition-colors w-full">
                         <div class="text-2xl mb-2">👨‍🏫</div>
                         <div class="font-semibold">Teacher</div>
                         <div class="text-sm opacity-90">Academic Management</div>
                     </button>
                 </div>
                 <div class="text-center">
-                    <button onclick="demoLogin('student')" class="demo-btn bg-orange-500 text-white px-4 py-3 rounded-lg hover:bg-orange-600 transition-colors w-full">
+                    <button onclick="handleDemoLogin('student')" class="demo-btn bg-orange-500 text-white px-4 py-3 rounded-lg hover:bg-orange-600 transition-colors w-full">
                         <div class="text-2xl mb-2">🎓</div>
                         <div class="font-semibold">Student</div>
                         <div class="text-sm opacity-90">Application Tracking</div>
@@ -284,15 +295,28 @@
                     <a href="#features" class="text-gray-400 hover:text-white">Features</a>
                 </div>
                 <div class="mt-8 pt-8 border-t border-gray-800 text-sm text-gray-400">
-                    © 2024 Institute of Technology and Health Management. All rights reserved.
+                    © 2024 Institute of Tourism and Hospitality Management. All rights reserved.
                 </div>
             </div>
         </div>
     </footer>
 
     <script>
-        // Initialize navigation
-        const navigationManager = new NavigationManager();
+        // Handle demo login with error checking
+        window.handleDemoLogin = function(role) {
+            console.log('Attempting demo login for role:', role);
+            try {
+                if (typeof window.demoLogin === 'function') {
+                    window.demoLogin(role);
+                } else {
+                    console.error('demoLogin function not available');
+                    alert('Demo login function not available. Please refresh the page and try again.');
+                }
+            } catch (error) {
+                console.error('Demo login error:', error);
+                alert('Demo login failed. Please refresh the page and try again.');
+            }
+        };
     </script>
 </body>
 </html>

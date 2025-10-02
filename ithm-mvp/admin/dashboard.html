@@ -20,7 +20,8 @@
                     </div>
                     <nav class="hidden md:ml-10 md:flex md:space-x-8">
                         <a href="dashboard.html" class="text-indigo-600 border-b-2 border-indigo-600 px-1 pt-1 text-sm font-medium">Dashboard</a>
-                        <a href="application-detail.html" class="text-gray-500 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Applications</a>
+                        <a href="admission-management.html" class="text-gray-500 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Admissions</a>
+                        <a href="../admission-form.html?mode=admin" class="text-gray-500 hover:text-gray-700 px-1 pt-1 text-sm font-medium">In-Person Form</a>
                         <a href="user-management.html" class="text-gray-500 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Users</a>
                     </nav>
                 </div>
@@ -119,6 +120,32 @@
                                 <dd class="text-lg font-medium text-gray-900">12</dd>
                             </dl>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-gradient-to-r from-green-50 to-emerald-50 shadow-xl rounded-2xl border border-green-200 mb-8">
+            <div class="px-6 py-8">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                    <div class="mb-4 lg:mb-0">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">In-Person Admissions</h2>
+                        <p class="text-gray-600">Help candidates fill out admission forms when they visit the office</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                        <a href="../admission-form.html?mode=admin" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                            Fill Form for Candidate
+                        </a>
+                        <a href="admission-management.html" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Manage Admissions
+                        </a>
                     </div>
                 </div>
             </div>

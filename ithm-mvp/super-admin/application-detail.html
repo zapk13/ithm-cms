@@ -6,6 +6,7 @@
     <title>Application Detail - ITHM CMS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../assets/css/tailwind-built.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../assets/js/demo-data.js"></script>
     <script src="../assets/js/navigation.js"></script>
 </head>
@@ -64,16 +65,66 @@
         </nav>
 
         <!-- Application Header -->
-        <div class="bg-white shadow rounded-lg mb-6">
-            <div class="px-4 py-5 sm:p-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-900">Application #APP-2024-001</h1>
-                        <p class="text-sm text-gray-600">Submitted on March 15, 2024</p>
+        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 shadow-xl rounded-2xl border border-indigo-200 mb-8">
+            <div class="px-6 py-8">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                    <div class="mb-4 lg:mb-0">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <div class="w-12 h-12 bg-indigo-500 rounded-xl flex items-center justify-center shadow-lg">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h1 class="text-3xl font-bold text-gray-900">Application #ITHM2024001</h1>
+                                <p class="text-sm text-gray-600 flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Submitted on March 15, 2024
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-3">
-                        <span class="status-badge status-pending">Under Review</span>
-                        <button class="btn btn-primary">Update Status</button>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                                </svg>
+                                Under Review
+                            </span>
+                            <div class="relative">
+                                <button onclick="toggleStatusDropdown()" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Update Status
+                                    <svg class="ml-2 -mr-0.5 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+                                <div id="statusDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200">
+                                    <div class="py-1">
+                                        <button onclick="updateStatus('accepted')" class="flex items-center w-full px-4 py-2 text-sm text-green-700 hover:bg-green-50">
+                                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            Accept Application
+                                        </button>
+                                        <button onclick="updateStatus('rejected')" class="flex items-center w-full px-4 py-2 text-sm text-red-700 hover:bg-red-50">
+                                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            Reject Application
+                                        </button>
+                                        <button onclick="updateStatus('onboarded')" class="flex items-center w-full px-4 py-2 text-sm text-purple-700 hover:bg-purple-50">
+                                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            Mark as Onboarded
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -141,45 +192,145 @@
                 </div>
 
                 <!-- Documents -->
-                <div class="bg-white shadow rounded-lg">
-                    <div class="px-4 py-5 sm:p-6">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Documents</h3>
-                        <div class="space-y-3">
-                            <div class="flex items-center justify-between p-3 border rounded-lg">
-                                <div class="flex items-center">
-                                    <svg class="h-8 w-8 text-red-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                    </svg>
+                <div class="bg-white shadow-xl rounded-2xl border border-gray-100 overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-4">
+                        <h3 class="text-lg font-semibold text-white flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Document Verification
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <!-- CNIC Document -->
+                            <div class="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-green-100 border border-green-200 rounded-xl hover:shadow-md transition-all duration-200">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center shadow-lg">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        </svg>
+                                    </div>
                                     <div>
-                                        <p class="font-medium text-gray-900">CNIC Copy</p>
-                                        <p class="text-sm text-gray-500">cnic_ahmed_khan.pdf</p>
+                                        <p class="font-semibold text-gray-900">CNIC Copy</p>
+                                        <p class="text-sm text-gray-600">cnic_ahmed_khan.pdf • 2.3 MB</p>
+                                        <p class="text-xs text-green-600 mt-1">Verified by Admin on Mar 16, 2024</p>
                                     </div>
                                 </div>
-                                <span class="status-badge status-accepted">Verified</span>
+                                <div class="flex items-center space-x-2">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-200">
+                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        Verified
+                                    </span>
+                                    <button onclick="viewDocument('cnic')" class="p-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="flex items-center justify-between p-3 border rounded-lg">
-                                <div class="flex items-center">
-                                    <svg class="h-8 w-8 text-red-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                    </svg>
+
+                            <!-- Matric Certificate -->
+                            <div class="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 border border-yellow-200 rounded-xl hover:shadow-md transition-all duration-200">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center shadow-lg">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        </svg>
+                                    </div>
                                     <div>
-                                        <p class="font-medium text-gray-900">Matriculation Certificate</p>
-                                        <p class="text-sm text-gray-500">matric_certificate.pdf</p>
+                                        <p class="font-semibold text-gray-900">Matriculation Certificate</p>
+                                        <p class="text-sm text-gray-600">matric_certificate.pdf • 1.8 MB</p>
+                                        <p class="text-xs text-yellow-600 mt-1">Pending verification</p>
                                     </div>
                                 </div>
-                                <span class="status-badge status-pending">Pending</span>
+                                <div class="flex items-center space-x-2">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">
+                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        Pending
+                                    </span>
+                                    <div class="flex space-x-1">
+                                        <button onclick="verifyDocument('matric')" class="p-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors" title="Verify">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </button>
+                                        <button onclick="rejectDocument('matric')" class="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors" title="Reject">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </button>
+                                        <button onclick="viewDocument('matric')" class="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors" title="View">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex items-center justify-between p-3 border rounded-lg">
-                                <div class="flex items-center">
-                                    <svg class="h-8 w-8 text-red-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                    </svg>
+
+                            <!-- Intermediate Certificate -->
+                            <div class="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 border border-yellow-200 rounded-xl hover:shadow-md transition-all duration-200">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center shadow-lg">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        </svg>
+                                    </div>
                                     <div>
-                                        <p class="font-medium text-gray-900">Intermediate Certificate</p>
-                                        <p class="text-sm text-gray-500">inter_certificate.pdf</p>
+                                        <p class="font-semibold text-gray-900">Intermediate Certificate</p>
+                                        <p class="text-sm text-gray-600">inter_certificate.pdf • 2.1 MB</p>
+                                        <p class="text-xs text-yellow-600 mt-1">Pending verification</p>
                                     </div>
                                 </div>
-                                <span class="status-badge status-pending">Pending</span>
+                                <div class="flex items-center space-x-2">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">
+                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        Pending
+                                    </span>
+                                    <div class="flex space-x-1">
+                                        <button onclick="verifyDocument('inter')" class="p-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors" title="Verify">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </button>
+                                        <button onclick="rejectDocument('inter')" class="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors" title="Reject">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </button>
+                                        <button onclick="viewDocument('inter')" class="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors" title="View">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Document Upload Section -->
+                        <div class="mt-6 p-4 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
+                            <div class="text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                </svg>
+                                <div class="mt-4">
+                                    <label for="file-upload" class="cursor-pointer">
+                                        <span class="mt-2 block text-sm font-medium text-gray-900">Upload additional documents</span>
+                                        <span class="mt-1 block text-sm text-gray-500">PNG, JPG, PDF up to 10MB</span>
+                                        <input id="file-upload" name="file-upload" type="file" class="sr-only" multiple accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload(event)">
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -242,14 +393,41 @@
             <!-- Sidebar -->
             <div class="space-y-6">
                 <!-- Quick Actions -->
-                <div class="bg-white shadow rounded-lg">
-                    <div class="px-4 py-5 sm:p-6">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Quick Actions</h3>
-                        <div class="space-y-3">
-                            <button class="btn btn-success w-full">Accept Application</button>
-                            <button class="btn btn-warning w-full">Request More Info</button>
-                            <button class="btn btn-danger w-full">Reject Application</button>
-                            <button class="btn btn-secondary w-full">Send Message</button>
+                <div class="bg-white shadow-xl rounded-2xl border border-gray-100 overflow-hidden">
+                    <div class="bg-gradient-to-r from-purple-500 to-pink-600 px-6 py-4">
+                        <h3 class="text-lg font-semibold text-white flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            Quick Actions
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <button onclick="acceptApplication()" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-3 rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Accept Application
+                            </button>
+                            <button onclick="requestMoreInfo()" class="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 py-3 rounded-xl font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                </svg>
+                                Request More Info
+                            </button>
+                            <button onclick="rejectApplication()" class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-xl font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                                Reject Application
+                            </button>
+                            <button onclick="sendMessage()" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-3 rounded-xl font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                </svg>
+                                Send Message
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -308,6 +486,330 @@
     <script>
         // Initialize navigation
         const navigationManager = new NavigationManager();
+
+        // Application status management
+        function toggleStatusDropdown() {
+            const dropdown = document.getElementById('statusDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        function updateStatus(status) {
+            const statusElement = document.querySelector('.inline-flex.items-center.px-3.py-1.rounded-full');
+            const statusText = statusElement.querySelector('span');
+            
+            // Update status badge
+            statusElement.className = 'inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border';
+            
+            switch(status) {
+                case 'accepted':
+                    statusElement.classList.add('bg-green-100', 'text-green-800', 'border-green-200');
+                    statusText.textContent = 'Accepted';
+                    showNotification('Application accepted successfully!', 'success');
+                    break;
+                case 'rejected':
+                    statusElement.classList.add('bg-red-100', 'text-red-800', 'border-red-200');
+                    statusText.textContent = 'Rejected';
+                    showNotification('Application rejected.', 'error');
+                    break;
+                case 'onboarded':
+                    statusElement.classList.add('bg-purple-100', 'text-purple-800', 'border-purple-200');
+                    statusText.textContent = 'Onboarded';
+                    showNotification('Student marked as onboarded!', 'success');
+                    break;
+            }
+            
+            // Close dropdown
+            document.getElementById('statusDropdown').classList.add('hidden');
+            
+            // Add to timeline
+            addTimelineEvent(status);
+        }
+
+        // Document management
+        function verifyDocument(docType) {
+            showNotification(`${docType} document verified successfully!`, 'success');
+            // Update document status in UI
+            updateDocumentStatus(docType, 'verified');
+        }
+
+        function rejectDocument(docType) {
+            showNotification(`${docType} document rejected.`, 'error');
+            // Update document status in UI
+            updateDocumentStatus(docType, 'rejected');
+        }
+
+        function viewDocument(docType) {
+            showNotification(`Opening ${docType} document...`, 'info');
+            // Simulate document opening
+            setTimeout(() => {
+                showNotification('Document opened in new tab.', 'info');
+            }, 1000);
+        }
+
+        function updateDocumentStatus(docType, status) {
+            // Find the document element and update its status
+            const documents = document.querySelectorAll('.bg-gradient-to-r');
+            documents.forEach(doc => {
+                if (doc.textContent.includes(docType)) {
+                    const statusBadge = doc.querySelector('.inline-flex.items-center.px-3.py-1.rounded-full');
+                    if (statusBadge) {
+                        statusBadge.className = 'inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border';
+                        if (status === 'verified') {
+                            statusBadge.classList.add('bg-green-100', 'text-green-800', 'border-green-200');
+                            statusBadge.querySelector('span').textContent = 'Verified';
+                        } else if (status === 'rejected') {
+                            statusBadge.classList.add('bg-red-100', 'text-red-800', 'border-red-200');
+                            statusBadge.querySelector('span').textContent = 'Rejected';
+                        }
+                    }
+                }
+            });
+        }
+
+        // File upload handling
+        function handleFileUpload(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                showNotification(`${files.length} file(s) uploaded successfully!`, 'success');
+                // Add uploaded files to the document list
+                addUploadedFiles(files);
+            }
+        }
+
+        function addUploadedFiles(files) {
+            const documentContainer = document.querySelector('.space-y-4');
+            Array.from(files).forEach(file => {
+                const fileElement = createFileElement(file);
+                documentContainer.appendChild(fileElement);
+            });
+        }
+
+        function createFileElement(file) {
+            const div = document.createElement('div');
+            div.className = 'flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-xl hover:shadow-md transition-all duration-200';
+            div.innerHTML = `
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-900">${file.name}</p>
+                        <p class="text-sm text-gray-600">${(file.size / 1024 / 1024).toFixed(1)} MB</p>
+                        <p class="text-xs text-blue-600 mt-1">Just uploaded</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                        </svg>
+                        New
+                    </span>
+                    <div class="flex space-x-1">
+                        <button onclick="verifyDocument('${file.name}')" class="p-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors" title="Verify">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <button onclick="viewDocument('${file.name}')" class="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors" title="View">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+            return div;
+        }
+
+        // Quick action functions
+        function acceptApplication() {
+            if (confirm('Are you sure you want to accept this application?')) {
+                updateStatus('accepted');
+                showNotification('Application accepted! Student will be notified.', 'success');
+            }
+        }
+
+        function requestMoreInfo() {
+            const message = prompt('What additional information do you need?');
+            if (message) {
+                showNotification('Information request sent to student.', 'info');
+                addTimelineEvent('info_requested', message);
+            }
+        }
+
+        function rejectApplication() {
+            if (confirm('Are you sure you want to reject this application?')) {
+                const reason = prompt('Please provide a reason for rejection:');
+                if (reason) {
+                    updateStatus('rejected');
+                    showNotification('Application rejected. Student will be notified.', 'error');
+                    addTimelineEvent('rejected', reason);
+                }
+            }
+        }
+
+        function sendMessage() {
+            const message = prompt('Enter your message to the student:');
+            if (message) {
+                showNotification('Message sent to student.', 'info');
+                addTimelineEvent('message_sent', message);
+            }
+        }
+
+        // Timeline management
+        function addTimelineEvent(action, details = '') {
+            const timeline = document.querySelector('.flow-root ul');
+            const newEvent = document.createElement('li');
+            
+            let eventText = '';
+            let iconColor = '';
+            let iconSvg = '';
+            
+            switch(action) {
+                case 'accepted':
+                    eventText = 'Application accepted';
+                    iconColor = 'bg-green-500';
+                    iconSvg = '<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>';
+                    break;
+                case 'rejected':
+                    eventText = 'Application rejected';
+                    iconColor = 'bg-red-500';
+                    iconSvg = '<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>';
+                    break;
+                case 'onboarded':
+                    eventText = 'Student onboarded';
+                    iconColor = 'bg-purple-500';
+                    iconSvg = '<path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>';
+                    break;
+                case 'info_requested':
+                    eventText = 'Information requested';
+                    iconColor = 'bg-yellow-500';
+                    iconSvg = '<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>';
+                    break;
+                case 'message_sent':
+                    eventText = 'Message sent to student';
+                    iconColor = 'bg-blue-500';
+                    iconSvg = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>';
+                    break;
+            }
+            
+            newEvent.innerHTML = `
+                <div class="relative pb-8">
+                    <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
+                    <div class="relative flex space-x-3">
+                        <div>
+                            <span class="h-8 w-8 rounded-full ${iconColor} flex items-center justify-center ring-8 ring-white">
+                                <svg class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    ${iconSvg}
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                            <div>
+                                <p class="text-sm text-gray-500">${eventText}</p>
+                                ${details ? `<p class="text-xs text-gray-400 mt-1">${details}</p>` : ''}
+                            </div>
+                            <div class="text-right text-sm whitespace-nowrap text-gray-500">
+                                <time>Just now</time>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            timeline.insertBefore(newEvent, timeline.firstChild);
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden transform transition-all duration-300 ease-in-out`;
+            
+            let bgColor = '';
+            let iconSvg = '';
+            
+            switch(type) {
+                case 'success':
+                    bgColor = 'bg-green-50 border-green-200';
+                    iconSvg = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>';
+                    break;
+                case 'error':
+                    bgColor = 'bg-red-50 border-red-200';
+                    iconSvg = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>';
+                    break;
+                case 'info':
+                default:
+                    bgColor = 'bg-blue-50 border-blue-200';
+                    iconSvg = '<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>';
+                    break;
+            }
+            
+            notification.innerHTML = `
+                <div class="p-4 ${bgColor} border-l-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-${type === 'success' ? 'green' : type === 'error' ? 'red' : 'blue'}-400" fill="currentColor" viewBox="0 0 20 20">
+                                ${iconSvg}
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">${message}</p>
+                        </div>
+                        <div class="ml-auto pl-3">
+                            <div class="-mx-1.5 -my-1.5">
+                                <button onclick="this.parentElement.parentElement.parentElement.parentElement.remove()" class="inline-flex rounded-md p-1.5 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-600">
+                                    <span class="sr-only">Dismiss</span>
+                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('statusDropdown');
+            const button = event.target.closest('button');
+            
+            if (!button || !button.onclick || !button.onclick.toString().includes('toggleStatusDropdown')) {
+                if (dropdown && !dropdown.classList.contains('hidden')) {
+                    dropdown.classList.add('hidden');
+                }
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add fade-in animation to cards
+            const cards = document.querySelectorAll('.bg-white');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease-out';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
     </script>
 </body>
 </html>
