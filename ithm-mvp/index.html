@@ -65,45 +65,187 @@
     <div class="bg-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Demo Access</h2>
-                <p class="text-lg text-gray-600">Experience the system with different user roles</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Interactive Demo Access</h2>
+                <p class="text-lg text-gray-600 mb-6">Experience the complete system with realistic data and workflows</p>
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-2xl mx-auto">
+                    <p class="text-sm text-blue-800">
+                        <strong>💡 Demo Tip:</strong> Each role has pre-loaded realistic data. Try different roles to see how the system works from different perspectives!
+                    </p>
+                </div>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                <div class="text-center">
-                    <button onclick="handleDemoLogin('super_admin')" class="demo-btn bg-red-500 text-white px-4 py-3 rounded-lg hover:bg-red-600 transition-colors w-full">
-                        <div class="text-2xl mb-2">👑</div>
-                        <div class="font-semibold">Super Admin</div>
-                        <div class="text-sm opacity-90">System Management</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <div class="group">
+                    <button onclick="handleDemoLogin('super_admin')" class="demo-btn bg-gradient-to-br from-red-500 to-red-600 text-white px-6 py-6 rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 w-full shadow-lg hover:shadow-xl transform hover:scale-105">
+                        <div class="text-3xl mb-3">👑</div>
+                        <div class="font-bold text-lg mb-2">Super Admin</div>
+                        <div class="text-sm opacity-90 mb-3">System-wide oversight & management</div>
+                        <div class="text-xs opacity-75 bg-white bg-opacity-20 rounded-full px-3 py-1">
+                            Global Analytics • User Management • System Settings
+                        </div>
                     </button>
                 </div>
-                <div class="text-center">
-                    <button onclick="handleDemoLogin('admin')" class="demo-btn bg-purple-500 text-white px-4 py-3 rounded-lg hover:bg-purple-600 transition-colors w-full">
-                        <div class="text-2xl mb-2">🏢</div>
-                        <div class="font-semibold">Campus Admin</div>
-                        <div class="text-sm opacity-90">Campus Operations</div>
+                <div class="group">
+                    <button onclick="handleDemoLogin('admin')" class="demo-btn bg-gradient-to-br from-purple-500 to-purple-600 text-white px-6 py-6 rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all duration-300 w-full shadow-lg hover:shadow-xl transform hover:scale-105">
+                        <div class="text-3xl mb-3">🏢</div>
+                        <div class="font-bold text-lg mb-2">Campus Admin</div>
+                        <div class="text-sm opacity-90 mb-3">Campus operations & admissions</div>
+                        <div class="text-xs opacity-75 bg-white bg-opacity-20 rounded-full px-3 py-1">
+                            Admission Management • User Creation • In-Person Admissions
+                        </div>
                     </button>
                 </div>
-                <div class="text-center">
-                    <button onclick="handleDemoLogin('accounts')" class="demo-btn bg-green-500 text-white px-4 py-3 rounded-lg hover:bg-green-600 transition-colors w-full">
-                        <div class="text-2xl mb-2">💰</div>
-                        <div class="font-semibold">Accounts Officer</div>
-                        <div class="text-sm opacity-90">Financial Management</div>
+                <div class="group">
+                    <button onclick="handleDemoLogin('accounts')" class="demo-btn bg-gradient-to-br from-green-500 to-green-600 text-white px-6 py-6 rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 w-full shadow-lg hover:shadow-xl transform hover:scale-105">
+                        <div class="text-3xl mb-3">💰</div>
+                        <div class="font-bold text-lg mb-2">Accounts Officer</div>
+                        <div class="text-sm opacity-90 mb-3">Financial management & payments</div>
+                        <div class="text-xs opacity-75 bg-white bg-opacity-20 rounded-full px-3 py-1">
+                            Payment Processing • Fee Management • Financial Reports
+                        </div>
                     </button>
                 </div>
-                <div class="text-center">
-                    <button onclick="handleDemoLogin('teacher')" class="demo-btn bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 transition-colors w-full">
-                        <div class="text-2xl mb-2">👨‍🏫</div>
-                        <div class="font-semibold">Teacher</div>
-                        <div class="text-sm opacity-90">Academic Management</div>
+                <div class="group">
+                    <button onclick="handleDemoLogin('teacher')" class="demo-btn bg-gradient-to-br from-blue-500 to-blue-600 text-white px-6 py-6 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 w-full shadow-lg hover:shadow-xl transform hover:scale-105">
+                        <div class="text-3xl mb-3">👨‍🏫</div>
+                        <div class="font-bold text-lg mb-2">Teacher</div>
+                        <div class="text-sm opacity-90 mb-3">Academic management & student tracking</div>
+                        <div class="text-xs opacity-75 bg-white bg-opacity-20 rounded-full px-3 py-1">
+                            Student Management • Course Coordination • Academic Reports
+                        </div>
                     </button>
                 </div>
-                <div class="text-center">
-                    <button onclick="handleDemoLogin('student')" class="demo-btn bg-orange-500 text-white px-4 py-3 rounded-lg hover:bg-orange-600 transition-colors w-full">
-                        <div class="text-2xl mb-2">🎓</div>
-                        <div class="font-semibold">Student</div>
-                        <div class="text-sm opacity-90">Application Tracking</div>
+                <div class="group">
+                    <button onclick="handleDemoLogin('student')" class="demo-btn bg-gradient-to-br from-orange-500 to-orange-600 text-white px-6 py-6 rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 w-full shadow-lg hover:shadow-xl transform hover:scale-105">
+                        <div class="text-3xl mb-3">🎓</div>
+                        <div class="font-bold text-lg mb-2">Student</div>
+                        <div class="text-sm opacity-90 mb-3">Application tracking & management</div>
+                        <div class="text-xs opacity-75 bg-white bg-opacity-20 rounded-full px-3 py-1">
+                            Application Status • Payment Tracking • Document Management
+                        </div>
                     </button>
+                </div>
+            </div>
+            
+            <!-- Demo Features Highlight -->
+            <div class="mt-12 bg-gray-50 rounded-2xl p-8">
+                <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Demo Features</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-indigo-600 text-xl">📊</span>
+                        </div>
+                        <h4 class="font-semibold text-gray-900 mb-2">Real-time Data</h4>
+                        <p class="text-sm text-gray-600">Interactive charts and live statistics</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-green-600 text-xl">🔄</span>
+                        </div>
+                        <h4 class="font-semibold text-gray-900 mb-2">Complete Workflows</h4>
+                        <p class="text-sm text-gray-600">End-to-end application processes</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-purple-600 text-xl">📱</span>
+                        </div>
+                        <h4 class="font-semibold text-gray-900 mb-2">Responsive Design</h4>
+                        <p class="text-sm text-gray-600">Works perfectly on all devices</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Walkthrough Section -->
+    <div class="bg-gradient-to-br from-indigo-50 to-purple-50 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Demo Walkthrough</h2>
+                <p class="text-lg text-gray-600 mb-8">Follow these steps to experience the complete system</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-4">
+                        <span class="text-indigo-600 font-bold text-lg">1</span>
+                    </div>
+                    <h3 class="font-bold text-gray-900 mb-2">Start as Student</h3>
+                    <p class="text-sm text-gray-600 mb-4">Begin by applying for admission to see the student perspective</p>
+                    <button onclick="handleDemoLogin('student')" class="text-indigo-600 font-medium text-sm">Try Student Demo →</button>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                        <span class="text-purple-600 font-bold text-lg">2</span>
+                    </div>
+                    <h3 class="font-bold text-gray-900 mb-2">Review as Admin</h3>
+                    <p class="text-sm text-gray-600 mb-4">Switch to Campus Admin to review and manage applications</p>
+                    <button onclick="handleDemoLogin('admin')" class="text-purple-600 font-medium text-sm">Try Admin Demo →</button>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <span class="text-green-600 font-bold text-lg">3</span>
+                    </div>
+                    <h3 class="font-bold text-gray-900 mb-2">Process Payments</h3>
+                    <p class="text-sm text-gray-600 mb-4">Experience the financial management workflow</p>
+                    <button onclick="handleDemoLogin('accounts')" class="text-green-600 font-medium text-sm">Try Accounts Demo →</button>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                        <span class="text-red-600 font-bold text-lg">4</span>
+                    </div>
+                    <h3 class="font-bold text-gray-900 mb-2">System Overview</h3>
+                    <p class="text-sm text-gray-600 mb-4">View the complete system from Super Admin perspective</p>
+                    <button onclick="handleDemoLogin('super_admin')" class="text-red-600 font-medium text-sm">Try Super Admin →</button>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Key Demo Scenarios</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-blue-600 text-xs font-bold">A</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Complete Application Process</h4>
+                                <p class="text-sm text-gray-600">Fill out admission form, upload documents, generate PDF, and track status</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-green-600 text-xs font-bold">B</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">In-Person Admissions</h4>
+                                <p class="text-sm text-gray-600">Admin staff can fill forms on behalf of candidates visiting the office</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-purple-600 text-xs font-bold">C</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Payment Processing</h4>
+                                <p class="text-sm text-gray-600">Process payments, generate receipts, and manage financial records</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-orange-600 text-xs font-bold">D</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Real-time Analytics</h4>
+                                <p class="text-sm text-gray-600">Interactive charts, live statistics, and comprehensive reporting</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,4 +1,5 @@
-// Demo Data for ITHM MVP
+// Enhanced Demo Data for ITHM MVP
+// This file contains realistic demo data for all system modules
 const demoData = {
     // User accounts
     users: [
@@ -751,6 +752,359 @@ function getStatusBadgeClass(status) {
     };
     return classes[status] || 'status-inactive';
 }
+
+// Demo Scenario Helper Functions
+const demoScenarios = {
+    // Initialize demo scenarios
+    init: function() {
+        this.setupRealisticData();
+        this.addDemoNotifications();
+        this.simulateRealTimeUpdates();
+    },
+    
+    // Setup realistic demo data
+    setupRealisticData: function() {
+        // Add timestamps to make data feel current
+        const now = new Date();
+        
+        // Update application timestamps
+        if (demoData.admissionForms) {
+            demoData.admissionForms.forEach((form, index) => {
+                const daysAgo = index * 2;
+                form.submitted_at = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000).toISOString();
+            });
+        }
+        
+        // Update payment timestamps
+        if (demoData.payments) {
+            demoData.payments.forEach((payment, index) => {
+                const daysAgo = index * 3;
+                payment.payment_date = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000).toISOString();
+            });
+        }
+    },
+    
+    // Add demo notifications
+    addDemoNotifications: function() {
+        const notifications = [
+            {
+                id: 'demo_1',
+                title: 'New Application Received',
+                message: 'Ahmed Ali Khan submitted an application for Fall 2024',
+                type: 'info',
+                timestamp: new Date().toISOString(),
+                is_read: false
+            },
+            {
+                id: 'demo_2',
+                title: 'Payment Processed',
+                message: 'Payment of PKR 15,000 received from Sara Khan',
+                type: 'success',
+                timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                is_read: false
+            },
+            {
+                id: 'demo_3',
+                title: 'Document Verification Required',
+                message: '3 applications pending document verification',
+                type: 'warning',
+                timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+                is_read: true
+            }
+        ];
+        
+        // Store notifications in localStorage
+        localStorage.setItem('demoNotifications', JSON.stringify(notifications));
+    },
+    
+    // Simulate real-time updates
+    simulateRealTimeUpdates: function() {
+        // Update statistics every 30 seconds
+        setInterval(() => {
+            this.updateStatistics();
+        }, 30000);
+    },
+    
+    // Update statistics for realistic demo
+    updateStatistics: function() {
+        const stats = {
+            total_applications: Math.floor(Math.random() * 5) + 45,
+            pending_review: Math.floor(Math.random() * 3) + 8,
+            accepted: Math.floor(Math.random() * 2) + 25,
+            rejected: Math.floor(Math.random() * 2) + 5,
+            total_revenue: Math.floor(Math.random() * 50000) + 450000,
+            today_applications: Math.floor(Math.random() * 3) + 2
+        };
+        
+        // Store updated stats
+        localStorage.setItem('demoStats', JSON.stringify(stats));
+        
+        // Trigger UI update if function exists
+        if (typeof updateDashboardStats === 'function') {
+            updateDashboardStats(stats);
+        }
+    },
+    
+    // Get demo scenario for specific role
+    getScenarioForRole: function(role) {
+        const scenarios = {
+            student: {
+                title: 'Student Application Journey',
+                steps: [
+                    'Fill out admission form with personal and academic details',
+                    'Upload required documents including passport photo',
+                    'Generate and review PDF application',
+                    'Submit application and receive confirmation',
+                    'Track application status in real-time',
+                    'Make payment and upload receipt'
+                ],
+                highlight: 'Complete end-to-end application process'
+            },
+            admin: {
+                title: 'Campus Administration Workflow',
+                steps: [
+                    'Review incoming applications from students',
+                    'Create new admission intakes for courses',
+                    'Process in-person admissions for walk-in candidates',
+                    'Manage user accounts and permissions',
+                    'Monitor campus-specific statistics',
+                    'Update application statuses and add comments'
+                ],
+                highlight: 'Comprehensive campus operations management'
+            },
+            accounts: {
+                title: 'Financial Management Process',
+                steps: [
+                    'Review payment details and process transactions',
+                    'Generate payment receipts and vouchers',
+                    'Track outstanding fees and payment history',
+                    'Manage fee structures and payment methods',
+                    'Generate financial reports and analytics',
+                    'Handle refunds and payment disputes'
+                ],
+                highlight: 'Complete financial workflow management'
+            },
+            teacher: {
+                title: 'Academic Management System',
+                steps: [
+                    'View assigned students and their progress',
+                    'Manage course materials and assignments',
+                    'Track student attendance and performance',
+                    'Generate academic reports and analytics',
+                    'Communicate with students and parents',
+                    'Update grades and academic records'
+                ],
+                highlight: 'Academic workflow and student management'
+            },
+            super_admin: {
+                title: 'System-wide Administration',
+                steps: [
+                    'Monitor global system statistics and health',
+                    'Manage all applications across campuses',
+                    'Configure system settings and preferences',
+                    'Generate comprehensive reports and analytics',
+                    'Manage user roles and permissions',
+                    'Oversee campus operations and performance'
+                ],
+                highlight: 'Complete system oversight and management'
+            }
+        };
+        
+        return scenarios[role] || scenarios.student;
+    },
+    
+    // Reset demo data
+    resetDemo: function() {
+        localStorage.removeItem('demoUser');
+        localStorage.removeItem('demoNotifications');
+        localStorage.removeItem('demoStats');
+        localStorage.removeItem('demoApplications');
+        localStorage.removeItem('demoPayments');
+        
+        // Reinitialize demo data
+        this.init();
+    },
+    
+    // Show interactive demo tour
+    showDemoTour: function() {
+        const tourSteps = [
+            {
+                target: '.demo-btn',
+                title: 'Demo Access',
+                content: 'Click any role button to experience the system from that user\'s perspective. Each role has different capabilities and workflows.',
+                position: 'bottom'
+            },
+            {
+                target: 'nav',
+                title: 'Navigation',
+                content: 'Use the navigation menu to explore different sections of the system. Each role sees different menu options.',
+                position: 'bottom'
+            },
+            {
+                target: '.notification-bell',
+                title: 'Notifications',
+                content: 'Click the notification bell to see real-time updates and system alerts.',
+                position: 'left'
+            },
+            {
+                target: '.search-box',
+                title: 'Global Search',
+                content: 'Use the search box to find applications, users, payments, and other data across the system.',
+                position: 'bottom'
+            }
+        ];
+        
+        this.startTour(tourSteps);
+    },
+    
+    // Start interactive tour
+    startTour: function(steps) {
+        let currentStep = 0;
+        
+        const showStep = (stepIndex) => {
+            if (stepIndex >= steps.length) {
+                this.endTour();
+                return;
+            }
+            
+            const step = steps[stepIndex];
+            const target = document.querySelector(step.target);
+            
+            if (!target) {
+                showStep(stepIndex + 1);
+                return;
+            }
+            
+            // Create tour overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'fixed inset-0 bg-black bg-opacity-50 z-50';
+            overlay.id = 'demo-tour-overlay';
+            
+            // Create tour tooltip
+            const tooltip = document.createElement('div');
+            tooltip.className = 'fixed bg-white rounded-lg shadow-2xl p-6 max-w-sm z-51';
+            tooltip.innerHTML = `
+                <div class="mb-4">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">${step.title}</h3>
+                    <p class="text-gray-600 text-sm">${step.content}</p>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xs text-gray-500">Step ${stepIndex + 1} of ${steps.length}</span>
+                    <div class="flex space-x-2">
+                        <button onclick="window.demoScenarios.endTour()" class="px-3 py-1 text-sm text-gray-600 hover:text-gray-800">
+                            Skip Tour
+                        </button>
+                        <button onclick="window.demoScenarios.nextStep(${stepIndex + 1})" class="px-4 py-1 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700">
+                            ${stepIndex === steps.length - 1 ? 'Finish' : 'Next'}
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Position tooltip
+            const rect = target.getBoundingClientRect();
+            const position = step.position || 'bottom';
+            
+            if (position === 'bottom') {
+                tooltip.style.top = `${rect.bottom + 10}px`;
+                tooltip.style.left = `${rect.left + rect.width / 2}px`;
+                tooltip.style.transform = 'translateX(-50%)';
+            } else if (position === 'left') {
+                tooltip.style.top = `${rect.top + rect.height / 2}px`;
+                tooltip.style.right = `${window.innerWidth - rect.left + 10}px`;
+                tooltip.style.transform = 'translateY(-50%)';
+            }
+            
+            document.body.appendChild(overlay);
+            document.body.appendChild(tooltip);
+            
+            // Highlight target element
+            target.style.position = 'relative';
+            target.style.zIndex = '52';
+            target.style.boxShadow = '0 0 0 4px rgba(59, 130, 246, 0.5)';
+        };
+        
+        // Make functions globally available
+        window.demoScenarios.nextStep = (stepIndex) => {
+            document.getElementById('demo-tour-overlay')?.remove();
+            document.querySelector('.fixed.bg-white.rounded-lg')?.remove();
+            showStep(stepIndex);
+        };
+        
+        window.demoScenarios.endTour = () => {
+            document.getElementById('demo-tour-overlay')?.remove();
+            document.querySelector('.fixed.bg-white.rounded-lg')?.remove();
+            // Remove highlighting
+            document.querySelectorAll('[style*="box-shadow"]').forEach(el => {
+                el.style.boxShadow = '';
+                el.style.position = '';
+                el.style.zIndex = '';
+            });
+        };
+        
+        showStep(0);
+    },
+    
+    // End tour
+    endTour: function() {
+        const overlay = document.getElementById('demo-tour-overlay');
+        const tooltip = document.querySelector('.fixed.bg-white.rounded-lg');
+        
+        if (overlay) overlay.remove();
+        if (tooltip) tooltip.remove();
+        
+        // Remove highlighting
+        document.querySelectorAll('[style*="box-shadow"]').forEach(el => {
+            el.style.boxShadow = '';
+            el.style.position = '';
+            el.style.zIndex = '';
+        });
+        
+        // Show completion message
+        this.showNotification('Demo tour completed! Explore the system at your own pace.', 'success');
+    },
+    
+    // Show notification
+    showNotification: function(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+            type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' :
+            type === 'error' ? 'bg-red-100 text-red-800 border border-red-200' :
+            type === 'warning' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' :
+            'bg-blue-100 text-blue-800 border border-blue-200'
+        }`;
+        notification.innerHTML = `
+            <div class="flex items-center space-x-2">
+                <span>${message}</span>
+                <button onclick="this.parentElement.parentElement.remove()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
+            }
+        }, 5000);
+    }
+};
+
+// Initialize demo scenarios when page loads
+if (typeof window !== 'undefined') {
+    window.addEventListener('load', function() {
+        demoScenarios.init();
+    });
+}
+
+// Make demoData and demoScenarios globally available
+window.demoData = demoData;
+window.demoScenarios = demoScenarios;
 
 // Export for use in other files
 if (typeof module !== 'undefined' && module.exports) {

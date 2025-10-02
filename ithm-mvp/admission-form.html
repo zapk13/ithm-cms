@@ -623,11 +623,220 @@
         }
 
         // Handle form submission
+        // Enhanced form validation
+        function validateForm() {
+            const requiredFields = [
+                'full_name', 'email', 'phone', 'cnic', 'date_of_birth', 'gender',
+                'guardian_name', 'guardian_relation', 'guardian_phone',
+                'matric_marks', 'matric_total', 'intermediate_marks', 'intermediate_total',
+                'information_accurate', 'agree_to_terms', 'agree_to_verification'
+            ];
+            
+            let isValid = true;
+            const errors = [];
+            
+            // Check required fields
+            requiredFields.forEach(field => {
+                const element = document.querySelector(`[name="${field}"]`);
+                if (!element || !element.value.trim()) {
+                    isValid = false;
+                    errors.push(`${field.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())} is required`);
+                    if (element) {
+                        element.classList.add('border-red-500');
+                        element.classList.remove('border-gray-200');
+                    }
+                } else {
+                    if (element) {
+                        element.classList.remove('border-red-500');
+                        element.classList.add('border-gray-200');
+                    }
+                }
+            });
+            
+            // Email validation
+            const email = document.querySelector('[name="email"]');
+            if (email && email.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+                isValid = false;
+                errors.push('Please enter a valid email address');
+                email.classList.add('border-red-500');
+            }
+            
+            // Phone validation
+            const phone = document.querySelector('[name="phone"]');
+            if (phone && phone.value && !/^[0-9+\-\s()]+$/.test(phone.value)) {
+                isValid = false;
+                errors.push('Please enter a valid phone number');
+                phone.classList.add('border-red-500');
+            }
+            
+            // CNIC validation
+            const cnic = document.querySelector('[name="cnic"]');
+            if (cnic && cnic.value && !/^[0-9]{5}-[0-9]{7}-[0-9]{1}$/.test(cnic.value)) {
+                isValid = false;
+                errors.push('CNIC must be in format: 12345-1234567-1');
+                cnic.classList.add('border-red-500');
+            }
+            
+            // Academic marks validation
+            const matricMarks = parseFloat(document.querySelector('[name="matric_marks"]')?.value || 0);
+            const matricTotal = parseFloat(document.querySelector('[name="matric_total"]')?.value || 0);
+            const intermediateMarks = parseFloat(document.querySelector('[name="intermediate_marks"]')?.value || 0);
+            const intermediateTotal = parseFloat(document.querySelector('[name="intermediate_total"]')?.value || 0);
+            
+            if (matricMarks > matricTotal) {
+                isValid = false;
+                errors.push('Matric marks cannot be greater than total marks');
+            }
+            
+            if (intermediateMarks > intermediateTotal) {
+                isValid = false;
+                errors.push('Intermediate marks cannot be greater than total marks');
+            }
+            
+            // Show validation errors
+            if (!isValid) {
+                showValidationErrors(errors);
+            }
+            
+            return isValid;
+        }
+        
+        // Show validation errors
+        function showValidationErrors(errors) {
+            const errorContainer = document.getElementById('validation-errors');
+            if (!errorContainer) {
+                const container = document.createElement('div');
+                container.id = 'validation-errors';
+                container.className = 'bg-red-50 border border-red-200 rounded-lg p-4 mb-6';
+                container.innerHTML = `
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-red-800">Please fix the following errors:</h3>
+                            <div class="mt-2 text-sm text-red-700">
+                                <ul class="list-disc list-inside space-y-1">
+                                    ${errors.map(error => `<li>${error}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.querySelector('form').insertBefore(container, document.querySelector('form').firstChild);
+            } else {
+                errorContainer.innerHTML = `
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-red-800">Please fix the following errors:</h3>
+                            <div class="mt-2 text-sm text-red-700">
+                                <ul class="list-disc list-inside space-y-1">
+                                    ${errors.map(error => `<li>${error}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Clear validation errors
+        function clearValidationErrors() {
+            const errorContainer = document.getElementById('validation-errors');
+            if (errorContainer) {
+                errorContainer.remove();
+            }
+        }
+        
+        // Real-time validation
+        function setupRealTimeValidation() {
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    validateField(this);
+                });
+                
+                input.addEventListener('input', function() {
+                    if (this.classList.contains('border-red-500')) {
+                        validateField(this);
+                    }
+                });
+            });
+        }
+        
+        function validateField(field) {
+            const value = field.value.trim();
+            let isValid = true;
+            
+            // Required field check
+            if (field.hasAttribute('required') && !value) {
+                isValid = false;
+            }
+            
+            // Email validation
+            if (field.type === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                isValid = false;
+            }
+            
+            // Phone validation
+            if (field.name === 'phone' && value && !/^[0-9+\-\s()]+$/.test(value)) {
+                isValid = false;
+            }
+            
+            // CNIC validation
+            if (field.name === 'cnic' && value && !/^[0-9]{5}-[0-9]{7}-[0-9]{1}$/.test(value)) {
+                isValid = false;
+            }
+            
+            // Update field appearance
+            if (isValid) {
+                field.classList.remove('border-red-500');
+                field.classList.add('border-gray-200');
+            } else {
+                field.classList.add('border-red-500');
+                field.classList.remove('border-gray-200');
+            }
+            
+            return isValid;
+        }
+        
+        // Initialize real-time validation
+        setupRealTimeValidation();
+        
         document.getElementById('admissionForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData);
+            // Clear previous errors
+            clearValidationErrors();
+            
+            // Validate form
+            if (!validateForm()) {
+                // Scroll to first error
+                const firstError = document.querySelector('.border-red-500');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstError.focus();
+                }
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+            
+            // Simulate form processing
+            setTimeout(() => {
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData);
             
             // Create new application
             const newApplication = {
@@ -682,16 +891,61 @@
                 demoData.admissionForms.push(newApplication);
             }
             
-            // Show success message
-            if (typeof showNotification === 'function') {
-                showNotification('Application submitted successfully!', 'success');
-            } else {
-                alert('Application submitted successfully!');
-            }
+                // Show enhanced success message
+                showSuccessMessage();
+                
+                // Update status
+                document.getElementById('application-status').textContent = 'SUBMITTED';
+                document.getElementById('application-status').className = 'text-green-600';
+                
+                // Reset button
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+        
+        // Show success message with animation
+        function showSuccessMessage() {
+            const successModal = document.createElement('div');
+            successModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            successModal.innerHTML = `
+                <div class="bg-white rounded-2xl p-8 max-w-md mx-4 shadow-2xl transform transition-all duration-300 scale-0" id="success-modal">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Application Submitted!</h3>
+                        <p class="text-gray-600 mb-6">Your application has been successfully submitted and is now under review.</p>
+                        <div class="space-y-2 text-sm text-gray-500 mb-6">
+                            <p>• You will receive an email confirmation shortly</p>
+                            <p>• Application ID: ADM${Date.now()}</p>
+                            <p>• Status: Pending Review</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                                Close
+                            </button>
+                            <button onclick="generatePDF(); this.parentElement.parentElement.parentElement.remove()" class="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                                Download PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
             
-            // Update status
-            document.getElementById('application-status').textContent = 'SUBMITTED';
-            document.getElementById('application-status').className = 'text-green-600';
+            document.body.appendChild(successModal);
+            
+            // Animate modal
+            setTimeout(() => {
+                const modal = document.getElementById('success-modal');
+                if (modal) {
+                    modal.classList.remove('scale-0');
+                    modal.classList.add('scale-100');
+                }
+            }, 100);
+        }
         });
     </script>
 </body>
