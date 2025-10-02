@@ -229,6 +229,31 @@
                     </div>
                 </div>
 
+                <!-- Passport Photo -->
+                ${app.passport_photo ? `
+                <div class="bg-white shadow rounded-lg mb-6">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Passport Photo</h3>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-shrink-0">
+                                <img src="${app.passport_photo}" alt="Passport Photo" class="h-32 w-32 rounded-lg object-cover border-2 border-gray-200">
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Passport size photo uploaded by applicant</p>
+                                <button onclick="viewFullImage('${app.passport_photo}')" class="mt-2 inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
+                                    </svg>
+                                    View Full Size
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
                 <!-- Guardian Information -->
                 <div class="bg-white shadow rounded-lg mb-6">
                     <div class="px-6 py-4 border-b border-gray-200">
@@ -288,6 +313,121 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Distinctions and Achievements -->
+                ${app.distinctions && app.distinctions.length > 0 ? `
+                <div class="bg-white shadow rounded-lg mb-6">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Distinctions and Achievements</h3>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div class="space-y-4">
+                            ${app.distinctions.map(distinction => `
+                            <div class="border border-gray-200 rounded-lg p-4">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex-1">
+                                        <h4 class="text-sm font-medium text-gray-900">${distinction.title}</h4>
+                                        <p class="text-sm text-gray-600 mt-1">${distinction.description}</p>
+                                        <p class="text-xs text-gray-500 mt-2">Awarded: ${distinction.year || 'N/A'}</p>
+                                    </div>
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        ${distinction.level || 'Achievement'}
+                                    </span>
+                                </div>
+                            </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Certificates and Trainings -->
+                ${app.certificates && app.certificates.length > 0 ? `
+                <div class="bg-white shadow rounded-lg mb-6">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Certificates and Trainings</h3>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div class="space-y-4">
+                            ${app.certificates.map(cert => `
+                            <div class="border border-gray-200 rounded-lg p-4">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex-1">
+                                        <h4 class="text-sm font-medium text-gray-900">${cert.name}</h4>
+                                        <p class="text-sm text-gray-600 mt-1">${cert.issuing_organization}</p>
+                                        <p class="text-xs text-gray-500 mt-2">Issued: ${cert.issue_date || 'N/A'} | Valid: ${cert.valid_until || 'N/A'}</p>
+                                    </div>
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                        ${cert.status || 'Valid'}
+                                    </span>
+                                </div>
+                            </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Previous Studentship -->
+                ${app.previous_studentship && app.previous_studentship.length > 0 ? `
+                <div class="bg-white shadow rounded-lg mb-6">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Previous Studentship</h3>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div class="space-y-4">
+                            ${app.previous_studentship.map(prev => `
+                            <div class="border border-gray-200 rounded-lg p-4">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex-1">
+                                        <h4 class="text-sm font-medium text-gray-900">${prev.institution}</h4>
+                                        <p class="text-sm text-gray-600 mt-1">${prev.program} - ${prev.degree}</p>
+                                        <p class="text-xs text-gray-500 mt-2">Period: ${prev.start_date || 'N/A'} to ${prev.end_date || 'N/A'}</p>
+                                        <p class="text-xs text-gray-500">Status: ${prev.status || 'N/A'}</p>
+                                    </div>
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${prev.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">
+                                        ${prev.status || 'Unknown'}
+                                    </span>
+                                </div>
+                            </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Documents Uploaded -->
+                ${app.documents && app.documents.length > 0 ? `
+                <div class="bg-white shadow rounded-lg mb-6">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Uploaded Documents</h3>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            ${app.documents.map(doc => `
+                            <div class="border border-gray-200 rounded-lg p-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 truncate">${doc.name}</p>
+                                        <p class="text-xs text-gray-500">${doc.type || 'Document'}</p>
+                                        <p class="text-xs text-gray-400">${doc.size || 'Unknown size'}</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 flex space-x-2">
+                                    <button onclick="viewDocument('${doc.url}')" class="text-xs text-indigo-600 hover:text-indigo-900">View</button>
+                                    <button onclick="downloadDocument('${doc.url}', '${doc.name}')" class="text-xs text-green-600 hover:text-green-900">Download</button>
+                                </div>
+                            </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
 
                 <!-- Application Details -->
                 <div class="bg-white shadow rounded-lg mb-6">
@@ -453,6 +593,39 @@
                 'waitlisted': 'bg-purple-100 text-purple-800'
             };
             return statusClasses[status] || 'bg-gray-100 text-gray-800';
+        }
+
+        function viewFullImage(imageUrl) {
+            // Create modal for full image view
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="relative max-w-4xl max-h-full p-4">
+                    <button onclick="this.parentElement.parentElement.remove()" class="absolute top-2 right-2 text-white hover:text-gray-300 z-10">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                    <img src="${imageUrl}" alt="Full size image" class="max-w-full max-h-full rounded-lg shadow-2xl">
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function viewDocument(documentUrl) {
+            // Open document in new tab
+            window.open(documentUrl, '_blank');
+        }
+
+        function downloadDocument(documentUrl, fileName) {
+            // Create download link
+            const link = document.createElement('a');
+            link.href = documentUrl;
+            link.download = fileName;
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>

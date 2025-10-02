@@ -519,23 +519,38 @@ const demoData = {
                 signature_date: '2024-08-15',
                 digital_signature: 'Ahmed Ali Khan'
             },
+            passport_photo: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=',
             documents: [
                 {
-                    type: 'CNIC',
-                    filename: 'ahmed_cnic.pdf',
+                    name: 'CNIC Copy',
+                    type: 'Identity Document',
+                    url: '#',
+                    size: '1.2 MB',
                     uploaded_at: '2024-08-15T14:25:00Z',
                     status: 'verified'
                 },
                 {
-                    type: 'Matric Certificate',
-                    filename: 'ahmed_matric.pdf',
+                    name: 'Matric Certificate',
+                    type: 'Academic Document',
+                    url: '#',
+                    size: '2.5 MB',
                     uploaded_at: '2024-08-15T14:26:00Z',
                     status: 'pending'
                 },
                 {
-                    type: 'Passport Size Photo',
-                    filename: 'ahmed_photo.jpg',
+                    name: 'Intermediate Certificate',
+                    type: 'Academic Document',
+                    url: '#',
+                    size: '2.8 MB',
                     uploaded_at: '2024-08-15T14:27:00Z',
+                    status: 'pending'
+                },
+                {
+                    name: 'Bachelor Degree Certificate',
+                    type: 'Academic Document',
+                    url: '#',
+                    size: '3.1 MB',
+                    uploaded_at: '2024-08-15T14:28:00Z',
                     status: 'verified'
                 }
             ],
