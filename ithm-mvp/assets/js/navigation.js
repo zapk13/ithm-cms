@@ -692,7 +692,7 @@ function demoLogin(role) {
             first_name: 'Dr. Muhammad',
             last_name: 'Ali Khan',
             role: 'super_admin',
-            redirect: 'super-admin/dashboard.html' 
+            redirect: '../super-admin/dashboard.html' 
         },
         admin: { 
             email: 'admin.lahore@ithm.edu.pk', 
@@ -700,7 +700,7 @@ function demoLogin(role) {
             first_name: 'Prof. Ahmed',
             last_name: 'Hassan',
             role: 'admin',
-            redirect: 'admin/dashboard.html' 
+            redirect: '../admin/dashboard.html' 
         },
         accounts: { 
             email: 'accounts.lahore@ithm.edu.pk', 
@@ -708,7 +708,7 @@ function demoLogin(role) {
             first_name: 'Ms. Fatima',
             last_name: 'Sheikh',
             role: 'accounts',
-            redirect: 'accounts/dashboard.html' 
+            redirect: '../accounts/dashboard.html' 
         },
         teacher: { 
             email: 'teacher.lahore@ithm.edu.pk', 
@@ -716,7 +716,7 @@ function demoLogin(role) {
             first_name: 'Mr. Usman',
             last_name: 'Malik',
             role: 'teacher',
-            redirect: 'teacher/dashboard.html' 
+            redirect: '../teacher/dashboard.html' 
         },
         student: { 
             email: 'student@ithm.edu.pk', 
@@ -724,7 +724,7 @@ function demoLogin(role) {
             first_name: 'Ahmed',
             last_name: 'Khan',
             role: 'student',
-            redirect: 'student/dashboard.html' 
+            redirect: '../student/dashboard.html' 
         }
     };
     
