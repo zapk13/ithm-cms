@@ -368,6 +368,11 @@
                     const previewImg = document.getElementById('preview-img');
                     previewImg.src = e.target.result;
                     preview.classList.remove('hidden');
+                    
+                    // Show success message
+                    if (typeof showNotification === 'function') {
+                        showNotification('Photo uploaded successfully! It will be included in the PDF.', 'success');
+                    }
                 };
                 reader.readAsDataURL(input.files[0]);
             }
@@ -474,13 +479,20 @@
             
             // Add passport photo if available
             const photoInput = document.getElementById('passport-photo');
+            console.log('Photo input found:', photoInput);
+            console.log('Photo files:', photoInput?.files);
+            
             if (photoInput && photoInput.files && photoInput.files[0]) {
+                console.log('Processing photo for PDF...');
                 const reader = new FileReader();
                 reader.onload = function(e) {
+                    console.log('Photo loaded, adding to PDF...');
                     try {
                         // Add photo to PDF (positioned on the right side)
                         const img = new Image();
                         img.onload = function() {
+                            console.log('Image loaded, dimensions:', img.width, 'x', img.height);
+                            
                             // Calculate dimensions to fit in a 2x2 inch space
                             const maxWidth = 60;
                             const maxHeight = 60;
@@ -494,11 +506,15 @@
                                 imgHeight *= ratio;
                             }
                             
+                            console.log('Scaled dimensions:', imgWidth, 'x', imgHeight);
+                            
                             // Position photo on the right side
                             const photoX = 140;
                             const photoY = y;
                             
+                            // Add the image to PDF
                             doc.addImage(e.target.result, 'JPEG', photoX, photoY, imgWidth, imgHeight);
+                            console.log('Image added to PDF at position:', photoX, photoY);
                             
                             // Add photo label
                             doc.setFontSize(10);
@@ -506,13 +522,31 @@
                             
                             // Continue with form data
                             addFormDataToPDF(doc, data, y);
+                            
+                            // Save the PDF
+                            console.log('Saving PDF with photo...');
+                            doc.save('admission-application.pdf');
+                        };
+                        img.onerror = function() {
+                            console.error('Error loading image for PDF');
+                            // Continue without image
+                            addFormDataToPDF(doc, data, y);
+                            doc.save('admission-application.pdf');
                         };
                         img.src = e.target.result;
                     } catch (error) {
                         console.error('Error adding image to PDF:', error);
                         // Continue without image
                         addFormDataToPDF(doc, data, y);
+                        // Save the PDF even without image
+                        doc.save('admission-application.pdf');
                     }
+                };
+                reader.onerror = function() {
+                    console.error('Error reading photo file');
+                    // Continue without image
+                    addFormDataToPDF(doc, data, y);
+                    doc.save('admission-application.pdf');
                 };
                 reader.readAsDataURL(photoInput.files[0]);
             } else {
@@ -523,6 +557,9 @@
                 
                 // Continue with form data
                 addFormDataToPDF(doc, data, y);
+                
+                // Save the PDF
+                doc.save('admission-application.pdf');
             }
         }
         
