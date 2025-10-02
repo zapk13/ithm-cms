@@ -71,12 +71,6 @@
                             </svg>
                             Create New Intake
                         </button>
-                        <button onclick="openInPersonAdmission()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-                            In-Person Admission
-                        </button>
                     </div>
                 </div>
             </div>
@@ -230,47 +224,6 @@
         </div>
     </main>
 
-    <!-- In-Person Admission Modal -->
-    <div id="inPersonAdmissionModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-        <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-4/5 lg:w-3/4 xl:w-2/3 shadow-lg rounded-md bg-white">
-            <div class="mt-3">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-medium text-gray-900">In-Person Admission Form</h3>
-                    <button onclick="closeInPersonAdmissionModal()" class="text-gray-400 hover:text-gray-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <div class="flex">
-                        <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                            </svg>
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-sm text-blue-700">
-                                <strong>In-Person Admission:</strong> Fill out the admission form on behalf of a candidate who is physically present at the office. 
-                                This form will be submitted under your admin account with a note indicating it was filled in-person.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="max-h-96 overflow-y-auto">
-                    <iframe id="inPersonFormFrame" src="../admission-form.html?mode=admin&admin_fill=true" class="w-full h-96 border-0 rounded-lg"></iframe>
-                </div>
-                <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200 mt-4">
-                    <button onclick="closeInPersonAdmissionModal()" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Cancel
-                    </button>
-                    <button onclick="submitInPersonAdmission()" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                        Submit on Behalf
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Create Intake Modal -->
     <div id="createIntakeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
@@ -453,106 +406,6 @@
         function closeCreateIntakeModal() {
             document.getElementById('createIntakeModal').classList.add('hidden');
             document.getElementById('createIntakeForm').reset();
-        }
-
-        function openInPersonAdmission() {
-            document.getElementById('inPersonAdmissionModal').classList.remove('hidden');
-        }
-
-        function closeInPersonAdmissionModal() {
-            document.getElementById('inPersonAdmissionModal').classList.add('hidden');
-        }
-
-        function submitInPersonAdmission() {
-            // Get the iframe content
-            const iframe = document.getElementById('inPersonFormFrame');
-            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-            
-            try {
-                // Try to get form data from iframe
-                const form = iframeDoc.getElementById('admissionForm');
-                if (form) {
-                    const formData = new FormData(form);
-                    const data = Object.fromEntries(formData);
-                    
-                    // Create in-person application
-                    const inPersonApplication = {
-                        id: 'ADM' + Date.now(),
-                        intake_id: 1,
-                        student_name: data.full_name,
-                        student_email: data.email,
-                        student_phone: data.phone,
-                        status: 'pending_review',
-                        submitted_by: 'admin',
-                        submitted_by_id: 2, // Current admin user
-                        submitted_at: new Date().toISOString(),
-                        submission_type: 'in_person',
-                        admin_notes: 'Application filled in-person by admin staff',
-                        personal_info: {
-                            full_name: data.full_name,
-                            cnic: data.cnic,
-                            date_of_birth: data.date_of_birth,
-                            gender: data.gender,
-                            phone: data.phone,
-                            email: data.email,
-                            address: data.address
-                        },
-                        guardian_info: {
-                            guardian_name: data.guardian_name,
-                            guardian_relation: data.guardian_relation,
-                            guardian_phone: data.guardian_phone,
-                            guardian_occupation: data.guardian_occupation
-                        },
-                        academic_info: {
-                            matric_marks: data.matric_marks,
-                            matric_total: data.matric_total,
-                            intermediate_marks: data.intermediate_marks,
-                            intermediate_total: data.intermediate_total
-                        },
-                        undertaking: {
-                            information_accurate: data.information_accurate,
-                            agree_to_terms: data.agree_to_terms,
-                            agree_to_verification: data.agree_to_verification,
-                            digital_signature: data.digital_signature
-                        },
-                        timeline: [
-                            {
-                                action: 'Form Submitted (In-Person)',
-                                user: 'Admin Staff',
-                                timestamp: new Date().toISOString(),
-                                status: 'pending_review',
-                                notes: 'Application filled by admin on behalf of candidate'
-                            }
-                        ]
-                    };
-                    
-                    // Add to demo data
-                    if (demoData.admissionForms) {
-                        demoData.admissionForms.push(inPersonApplication);
-                    }
-                    
-                    // Update UI
-                    loadApplications();
-                    updateStatistics();
-                    closeInPersonAdmissionModal();
-                    
-                    // Show success notification
-                    if (typeof showNotification === 'function') {
-                        showNotification('In-person admission submitted successfully!', 'success');
-                    } else {
-                        alert('In-person admission submitted successfully!');
-                    }
-                } else {
-                    alert('Please fill out the form completely before submitting.');
-                }
-            } catch (error) {
-                console.error('Error submitting in-person admission:', error);
-                alert('Error submitting form. Please try again.');
-            }
-        }
-
-        function closeCreateIntakeModal() {
-            document.getElementById('createIntakeModal').classList.add('hidden');
         }
 
         function showAdmissionStats() {
