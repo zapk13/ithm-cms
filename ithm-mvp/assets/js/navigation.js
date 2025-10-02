@@ -6,12 +6,26 @@ class NavigationManager {
     }
 
     init() {
-        this.setupNavigation();
-        this.setupUserInfo();
-        this.setupLogout();
-        this.setupNotificationSystem();
-        this.setupRealTimeUpdates();
-        this.setupSearchClickOutside();
+        // Only initialize navigation features on dashboard pages
+        const currentPath = window.location.pathname;
+        const isDashboardPage = currentPath.includes('/dashboard.html') || 
+                               currentPath.includes('/admin/') || 
+                               currentPath.includes('/super-admin/') || 
+                               currentPath.includes('/accounts/') || 
+                               currentPath.includes('/teacher/') || 
+                               currentPath.includes('/student/');
+        
+        if (isDashboardPage) {
+            this.setupNavigation();
+            this.setupUserInfo();
+            this.setupLogout();
+            this.setupNotificationSystem();
+            this.setupRealTimeUpdates();
+            this.setupSearchClickOutside();
+        } else {
+            // For non-dashboard pages, only setup basic user info
+            this.setupUserInfo();
+        }
     }
 
     getCurrentUser() {
@@ -106,8 +120,14 @@ class NavigationManager {
             const container = document.createElement('div');
             container.id = 'notification-container';
             container.className = 'fixed top-4 right-4 z-50 space-y-2 max-w-sm w-full';
-            document.body.appendChild(container);
-            this.notificationContainer = container;
+            
+            // Safety check to ensure document.body exists
+            if (document.body) {
+                document.body.appendChild(container);
+                this.notificationContainer = container;
+            } else {
+                console.warn('Document body not available for notification container');
+            }
         }
     }
 
