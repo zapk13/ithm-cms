@@ -127,7 +127,11 @@ class NavigationManager {
                 this.notificationContainer = container;
             } else {
                 console.warn('Document body not available for notification container');
+                this.notificationContainer = null;
             }
+        } else {
+            // Use existing container
+            this.notificationContainer = document.getElementById('notification-container');
         }
     }
 
@@ -179,6 +183,11 @@ class NavigationManager {
             this.notifications = [];
         }
 
+        // Create notification container if it doesn't exist
+        if (!this.notificationContainer) {
+            this.createNotificationContainer();
+        }
+
         const notification = {
             id: Date.now(),
             message,
@@ -188,17 +197,30 @@ class NavigationManager {
         };
 
         this.notifications.unshift(notification);
-        this.renderNotification(notification);
-        this.updateNotificationCount();
-        this.saveNotifications();
+        
+        // Only render notification if container exists
+        if (this.notificationContainer) {
+            this.renderNotification(notification);
+            this.updateNotificationCount();
+            this.saveNotifications();
 
-        // Auto remove after duration
-        setTimeout(() => {
-            this.removeNotification(notification.id);
-        }, duration);
+            // Auto remove after duration
+            setTimeout(() => {
+                this.removeNotification(notification.id);
+            }, duration);
+        } else {
+            // Fallback: show simple alert if notification system not available
+            alert(message);
+        }
     }
 
     renderNotification(notification) {
+        // Check if notification container exists
+        if (!this.notificationContainer) {
+            console.warn('Notification container not available');
+            return;
+        }
+
         const notificationElement = document.createElement('div');
         notificationElement.id = `notification-${notification.id}`;
         notificationElement.className = `bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden transform transition-all duration-300 ease-in-out`;
