@@ -174,6 +174,11 @@ class NavigationManager {
     }
 
     showNotification(message, type = 'info', duration = 5000) {
+        // Initialize notifications array if it doesn't exist
+        if (!this.notifications) {
+            this.notifications = [];
+        }
+
         const notification = {
             id: Date.now(),
             message,
