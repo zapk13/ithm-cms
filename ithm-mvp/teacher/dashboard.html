@@ -18,15 +18,9 @@
                     <div class="flex-shrink-0">
                         <h1 class="text-2xl font-bold text-indigo-600">ITHM CMS</h1>
                     </div>
-                    <nav class="hidden md:ml-10 md:flex md:space-x-8">
-                        <a href="dashboard.html" class="text-indigo-600 border-b-2 border-indigo-600 px-1 pt-1 text-sm font-medium">Dashboard</a>
-                        <a href="dashboard.html" class="text-gray-500 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Students</a>
-                        <a href="dashboard.html" class="text-gray-500 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Courses</a>
-                    </nav>
                 </div>
                 <div class="flex items-center space-x-4">
                     <span class="text-sm text-gray-600">Welcome, <span class="user-info font-medium">Loading...</span></span>
-                    <span class="text-xs text-gray-500 user-role">Loading...</span>
                     <button onclick="navigationManager.logout()" class="logout-btn text-sm text-gray-500 hover:text-gray-700">Logout</button>
                 </div>
             </div>
@@ -34,367 +28,135 @@
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <!-- Page Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Teacher Dashboard</h1>
-            <p class="text-gray-600 mt-2">Student management and academic records</p>
+            <h1 class="text-4xl font-bold text-gray-900">Teacher Dashboard</h1>
+            <p class="text-xl text-gray-600 mt-2">Academic Management</p>
         </div>
 
-        <!-- Teaching Statistics Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white overflow-hidden shadow rounded-lg">
-                <div class="p-5">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Key Metrics Widgets -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+            <!-- Total Students -->
+            <div class="bg-white shadow-xl rounded-2xl p-8 cursor-pointer hover:shadow-2xl transition-all duration-300 transform hover:scale-105" onclick="drillDown('students')">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900 mb-2">127</p>
+                        <p class="text-lg text-gray-600">Total Students</p>
+                        <p class="text-sm text-blue-600 mt-2">Under my guidance</p>
+                    </div>
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                                 </svg>
-                            </div>
-                        </div>
-                        <div class="ml-5 w-0 flex-1">
-                            <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">Total Students</dt>
-                                <dd class="text-lg font-medium text-gray-900">25</dd>
-                            </dl>
-                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white overflow-hidden shadow rounded-lg">
-                <div class="p-5">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+            <!-- Assigned Courses -->
+            <div class="bg-white shadow-xl rounded-2xl p-8 cursor-pointer hover:shadow-2xl transition-all duration-300 transform hover:scale-105" onclick="drillDown('courses')">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900 mb-2">8</p>
+                        <p class="text-lg text-gray-600">Assigned Courses</p>
+                        <p class="text-sm text-green-600 mt-2">This semester</p>
+                    </div>
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                                 </svg>
-                            </div>
-                        </div>
-                        <div class="ml-5 w-0 flex-1">
-                            <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">Assigned Courses</dt>
-                                <dd class="text-lg font-medium text-gray-900">3</dd>
-                            </dl>
-                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white overflow-hidden shadow rounded-lg">
-                <div class="p-5">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="ml-5 w-0 flex-1">
-                            <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">Attendance Rate</dt>
-                                <dd class="text-lg font-medium text-gray-900">87%</dd>
-                            </dl>
-                        </div>
+            <!-- Attendance Rate -->
+            <div class="bg-white shadow-xl rounded-2xl p-8 cursor-pointer hover:shadow-2xl transition-all duration-300 transform hover:scale-105" onclick="drillDown('attendance')">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900 mb-2">94%</p>
+                        <p class="text-lg text-gray-600">Attendance Rate</p>
+                        <p class="text-sm text-green-600 mt-2">Excellent</p>
+                    </div>
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white overflow-hidden shadow rounded-lg">
-                <div class="p-5">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
-                                <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="ml-5 w-0 flex-1">
-                            <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">Pending Grades</dt>
-                                <dd class="text-lg font-medium text-gray-900">12</dd>
-                            </dl>
-                        </div>
+            <!-- Pending Grades -->
+            <div class="bg-white shadow-xl rounded-2xl p-8 cursor-pointer hover:shadow-2xl transition-all duration-300 transform hover:scale-105" onclick="drillDown('grades')">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900 mb-2">23</p>
+                        <p class="text-lg text-gray-600">Pending Grades</p>
+                        <p class="text-sm text-yellow-600 mt-2">To be submitted</p>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Content Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- My Students -->
-            <div class="bg-white shadow rounded-lg">
-                <div class="px-4 py-5 sm:p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900">My Students</h3>
-                        <a href="dashboard.html" class="text-sm text-indigo-600 hover:text-indigo-500">View all</a>
-                    </div>
-                    <div class="flow-root">
-                        <ul class="-mb-8">
-                            <li>
-                                <div class="relative pb-8">
-                                    <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
-                                    <div class="relative flex space-x-3">
-                                        <div>
-                                            <span class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center ring-8 ring-white">
-                                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                            <div>
-                                                <p class="text-sm text-gray-500">Student: <span class="font-medium text-gray-900">Ahmed Khan</span></p>
-                                                <p class="text-xs text-gray-400">Hotel Management - Roll: HM24001</p>
-                                            </div>
-                                            <div class="text-right text-sm whitespace-nowrap text-gray-500">
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    Active
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="relative pb-8">
-                                    <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
-                                    <div class="relative flex space-x-3">
-                                        <div>
-                                            <span class="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center ring-8 ring-white">
-                                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                            <div>
-                                                <p class="text-sm text-gray-500">Student: <span class="font-medium text-gray-900">Fatima Ali</span></p>
-                                                <p class="text-xs text-gray-400">Tourism Management - Roll: TM24002</p>
-                                            </div>
-                                            <div class="text-right text-sm whitespace-nowrap text-gray-500">
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    Active
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="relative">
-                                    <div class="relative flex space-x-3">
-                                        <div>
-                                            <span class="h-8 w-8 rounded-full bg-purple-500 flex items-center justify-center ring-8 ring-white">
-                                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                            <div>
-                                                <p class="text-sm text-gray-500">Student: <span class="font-medium text-gray-900">Hassan Ahmed</span></p>
-                                                <p class="text-xs text-gray-400">Hotel Management - Roll: HM24003</p>
-                                            </div>
-                                            <div class="text-right text-sm whitespace-nowrap text-gray-500">
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                    Under Review
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Course Overview -->
-            <div class="bg-white shadow rounded-lg">
-                <div class="px-4 py-5 sm:p-6">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Course Overview</h3>
-                    <div class="space-y-4">
-                        <div class="border-l-4 border-blue-400 pl-4">
-                            <div class="flex justify-between items-center">
-                                <h4 class="text-sm font-medium text-gray-900">Hotel Management</h4>
-                                <span class="text-sm text-blue-600 font-medium">15 students</span>
-                            </div>
-                            <p class="text-sm text-gray-500">2 Years Program - Main Campus</p>
-                        </div>
-                        <div class="border-l-4 border-green-400 pl-4">
-                            <div class="flex justify-between items-center">
-                                <h4 class="text-sm font-medium text-gray-900">Tourism Management</h4>
-                                <span class="text-sm text-green-600 font-medium">8 students</span>
-                            </div>
-                            <p class="text-sm text-gray-500">2 Years Program - Main Campus</p>
-                        </div>
-                        <div class="border-l-4 border-purple-400 pl-4">
-                            <div class="flex justify-between items-center">
-                                <h4 class="text-sm font-medium text-gray-900">Culinary Arts</h4>
-                                <span class="text-sm text-purple-600 font-medium">2 students</span>
-                            </div>
-                            <p class="text-sm text-gray-500">18 Months Program - Main Campus</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Recent Activity -->
-        <div class="mt-8">
-            <div class="bg-white shadow rounded-lg">
-                <div class="px-4 py-5 sm:p-6">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Recent Academic Activity</h3>
-                    <div class="flow-root">
-                        <ul class="-mb-8">
-                            <li>
-                                <div class="relative pb-8">
-                                    <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
-                                    <div class="relative flex space-x-3">
-                                        <div>
-                                            <span class="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center ring-8 ring-white">
-                                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                            <div>
-                                                <p class="text-sm text-gray-500">Attendance marked for <span class="font-medium text-gray-900">Hotel Management</span> class</p>
-                                                <p class="text-xs text-gray-400">15/18 students present</p>
-                                            </div>
-                                            <div class="text-right text-sm whitespace-nowrap text-gray-500">
-                                                <time datetime="2024-02-01">2 hours ago</time>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="relative pb-8">
-                                    <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
-                                    <div class="relative flex space-x-3">
-                                        <div>
-                                            <span class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center ring-8 ring-white">
-                                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                            <div>
-                                                <p class="text-sm text-gray-500">Grades updated for <span class="font-medium text-gray-900">Tourism Management</span> assignment</p>
-                                                <p class="text-xs text-gray-400">8 students graded</p>
-                                            </div>
-                                            <div class="text-right text-sm whitespace-nowrap text-gray-500">
-                                                <time datetime="2024-02-01">4 hours ago</time>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="relative">
-                                    <div class="relative flex space-x-3">
-                                        <div>
-                                            <span class="h-8 w-8 rounded-full bg-purple-500 flex items-center justify-center ring-8 ring-white">
-                                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                             </svg>
-                                        </div>
-                                        <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                            <div>
-                                                <p class="text-sm text-gray-500">New student enrolled: <span class="font-medium text-gray-900">Ayesha Butt</span></p>
-                                                <p class="text-xs text-gray-400">Culinary Arts program</p>
-                                            </div>
-                                            <div class="text-right text-sm whitespace-nowrap text-gray-500">
-                                                <time datetime="2024-02-01">6 hours ago</time>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Quick Actions -->
-        <div class="mt-8">
-            <div class="bg-white shadow rounded-lg">
-                <div class="px-4 py-5 sm:p-6">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Quick Actions</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <a href="dashboard.html" class="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg border border-gray-200 hover:border-gray-300">
-                            <div>
-                                <span class="rounded-lg inline-flex p-3 bg-indigo-50 text-indigo-700 ring-4 ring-white">
-                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div class="mt-4">
-                                <h3 class="text-lg font-medium">
-                                    <span class="absolute inset-0" aria-hidden="true"></span>
+        <div class="bg-white shadow-xl rounded-2xl p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Quick Actions</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <button onclick="manageStudents()" class="bg-blue-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
                                     Manage Students
-                                </h3>
-                                <p class="mt-2 text-sm text-gray-500">View and manage student records</p>
-                            </div>
-                        </a>
-
-                        <a href="dashboard.html" class="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg border border-gray-200 hover:border-gray-300">
-                            <div>
-                                <span class="rounded-lg inline-flex p-3 bg-green-50 text-green-700 ring-4 ring-white">
-                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div class="mt-4">
-                                <h3 class="text-lg font-medium">
-                                    <span class="absolute inset-0" aria-hidden="true"></span>
+                </button>
+                <button onclick="courseManagement()" class="bg-green-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-green-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
                                     Course Management
-                                </h3>
-                                <p class="mt-2 text-sm text-gray-500">Manage courses and academic content</p>
-                            </div>
-                        </a>
-
-                        <a href="#" class="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg border border-gray-200 hover:border-gray-300">
-                            <div>
-                                <span class="rounded-lg inline-flex p-3 bg-purple-50 text-purple-700 ring-4 ring-white">
-                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div class="mt-4">
-                                <h3 class="text-lg font-medium">
-                                    <span class="absolute inset-0" aria-hidden="true"></span>
+                </button>
+                <button onclick="academicReports()" class="bg-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
                                     Academic Reports
-                                </h3>
-                                <p class="mt-2 text-sm text-gray-500">Generate academic performance reports</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+                </button>
             </div>
         </div>
     </main>
 
     <script>
+        // Initialize navigation
+        const navigationManager = new NavigationManager();
+
+        // Drill down functionality
+        function drillDown(type) {
+            switch(type) {
+                case 'students':
+                    showNotification('Opening student list...', 'info');
+                    break;
+                case 'courses':
+                    showNotification('Opening course management...', 'info');
+                    break;
+                case 'attendance':
+                    showNotification('Opening attendance records...', 'info');
+                    break;
+                case 'grades':
+                    showNotification('Opening grade submission...', 'info');
+                    break;
+            }
+        }
+
+        // Quick action functions
+        function manageStudents() {
+            showNotification('Opening student management...', 'info');
+        }
+
+        function courseManagement() {
+            showNotification('Opening course management...', 'info');
+        }
+
+        function academicReports() {
+            showNotification('Loading academic reports...', 'info');
+        }
+
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
-            // Load demo data
-            const stats = getStatisticsByRole('teacher');
-            
-            // Update statistics if needed
-            console.log('Teacher Dashboard loaded with stats:', stats);
+            console.log('Teacher Dashboard loaded');
         });
     </script>
 </body>
