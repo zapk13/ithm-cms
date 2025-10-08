@@ -143,15 +143,24 @@
 
         // Quick action functions
         function viewApplicationStatus() {
-            showNotification('Loading application status...', 'info');
+            showNotification('Opening application status...', 'info');
+            setTimeout(() => {
+                window.open('admission-form.html', '_blank');
+            }, 1000);
         }
 
         function uploadDocuments() {
             showNotification('Opening document upload...', 'info');
+            setTimeout(() => {
+                showNotification('Document upload system would open here', 'success');
+            }, 1000);
         }
 
         function viewPayments() {
-            showNotification('Loading payment history...', 'info');
+            showNotification('Opening payment history...', 'info');
+            setTimeout(() => {
+                showNotification('Payment history system would open here', 'success');
+            }, 1000);
         }
 
         // Initialize dashboard

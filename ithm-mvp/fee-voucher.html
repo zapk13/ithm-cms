@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Voucher Generator - ITHM CMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/tailwind-built.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="assets/js/demo-data.js"></script>
+    <script src="assets/js/navigation.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-indigo-600">ITHM CMS</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="generateVoucherPDF()" class="bg-blue-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl">
+                        <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Generate PDF Voucher
+                    </button>
+                    <button onclick="saveVoucher()" class="bg-green-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-green-700 transition-all duration-200 shadow-lg hover:shadow-xl">
+                        Save Voucher
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <!-- Voucher Header -->
+        <div class="bg-white shadow rounded-lg mb-6">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h1 class="text-2xl font-bold text-gray-900">Fee Voucher Generator</h1>
+                <p class="text-gray-600 mt-1">Generate fee vouchers for students</p>
+                <div class="mt-4 flex items-center space-x-4">
+                    <span class="text-sm text-gray-500">Voucher ID: <span id="voucher-id">FV2024001</span></span>
+                    <span class="text-sm text-gray-500">Status: <span id="voucher-status" class="text-yellow-600">Draft</span></span>
+                </div>
+            </div>
+        </div>
+
+        <form id="voucherForm" class="space-y-8">
+            <!-- Student Information -->
+            <div class="bg-white shadow rounded-lg">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-medium text-gray-900">Student Information</h2>
+                </div>
+                <div class="px-6 py-4 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Student Name *</label>
+                            <input type="text" name="student_name" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800 placeholder-gray-400">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Roll Number *</label>
+                            <input type="text" name="roll_number" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800 placeholder-gray-400">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Course *</label>
+                            <select name="course" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800">
+                                <option value="">Select Course</option>
+                                <option value="Hotel Management">Hotel Management</option>
+                                <option value="Tourism Management">Tourism Management</option>
+                                <option value="Culinary Arts">Culinary Arts</option>
+                                <option value="Event Management">Event Management</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Semester *</label>
+                            <select name="semester" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800">
+                                <option value="">Select Semester</option>
+                                <option value="1st Semester">1st Semester</option>
+                                <option value="2nd Semester">2nd Semester</option>
+                                <option value="3rd Semester">3rd Semester</option>
+                                <option value="4th Semester">4th Semester</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fee Structure -->
+            <div class="bg-white shadow rounded-lg">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-medium text-gray-900">Fee Structure</h2>
+                </div>
+                <div class="px-6 py-4 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Admission Fee (PKR) *</label>
+                            <input type="number" name="admission_fee" value="25000" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Tuition Fee (PKR) *</label>
+                            <input type="number" name="tuition_fee" value="75000" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Security Deposit (PKR) *</label>
+                            <input type="number" name="security_deposit" value="10000" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Other Charges (PKR) *</label>
+                            <input type="number" name="other_charges" value="5000" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800">
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-xl">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-semibold text-gray-800">Total Amount:</span>
+                            <span id="total-amount" class="text-2xl font-bold text-indigo-600">PKR 115,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Details -->
+            <div class="bg-white shadow rounded-lg">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-medium text-gray-900">Payment Details</h2>
+                </div>
+                <div class="px-6 py-4 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Due Date *</label>
+                            <input type="date" name="due_date" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-800">Payment Method</label>
+                            <select name="payment_method" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-800">
+                                <option value="">Select Payment Method</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Cheque">Cheque</option>
+                                <option value="Online Payment">Online Payment</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-800">Bank Details</label>
+                        <div class="bg-gray-50 p-4 rounded-xl">
+                            <p class="text-sm text-gray-600"><strong>Bank:</strong> Allied Bank Limited</p>
+                            <p class="text-sm text-gray-600"><strong>Account Title:</strong> ITHM College</p>
+                            <p class="text-sm text-gray-600"><strong>Account Number:</strong> 1234567890123456</p>
+                            <p class="text-sm text-gray-600"><strong>IBAN:</strong> PK36ABPA0000001234567890123456</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-end space-x-4">
+                <button type="button" onclick="saveVoucher()" class="px-8 py-4 border-2 border-gray-300 rounded-xl text-base font-semibold text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 shadow-sm hover:shadow-md">
+                    Save Draft
+                </button>
+                <button type="submit" class="px-8 py-4 border-2 border-transparent rounded-xl text-base font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+                    Generate Voucher
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        // Initialize form
+        document.addEventListener('DOMContentLoaded', function() {
+            loadVoucherData();
+            calculateTotal();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Calculate total when fee amounts change
+            const feeInputs = document.querySelectorAll('input[name="admission_fee"], input[name="tuition_fee"], input[name="security_deposit"], input[name="other_charges"]');
+            feeInputs.forEach(input => {
+                input.addEventListener('input', calculateTotal);
+            });
+
+            // Set default due date to 30 days from now
+            const dueDateInput = document.querySelector('input[name="due_date"]');
+            const today = new Date();
+            const dueDate = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
+            dueDateInput.value = dueDate.toISOString().split('T')[0];
+        }
+
+        function calculateTotal() {
+            const admissionFee = parseFloat(document.querySelector('input[name="admission_fee"]').value) || 0;
+            const tuitionFee = parseFloat(document.querySelector('input[name="tuition_fee"]').value) || 0;
+            const securityDeposit = parseFloat(document.querySelector('input[name="security_deposit"]').value) || 0;
+            const otherCharges = parseFloat(document.querySelector('input[name="other_charges"]').value) || 0;
+            
+            const total = admissionFee + tuitionFee + securityDeposit + otherCharges;
+            document.getElementById('total-amount').textContent = `PKR ${total.toLocaleString()}`;
+        }
+
+        function loadVoucherData() {
+            // Load existing voucher data if available
+            const urlParams = new URLSearchParams(window.location.search);
+            const voucherId = urlParams.get('id');
+            
+            if (voucherId) {
+                document.getElementById('voucher-id').textContent = voucherId;
+            }
+        }
+
+        function saveVoucher() {
+            const formData = new FormData(document.getElementById('voucherForm'));
+            const data = Object.fromEntries(formData);
+            
+            // Save to localStorage
+            localStorage.setItem('voucherDraft', JSON.stringify(data));
+            
+            showNotification('Voucher saved as draft', 'success');
+        }
+
+        function generateVoucherPDF() {
+            // Check if jsPDF is available
+            if (typeof window.jspdf === 'undefined') {
+                alert('PDF library not loaded. Please refresh the page and try again.');
+                return;
+            }
+            
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+            
+                // Add header
+                doc.setFontSize(20);
+                doc.text('FEE VOUCHER', 20, 20);
+                doc.setFontSize(12);
+                doc.text('Institute of Tourism and Hospitality Management', 20, 30);
+                doc.text('123 Gulberg III, Lahore, Pakistan', 20, 35);
+                doc.text('Phone: +92-42-35714001', 20, 40);
+                
+                // Add voucher details
+                const formData = new FormData(document.getElementById('voucherForm'));
+                const data = Object.fromEntries(formData);
+                
+                let y = 60;
+                
+                // Voucher ID and Date
+                doc.setFontSize(14);
+                doc.text(`Voucher ID: ${document.getElementById('voucher-id').textContent}`, 20, y);
+                y += 10;
+                doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, y);
+                y += 20;
+                
+                // Student Information
+                doc.setFontSize(16);
+                doc.text('STUDENT INFORMATION', 20, y);
+                y += 10;
+                
+                doc.setFontSize(12);
+                doc.text(`Student Name: ${data.student_name || ''}`, 20, y);
+                y += 8;
+                doc.text(`Roll Number: ${data.roll_number || ''}`, 20, y);
+                y += 8;
+                doc.text(`Course: ${data.course || ''}`, 20, y);
+                y += 8;
+                doc.text(`Semester: ${data.semester || ''}`, 20, y);
+                y += 15;
+                
+                // Fee Structure
+                doc.setFontSize(16);
+                doc.text('FEE STRUCTURE', 20, y);
+                y += 10;
+                
+                doc.setFontSize(12);
+                doc.text(`Admission Fee: PKR ${parseFloat(data.admission_fee || 0).toLocaleString()}`, 20, y);
+                y += 8;
+                doc.text(`Tuition Fee: PKR ${parseFloat(data.tuition_fee || 0).toLocaleString()}`, 20, y);
+                y += 8;
+                doc.text(`Security Deposit: PKR ${parseFloat(data.security_deposit || 0).toLocaleString()}`, 20, y);
+                y += 8;
+                doc.text(`Other Charges: PKR ${parseFloat(data.other_charges || 0).toLocaleString()}`, 20, y);
+                y += 10;
+                
+                // Total
+                doc.setFontSize(14);
+                const total = parseFloat(data.admission_fee || 0) + parseFloat(data.tuition_fee || 0) + 
+                             parseFloat(data.security_deposit || 0) + parseFloat(data.other_charges || 0);
+                doc.text(`TOTAL AMOUNT: PKR ${total.toLocaleString()}`, 20, y);
+                y += 15;
+                
+                // Payment Details
+                doc.setFontSize(16);
+                doc.text('PAYMENT DETAILS', 20, y);
+                y += 10;
+                
+                doc.setFontSize(12);
+                doc.text(`Due Date: ${data.due_date || ''}`, 20, y);
+                y += 8;
+                doc.text(`Payment Method: ${data.payment_method || 'Not specified'}`, 20, y);
+                y += 15;
+                
+                // Bank Details
+                doc.setFontSize(16);
+                doc.text('BANK DETAILS', 20, y);
+                y += 10;
+                
+                doc.setFontSize(12);
+                doc.text('Bank: Allied Bank Limited', 20, y);
+                y += 8;
+                doc.text('Account Title: ITHM College', 20, y);
+                y += 8;
+                doc.text('Account Number: 1234567890123456', 20, y);
+                y += 8;
+                doc.text('IBAN: PK36ABPA0000001234567890123456', 20, y);
+                y += 20;
+                
+                // Footer
+                doc.setFontSize(10);
+                doc.text('This voucher is valid for 30 days from the date of issue.', 20, y);
+                y += 8;
+                doc.text('Please bring this voucher when making payment.', 20, y);
+                y += 8;
+                doc.text('For any queries, contact: accounts@ithm.edu.pk', 20, y);
+                
+                // Save the PDF
+                doc.save('fee-voucher.pdf');
+                
+                showNotification('Fee voucher PDF generated successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Error generating PDF: ' + error.message);
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('voucherForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            // Show loading state
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Generating...';
+            submitBtn.disabled = true;
+            
+            // Simulate voucher generation
+            setTimeout(() => {
+                // Update status
+                document.getElementById('voucher-status').textContent = 'Generated';
+                document.getElementById('voucher-status').className = 'text-green-600';
+                
+                // Generate PDF
+                generateVoucherPDF();
+                
+                // Reset button
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                
+                // Show success message
+                showSuccessMessage();
+            }, 2000);
+        });
+        
+        // Show success message
+        function showSuccessMessage() {
+            const successModal = document.createElement('div');
+            successModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            successModal.innerHTML = `
+                <div class="bg-white rounded-2xl p-8 max-w-md mx-4 shadow-2xl transform transition-all duration-300 scale-0" id="success-modal">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Voucher Generated!</h3>
+                        <p class="text-gray-600 mb-6">Fee voucher has been generated and PDF downloaded.</p>
+                        <div class="space-y-2 text-sm text-gray-500 mb-6">
+                            <p>• Voucher ID: ${document.getElementById('voucher-id').textContent}</p>
+                            <p>• Total Amount: ${document.getElementById('total-amount').textContent}</p>
+                            <p>• Status: Generated</p>
+                        </div>
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(successModal);
+            
+            // Animate modal
+            setTimeout(() => {
+                const modal = document.getElementById('success-modal');
+                if (modal) {
+                    modal.classList.remove('scale-0');
+                    modal.classList.add('scale-100');
+                }
+            }, 100);
+        }
+    </script>
+</body>
+</html>

@@ -144,14 +144,23 @@
         // Quick action functions
         function manageStudents() {
             showNotification('Opening student management...', 'info');
+            setTimeout(() => {
+                showNotification('Student management system would open here', 'success');
+            }, 1000);
         }
 
         function courseManagement() {
             showNotification('Opening course management...', 'info');
+            setTimeout(() => {
+                showNotification('Course management system would open here', 'success');
+            }, 1000);
         }
 
         function academicReports() {
-            showNotification('Loading academic reports...', 'info');
+            showNotification('Generating academic reports...', 'info');
+            setTimeout(() => {
+                showNotification('Academic reports generated successfully', 'success');
+            }, 1000);
         }
 
         // Initialize dashboard

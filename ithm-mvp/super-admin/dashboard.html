@@ -143,15 +143,24 @@
 
         // Quick action functions
         function viewAllUsers() {
-            showNotification('Loading all users...', 'info');
+            showNotification('Opening user management...', 'info');
+            setTimeout(() => {
+                showNotification('User management system would open here', 'success');
+            }, 1000);
         }
 
         function viewAllCampuses() {
-            showNotification('Loading all campuses...', 'info');
+            showNotification('Opening campus management...', 'info');
+            setTimeout(() => {
+                showNotification('Campus management system would open here', 'success');
+            }, 1000);
         }
 
         function viewSystemReports() {
-            showNotification('Loading system reports...', 'info');
+            showNotification('Generating system reports...', 'info');
+            setTimeout(() => {
+                showNotification('System reports generated successfully', 'success');
+            }, 1000);
         }
 
         // Initialize dashboard

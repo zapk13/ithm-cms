@@ -147,15 +147,27 @@
 
         // Quick action functions
         function viewApplications() {
-            showNotification('Loading applications...', 'info');
+            showNotification('Opening applications management...', 'info');
+            // Simulate opening applications page
+            setTimeout(() => {
+                window.open('admission-form.html?mode=admin', '_blank');
+            }, 1000);
         }
 
         function viewStudents() {
-            showNotification('Loading students...', 'info');
+            showNotification('Opening student management...', 'info');
+            // Simulate opening students page
+            setTimeout(() => {
+                showNotification('Student management system would open here', 'success');
+            }, 1000);
         }
 
         function viewPayments() {
-            showNotification('Loading payments...', 'info');
+            showNotification('Opening payment management...', 'info');
+            // Simulate opening payments page
+            setTimeout(() => {
+                showNotification('Payment management system would open here', 'success');
+            }, 1000);
         }
 
         // Initialize dashboard
