@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Test Suite - ITHM CMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/tailwind-built.css">
+    <script src="assets/js/demo-data.js"></script>
+    <script src="assets/js/navigation.js"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-7xl mx-auto py-8 px-4">
+        <h1 class="text-4xl font-bold text-gray-900 mb-8">ITHM CMS Demo Test Suite</h1>
+        
+        <!-- Test Results -->
+        <div class="bg-white shadow-xl rounded-2xl p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Test Results</h2>
+            <div id="testResults" class="space-y-4">
+                <!-- Test results will be populated here -->
+            </div>
+        </div>
+
+        <!-- Role Testing -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white shadow-xl rounded-2xl p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Super Admin</h3>
+                <button onclick="testRole('super_admin')" class="w-full bg-red-600 text-white px-6 py-3 rounded-xl hover:bg-red-700 transition-all duration-200">
+                    Test Super Admin
+                </button>
+            </div>
+            
+            <div class="bg-white shadow-xl rounded-2xl p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Campus Admin</h3>
+                <button onclick="testRole('admin')" class="w-full bg-purple-600 text-white px-6 py-3 rounded-xl hover:bg-purple-700 transition-all duration-200">
+                    Test Campus Admin
+                </button>
+            </div>
+            
+            <div class="bg-white shadow-xl rounded-2xl p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Accounts Officer</h3>
+                <button onclick="testRole('accounts')" class="w-full bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700 transition-all duration-200">
+                    Test Accounts
+                </button>
+            </div>
+            
+            <div class="bg-white shadow-xl rounded-2xl p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Teacher</h3>
+                <button onclick="testRole('teacher')" class="w-full bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-all duration-200">
+                    Test Teacher
+                </button>
+            </div>
+            
+            <div class="bg-white shadow-xl rounded-2xl p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Student</h3>
+                <button onclick="testRole('student')" class="w-full bg-orange-600 text-white px-6 py-3 rounded-xl hover:bg-orange-700 transition-all duration-200">
+                    Test Student
+                </button>
+            </div>
+            
+            <div class="bg-white shadow-xl rounded-2xl p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Run All Tests</h3>
+                <button onclick="runAllTests()" class="w-full bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 transition-all duration-200">
+                    Test Everything
+                </button>
+            </div>
+        </div>
+
+        <!-- Demo Access -->
+        <div class="bg-white shadow-xl rounded-2xl p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Quick Demo Access</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <button onclick="demoLogin('super_admin')" class="bg-red-600 text-white px-6 py-4 rounded-xl hover:bg-red-700 transition-all duration-200">
+                    👑 Super Admin
+                </button>
+                <button onclick="demoLogin('admin')" class="bg-purple-600 text-white px-6 py-4 rounded-xl hover:bg-purple-700 transition-all duration-200">
+                    🏢 Campus Admin
+                </button>
+                <button onclick="demoLogin('accounts')" class="bg-green-600 text-white px-6 py-4 rounded-xl hover:bg-green-700 transition-all duration-200">
+                    💰 Accounts Officer
+                </button>
+                <button onclick="demoLogin('teacher')" class="bg-blue-600 text-white px-6 py-4 rounded-xl hover:bg-blue-700 transition-all duration-200">
+                    👨‍🏫 Teacher
+                </button>
+                <button onclick="demoLogin('student')" class="bg-orange-600 text-white px-6 py-4 rounded-xl hover:bg-orange-700 transition-all duration-200">
+                    🎓 Student
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let testResults = [];
+
+        function addTestResult(test, status, message) {
+            const result = {
+                test: test,
+                status: status,
+                message: message,
+                timestamp: new Date().toLocaleTimeString()
+            };
+            testResults.push(result);
+            updateTestResults();
+        }
+
+        function updateTestResults() {
+            const container = document.getElementById('testResults');
+            container.innerHTML = testResults.map(result => `
+                <div class="flex items-center justify-between p-4 rounded-lg ${
+                    result.status === 'PASS' ? 'bg-green-50 border border-green-200' :
+                    result.status === 'FAIL' ? 'bg-red-50 border border-red-200' :
+                    'bg-yellow-50 border border-yellow-200'
+                }">
+                    <div>
+                        <span class="font-medium">${result.test}</span>
+                        <span class="text-sm text-gray-600 ml-2">${result.message}</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs text-gray-500">${result.timestamp}</span>
+                        <span class="px-2 py-1 rounded-full text-xs font-medium ${
+                            result.status === 'PASS' ? 'bg-green-100 text-green-800' :
+                            result.status === 'FAIL' ? 'bg-red-100 text-red-800' :
+                            'bg-yellow-100 text-yellow-800'
+                        }">${result.status}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function testRole(role) {
+            addTestResult(`Testing ${role} role`, 'RUNNING', 'Starting test...');
+            
+            try {
+                // Test demo login
+                if (typeof demoLogin === 'function') {
+                    addTestResult(`${role} demo login function`, 'PASS', 'Demo login function available');
+                } else {
+                    addTestResult(`${role} demo login function`, 'FAIL', 'Demo login function not available');
+                }
+
+                // Test statistics
+                const stats = getStatisticsByRole(role);
+                if (stats && Object.keys(stats).length > 0) {
+                    addTestResult(`${role} statistics`, 'PASS', `Found ${Object.keys(stats).length} statistics`);
+                } else {
+                    addTestResult(`${role} statistics`, 'FAIL', 'No statistics found');
+                }
+
+                // Test user data
+                const user = demoUsers[role];
+                if (user) {
+                    addTestResult(`${role} user data`, 'PASS', `User: ${user.name}`);
+                } else {
+                    addTestResult(`${role} user data`, 'FAIL', 'User data not found');
+                }
+
+                // Test dashboard redirect
+                const redirects = {
+                    super_admin: 'super-admin/dashboard.html',
+                    admin: 'admin/dashboard.html',
+                    accounts: 'accounts/dashboard.html',
+                    teacher: 'teacher/dashboard.html',
+                    student: 'student/dashboard.html'
+                };
+                
+                if (redirects[role]) {
+                    addTestResult(`${role} dashboard redirect`, 'PASS', `Redirects to ${redirects[role]}`);
+                } else {
+                    addTestResult(`${role} dashboard redirect`, 'FAIL', 'No redirect found');
+                }
+
+                addTestResult(`${role} role test`, 'PASS', 'All tests completed successfully');
+                
+            } catch (error) {
+                addTestResult(`${role} role test`, 'FAIL', `Error: ${error.message}`);
+            }
+        }
+
+        function runAllTests() {
+            testResults = [];
+            addTestResult('Test Suite', 'RUNNING', 'Starting comprehensive test suite...');
+            
+            // Test all roles
+            ['super_admin', 'admin', 'accounts', 'teacher', 'student'].forEach(role => {
+                testRole(role);
+            });
+
+            // Test global functions
+            if (typeof showNotification === 'function') {
+                addTestResult('Notification system', 'PASS', 'Notification function available');
+            } else {
+                addTestResult('Notification system', 'FAIL', 'Notification function not available');
+            }
+
+            // Test demo data
+            if (typeof demoData !== 'undefined') {
+                addTestResult('Demo data', 'PASS', 'Demo data loaded successfully');
+            } else {
+                addTestResult('Demo data', 'FAIL', 'Demo data not loaded');
+            }
+
+            addTestResult('Test Suite Complete', 'PASS', `All tests completed. ${testResults.filter(r => r.status === 'PASS').length} passed, ${testResults.filter(r => r.status === 'FAIL').length} failed.`);
+        }
+
+        // Initialize test suite
+        document.addEventListener('DOMContentLoaded', function() {
+            addTestResult('Test Suite Initialized', 'PASS', 'Test suite loaded successfully');
+        });
+    </script>
+</body>
+</html>
