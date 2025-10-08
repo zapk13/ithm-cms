@@ -145,21 +145,21 @@
         function generateVoucher() {
             showNotification('Opening fee voucher generator...', 'info');
             setTimeout(() => {
-                window.open('fee-voucher.html', '_blank');
+                window.location.href = 'fee-voucher.html';
             }, 1000);
         }
 
         function verifyPayments() {
             showNotification('Opening payment verification...', 'info');
             setTimeout(() => {
-                showNotification('Payment verification system would open here', 'success');
+                window.location.href = 'payment-verification.html';
             }, 1000);
         }
 
         function viewFinancialReports() {
             showNotification('Loading financial reports...', 'info');
             setTimeout(() => {
-                showNotification('Financial reports system would open here', 'success');
+                window.location.href = 'financial-reports.html';
             }, 1000);
         }
 

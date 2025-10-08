@@ -148,25 +148,22 @@
         // Quick action functions
         function viewApplications() {
             showNotification('Opening applications management...', 'info');
-            // Simulate opening applications page
             setTimeout(() => {
-                window.open('admission-form.html?mode=admin', '_blank');
+                window.location.href = 'admission-form.html?mode=admin';
             }, 1000);
         }
 
         function viewStudents() {
             showNotification('Opening student management...', 'info');
-            // Simulate opening students page
             setTimeout(() => {
-                showNotification('Student management system would open here', 'success');
+                window.location.href = 'student-management.html';
             }, 1000);
         }
 
         function viewPayments() {
             showNotification('Opening payment management...', 'info');
-            // Simulate opening payments page
             setTimeout(() => {
-                showNotification('Payment management system would open here', 'success');
+                window.location.href = 'payment-management.html';
             }, 1000);
         }
 

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Management - ITHM CMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/tailwind-built.css">
+    <script src="assets/js/demo-data.js"></script>
+    <script src="assets/js/navigation.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-indigo-600">ITHM CMS</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="history.back()" class="text-sm text-gray-500 hover:text-gray-700">← Back</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-900">Course Management</h1>
+            <p class="text-xl text-gray-600 mt-2">Manage courses and academic programs</p>
+        </div>
+
+        <!-- Course List -->
+        <div class="bg-white shadow-xl rounded-2xl p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Available Courses</h2>
+                <button onclick="addCourse()" class="bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 transition-all duration-200">
+                    Add New Course
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-gray-50 p-6 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Hotel Management</h3>
+                    <p class="text-sm text-gray-600 mb-4">2 Years • PKR 190,000</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500">Code: HM-2024</span>
+                        <button onclick="editCourse('1')" class="text-indigo-600 hover:text-indigo-900 text-sm">Edit</button>
+                    </div>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Tourism Management</h3>
+                    <p class="text-sm text-gray-600 mb-4">2 Years • PKR 155,000</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500">Code: TM-2024</span>
+                        <button onclick="editCourse('2')" class="text-indigo-600 hover:text-indigo-900 text-sm">Edit</button>
+                    </div>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Culinary Arts</h3>
+                    <p class="text-sm text-gray-600 mb-4">18 Months • PKR 232,000</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500">Code: CA-2024</span>
+                        <button onclick="editCourse('3')" class="text-indigo-600 hover:text-indigo-900 text-sm">Edit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function addCourse() {
+            showNotification('Opening add course form...', 'info');
+            setTimeout(() => {
+                showNotification('Add course form would open here', 'success');
+            }, 1000);
+        }
+
+        function editCourse(id) {
+            showNotification(`Editing course ${id}...`, 'info');
+            setTimeout(() => {
+                showNotification('Course edit form would open here', 'success');
+            }, 1000);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Course Management page loaded');
+        });
+    </script>
+</body>
+</html>

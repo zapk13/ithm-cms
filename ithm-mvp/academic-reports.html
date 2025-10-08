@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Reports - ITHM CMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/tailwind-built.css">
+    <script src="assets/js/demo-data.js"></script>
+    <script src="assets/js/navigation.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-indigo-600">ITHM CMS</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="history.back()" class="text-sm text-gray-500 hover:text-gray-700">← Back</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-900">Academic Reports</h1>
+            <p class="text-xl text-gray-600 mt-2">Generate and view academic performance reports</p>
+        </div>
+
+        <!-- Report Options -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Student Performance</h3>
+                <p class="text-sm text-gray-600 mb-4">Generate individual student performance reports</p>
+                <button onclick="generateStudentReport()" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700">
+                    Generate Report
+                </button>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Class Attendance</h3>
+                <p class="text-sm text-gray-600 mb-4">View attendance statistics and trends</p>
+                <button onclick="generateAttendanceReport()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700">
+                    Generate Report
+                </button>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Grade Summary</h3>
+                <p class="text-sm text-gray-600 mb-4">Academic performance summary by course</p>
+                <button onclick="generateGradeReport()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700">
+                    Generate Report
+                </button>
+            </div>
+        </div>
+
+        <!-- Recent Reports -->
+        <div class="bg-white shadow-xl rounded-2xl p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Recent Reports</h2>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                    <div>
+                        <h4 class="font-medium text-gray-900">Student Performance Report - Q1 2024</h4>
+                        <p class="text-sm text-gray-600">Generated on 2024-01-15</p>
+                    </div>
+                    <button onclick="downloadReport('1')" class="text-indigo-600 hover:text-indigo-900">Download</button>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                    <div>
+                        <h4 class="font-medium text-gray-900">Attendance Summary - January 2024</h4>
+                        <p class="text-sm text-gray-600">Generated on 2024-02-01</p>
+                    </div>
+                    <button onclick="downloadReport('2')" class="text-indigo-600 hover:text-indigo-900">Download</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function generateStudentReport() {
+            showNotification('Generating student performance report...', 'info');
+            setTimeout(() => {
+                showNotification('Student performance report generated successfully', 'success');
+            }, 2000);
+        }
+
+        function generateAttendanceReport() {
+            showNotification('Generating attendance report...', 'info');
+            setTimeout(() => {
+                showNotification('Attendance report generated successfully', 'success');
+            }, 2000);
+        }
+
+        function generateGradeReport() {
+            showNotification('Generating grade summary report...', 'info');
+            setTimeout(() => {
+                showNotification('Grade summary report generated successfully', 'success');
+            }, 2000);
+        }
+
+        function downloadReport(id) {
+            showNotification(`Downloading report ${id}...`, 'info');
+            setTimeout(() => {
+                showNotification('Report downloaded successfully', 'success');
+            }, 1000);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Academic Reports page loaded');
+        });
+    </script>
+</body>
+</html>
