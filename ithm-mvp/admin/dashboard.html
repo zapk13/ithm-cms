@@ -105,15 +105,18 @@
         <!-- Quick Actions -->
         <div class="bg-white shadow-xl rounded-2xl p-8 mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-6">Quick Actions</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <button onclick="viewApplications()" class="bg-blue-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <button onclick="viewApplications()" class="bg-blue-600 text-white px-6 py-4 rounded-xl text-lg font-semibold hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
                     View All Applications
                 </button>
-                <button onclick="viewStudents()" class="bg-green-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-green-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+                <button onclick="viewStudents()" class="bg-green-600 text-white px-6 py-4 rounded-xl text-lg font-semibold hover:bg-green-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
                     View All Students
                 </button>
-                <button onclick="viewPayments()" class="bg-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+                <button onclick="viewPayments()" class="bg-purple-600 text-white px-6 py-4 rounded-xl text-lg font-semibold hover:bg-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
                     View Payments
+                </button>
+                <button onclick="accessAdmissionForm()" class="bg-orange-600 text-white px-6 py-4 rounded-xl text-lg font-semibold hover:bg-orange-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+                    Admission Form
                 </button>
             </div>
         </div>
@@ -172,6 +175,13 @@
             showNotification('Opening payment management...', 'info');
             setTimeout(() => {
                 window.location.href = '../payment-management.html';
+            }, 1000);
+        }
+        
+        function accessAdmissionForm() {
+            showNotification('Opening admission form...', 'info');
+            setTimeout(() => {
+                window.location.href = '../admission-form.html';
             }, 1000);
         }
 
