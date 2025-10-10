@@ -28,6 +28,7 @@
     <!-- <link rel="stylesheet" href="assets/css/tailwind-built.css"> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.min.js"></script>
     <script src="assets/js/demo-data.js"></script>
     <script src="assets/js/navigation.js"></script>
 </head>
@@ -120,6 +121,9 @@
                     </button>
                     <button onclick="testSimplePDF()" class="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-purple-700 transition-all duration-200">
                         Test PDF
+                    </button>
+                    <button onclick="generateHTMLPDF()" class="bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-orange-700 transition-all duration-200">
+                        HTML PDF
                     </button>
                     <button onclick="saveForm()" class="bg-green-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-green-700 transition-all duration-200 shadow-lg hover:shadow-xl">
                         Save Form
@@ -535,23 +539,34 @@
         function generatePDF() {
             console.log('Starting PDF generation...');
             
-            // Check if jsPDF is available
-            if (typeof window.jspdf === 'undefined') {
-                console.error('jsPDF library not loaded');
-                // Try alternative approach
-                if (typeof window.jsPDF !== 'undefined') {
-                    console.log('Using alternative jsPDF reference');
-                    return generatePDFAlternative();
-                }
+            // Try multiple ways to access jsPDF
+            let jsPDF = null;
+            let doc = null;
+            
+            // Method 1: Try window.jspdf
+            if (typeof window.jspdf !== 'undefined') {
+                console.log('Using window.jspdf');
+                jsPDF = window.jspdf.jsPDF;
+            }
+            // Method 2: Try window.jsPDF
+            else if (typeof window.jsPDF !== 'undefined') {
+                console.log('Using window.jsPDF');
+                jsPDF = window.jsPDF;
+            }
+            // Method 3: Try global jsPDF
+            else if (typeof jsPDF !== 'undefined') {
+                console.log('Using global jsPDF');
+                jsPDF = window.jsPDF;
+            }
+            else {
+                console.error('jsPDF library not found');
                 alert('PDF library not loaded. Please refresh the page and try again.');
                 return;
             }
             
             try {
-                console.log('jsPDF library found, creating PDF...');
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                
+                console.log('Creating PDF document...');
+                doc = new jsPDF();
                 console.log('PDF document created successfully');
             
                 // Add title
@@ -567,94 +582,47 @@
                 
                 let y = 50;
                 
-                // Add passport photo if available
-                const photoInput = document.getElementById('passport-photo');
-                console.log('Photo input found:', photoInput);
+                // Add basic form data first
+                addFormDataToPDF(doc, data, y);
                 
+                // Try to add photo if available
+                const photoInput = document.getElementById('passport-photo');
                 if (photoInput && photoInput.files && photoInput.files[0]) {
-                    console.log('Photo file found:', photoInput.files[0]);
-                    showNotification('Processing photo for PDF...', 'info');
-                    
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        console.log('Photo file read successfully');
-                        try {
-                            const img = new Image();
-                            img.onload = function() {
-                                console.log('Image loaded successfully');
-                                // Calculate dimensions to fit in a 2x2 inch space
-                                const maxWidth = 60;
-                                const maxHeight = 60;
-                                let imgWidth = img.width;
-                                let imgHeight = img.height;
-                                
-                                // Scale image to fit
-                                if (imgWidth > maxWidth || imgHeight > maxHeight) {
-                                    const ratio = Math.min(maxWidth / imgWidth, maxHeight / imgHeight);
-                                    imgWidth *= ratio;
-                                    imgHeight *= ratio;
-                                }
-                                
-                                // Position photo on the right side
-                                const photoX = 140;
-                                const photoY = y;
-                                
-                                // Add the image to PDF
-                                doc.addImage(e.target.result, 'JPEG', photoX, photoY, imgWidth, imgHeight);
-                                console.log('Image added to PDF');
-                                
-                                // Add photo label
-                                doc.setFontSize(10);
-                                doc.text('Passport Photo:', photoX, photoY + imgHeight + 5);
-                                
-                                // Continue with form data
-                                addFormDataToPDF(doc, data, y);
-                                
-                                // Save the PDF
-                                console.log('Saving PDF...');
+                    console.log('Photo file found, attempting to add to PDF...');
+                    try {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            try {
+                                const img = new Image();
+                                img.onload = function() {
+                                    // Add the image to PDF
+                                    doc.addImage(e.target.result, 'JPEG', 140, 50, 60, 60);
+                                    console.log('Image added to PDF');
+                                    
+                                    // Save the PDF
+                                    doc.save('admission-application.pdf');
+                                    showNotification('PDF generated successfully with photo!', 'success');
+                                };
+                                img.src = e.target.result;
+                            } catch (error) {
+                                console.error('Error adding image to PDF:', error);
+                                // Save without image
                                 doc.save('admission-application.pdf');
-                                showNotification('PDF generated successfully with photo!', 'success');
-                                console.log('PDF saved successfully');
-                            };
-                            img.onerror = function() {
-                                console.error('Error loading image for PDF');
-                                showNotification('Error loading photo, generating PDF without photo', 'warning');
-                                // Continue without image
-                                addFormDataToPDF(doc, data, y);
-                                doc.save('admission-application.pdf');
-                            };
-                            img.src = e.target.result;
-                        } catch (error) {
-                            console.error('Error processing image:', error);
-                            showNotification('Error processing photo, generating PDF without photo', 'warning');
-                            // Continue without image
-                            addFormDataToPDF(doc, data, y);
-                            doc.save('admission-application.pdf');
-                        }
-                    };
-                    reader.onerror = function() {
-                        console.error('Error reading photo file');
-                        showNotification('Error reading photo file, generating PDF without photo', 'warning');
-                        // Continue without image
-                        addFormDataToPDF(doc, data, y);
+                                showNotification('PDF generated without photo due to image error', 'warning');
+                            }
+                        };
+                        reader.readAsDataURL(photoInput.files[0]);
+                    } catch (error) {
+                        console.error('Error processing photo:', error);
+                        // Save without image
                         doc.save('admission-application.pdf');
-                    };
-                    reader.readAsDataURL(photoInput.files[0]);
+                        showNotification('PDF generated without photo', 'warning');
+                    }
                 } else {
-                    console.log('No photo uploaded');
-                    // No photo uploaded, add placeholder text
-                    doc.setFontSize(10);
-                    doc.text('Passport Photo: Not uploaded', 140, y);
-                    doc.text('(Please upload photo for complete PDF)', 140, y + 5);
-                    
-                    // Continue with form data
-                    addFormDataToPDF(doc, data, y);
-                    
+                    console.log('No photo uploaded, saving PDF without photo');
                     // Save the PDF
-                    console.log('Saving PDF without photo...');
                     doc.save('admission-application.pdf');
-                    showNotification('PDF generated without photo. Please upload a photo for complete PDF.', 'warning');
-                    console.log('PDF saved successfully without photo');
+                    showNotification('PDF generated successfully!', 'success');
                 }
                 
             } catch (error) {
@@ -966,13 +934,19 @@
         function testSimplePDF() {
             console.log('Testing simple PDF generation...');
             
-            if (typeof window.jspdf === 'undefined') {
+            // Try multiple ways to access jsPDF
+            let jsPDF = null;
+            
+            if (typeof window.jspdf !== 'undefined') {
+                jsPDF = window.jspdf.jsPDF;
+            } else if (typeof window.jsPDF !== 'undefined') {
+                jsPDF = window.jsPDF;
+            } else {
                 alert('jsPDF library not loaded!');
                 return;
             }
             
             try {
-                const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
                 
                 doc.setFontSize(20);
@@ -987,6 +961,86 @@
             } catch (error) {
                 console.error('Error generating test PDF:', error);
                 alert('Error generating test PDF: ' + error.message);
+            }
+        }
+        
+        // Alternative HTML-to-PDF method
+        function generateHTMLPDF() {
+            console.log('Using HTML-to-PDF method...');
+            
+            try {
+                // Get form data
+                const formData = new FormData(document.getElementById('admissionForm'));
+                const data = Object.fromEntries(formData);
+                
+                // Create HTML content
+                const htmlContent = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Admission Application Form</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; margin: 20px; }
+                            .header { text-align: center; margin-bottom: 30px; }
+                            .section { margin-bottom: 20px; }
+                            .field { margin-bottom: 10px; }
+                            .label { font-weight: bold; }
+                            .photo { float: right; width: 100px; height: 100px; border: 1px solid #ccc; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="header">
+                            <h1>Admission Application Form</h1>
+                            <h2>Institute of Tourism and Hospitality Management</h2>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Personal Information</h3>
+                            <div class="field"><span class="label">Name:</span> ${data.full_name || ''}</div>
+                            <div class="field"><span class="label">CNIC:</span> ${data.cnic || ''}</div>
+                            <div class="field"><span class="label">Date of Birth:</span> ${data.date_of_birth || ''}</div>
+                            <div class="field"><span class="label">Gender:</span> ${data.gender || ''}</div>
+                            <div class="field"><span class="label">Phone:</span> ${data.phone || ''}</div>
+                            <div class="field"><span class="label">Email:</span> ${data.email || ''}</div>
+                            <div class="field"><span class="label">Address:</span> ${data.address || ''}</div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Guardian Information</h3>
+                            <div class="field"><span class="label">Guardian Name:</span> ${data.guardian_name || ''}</div>
+                            <div class="field"><span class="label">Relation:</span> ${data.guardian_relation || ''}</div>
+                            <div class="field"><span class="label">Phone:</span> ${data.guardian_phone || ''}</div>
+                            <div class="field"><span class="label">Occupation:</span> ${data.guardian_occupation || ''}</div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Academic Information</h3>
+                            <div class="field"><span class="label">Matric Marks:</span> ${data.matric_marks || ''}/${data.matric_total || ''}</div>
+                            <div class="field"><span class="label">Intermediate Marks:</span> ${data.intermediate_marks || ''}/${data.intermediate_total || ''}</div>
+                        </div>
+                        
+                        <div style="clear: both;"></div>
+                        <div style="margin-top: 20px; text-align: center; font-size: 12px; color: #666;">
+                            Generated on: ${new Date().toLocaleString()}
+                        </div>
+                    </body>
+                    </html>
+                `;
+                
+                // Create a new window with the HTML content
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(htmlContent);
+                printWindow.document.close();
+                
+                // Wait for content to load, then print
+                printWindow.onload = function() {
+                    printWindow.print();
+                    showNotification('PDF generation initiated via print dialog!', 'success');
+                };
+                
+            } catch (error) {
+                console.error('Error in HTML PDF generation:', error);
+                alert('Error generating PDF: ' + error.message);
             }
         }
         
