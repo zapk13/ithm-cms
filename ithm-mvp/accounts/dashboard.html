@@ -128,15 +128,27 @@
             switch(type) {
                 case 'outstanding':
                     showNotification('Opening outstanding amounts...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../student-financial-info.html';
+                    }, 1000);
                     break;
                 case 'collection':
                     showNotification('Opening monthly collection...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../financial-reports.html';
+                    }, 1000);
                     break;
                 case 'overdue':
                     showNotification('Opening overdue payments...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../student-financial-info.html';
+                    }, 1000);
                     break;
                 case 'today':
                     showNotification('Opening today\'s collection...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../payment-management.html';
+                    }, 1000);
                     break;
             }
         }
@@ -145,21 +157,21 @@
         function generateVoucher() {
             showNotification('Opening fee voucher generator...', 'info');
             setTimeout(() => {
-                window.location.href = 'fee-voucher.html';
+                window.location.href = '../fee-voucher.html';
             }, 1000);
         }
 
         function verifyPayments() {
             showNotification('Opening payment verification...', 'info');
             setTimeout(() => {
-                window.location.href = 'student-financial-info.html';
+                window.location.href = '../student-financial-info.html';
             }, 1000);
         }
 
         function viewFinancialReports() {
             showNotification('Loading financial reports...', 'info');
             setTimeout(() => {
-                window.location.href = 'financial-reports.html';
+                window.location.href = '../financial-reports.html';
             }, 1000);
         }
 

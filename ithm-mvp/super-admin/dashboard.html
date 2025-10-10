@@ -128,15 +128,27 @@
             switch(type) {
                 case 'users':
                     showNotification('Opening all users...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../user-management.html';
+                    }, 1000);
                     break;
                 case 'campuses':
                     showNotification('Opening all campuses...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../campus-management.html';
+                    }, 1000);
                     break;
                 case 'applications':
                     showNotification('Opening all applications...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../applications-management.html';
+                    }, 1000);
                     break;
                 case 'health':
                     showNotification('Opening system health details...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../system-reports.html';
+                    }, 1000);
                     break;
             }
         }
@@ -145,21 +157,21 @@
         function viewAllUsers() {
             showNotification('Opening user management...', 'info');
             setTimeout(() => {
-                window.location.href = 'user-management.html';
+                window.location.href = '../user-management.html';
             }, 1000);
         }
 
         function viewAllCampuses() {
             showNotification('Opening campus management...', 'info');
             setTimeout(() => {
-                window.location.href = 'campus-management.html';
+                window.location.href = '../campus-management.html';
             }, 1000);
         }
 
         function viewSystemReports() {
             showNotification('Generating system reports...', 'info');
             setTimeout(() => {
-                window.location.href = 'system-reports.html';
+                window.location.href = '../system-reports.html';
             }, 1000);
         }
 

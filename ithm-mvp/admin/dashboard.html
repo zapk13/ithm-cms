@@ -128,19 +128,27 @@
             switch(type) {
                 case 'onboarded':
                     showNotification('Opening onboarded students list...', 'info');
-                    // Navigate to students list
+                    setTimeout(() => {
+                        window.location.href = '../student-management.html';
+                    }, 1000);
                     break;
                 case 'pending':
                     showNotification('Opening pending applications...', 'info');
-                    // Navigate to pending applications
+                    setTimeout(() => {
+                        window.location.href = '../applications-management.html';
+                    }, 1000);
                     break;
                 case 'fee_submitted':
                     showNotification('Opening fee submitted records...', 'info');
-                    // Navigate to fee submitted
+                    setTimeout(() => {
+                        window.location.href = '../student-financial-info.html';
+                    }, 1000);
                     break;
                 case 'fee_pending':
                     showNotification('Opening pending fee records...', 'info');
-                    // Navigate to pending fees
+                    setTimeout(() => {
+                        window.location.href = '../student-financial-info.html';
+                    }, 1000);
                     break;
             }
         }
@@ -149,21 +157,21 @@
         function viewApplications() {
             showNotification('Opening applications management...', 'info');
             setTimeout(() => {
-                window.location.href = 'applications-management.html';
+                window.location.href = '../applications-management.html';
             }, 1000);
         }
 
         function viewStudents() {
             showNotification('Opening student management...', 'info');
             setTimeout(() => {
-                window.location.href = 'student-management.html';
+                window.location.href = '../student-management.html';
             }, 1000);
         }
 
         function viewPayments() {
             showNotification('Opening payment management...', 'info');
             setTimeout(() => {
-                window.location.href = 'payment-management.html';
+                window.location.href = '../payment-management.html';
             }, 1000);
         }
 

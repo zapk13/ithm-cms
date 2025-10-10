@@ -128,15 +128,27 @@
             switch(type) {
                 case 'application':
                     showNotification('Opening application details...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../admission-form.html';
+                    }, 1000);
                     break;
                 case 'fee':
                     showNotification('Opening fee details...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../payment-history.html';
+                    }, 1000);
                     break;
                 case 'documents':
                     showNotification('Opening document management...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../document-upload.html';
+                    }, 1000);
                     break;
                 case 'roll':
                     showNotification('Opening student profile...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../admission-form.html';
+                    }, 1000);
                     break;
             }
         }
@@ -145,21 +157,21 @@
         function viewApplicationStatus() {
             showNotification('Opening application status...', 'info');
             setTimeout(() => {
-                window.location.href = 'admission-form.html';
+                window.location.href = '../admission-form.html';
             }, 1000);
         }
 
         function uploadDocuments() {
             showNotification('Opening document upload...', 'info');
             setTimeout(() => {
-                window.location.href = 'document-upload.html';
+                window.location.href = '../document-upload.html';
             }, 1000);
         }
 
         function viewPayments() {
             showNotification('Opening payment history...', 'info');
             setTimeout(() => {
-                window.location.href = 'payment-history.html';
+                window.location.href = '../payment-history.html';
             }, 1000);
         }
 

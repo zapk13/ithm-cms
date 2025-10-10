@@ -128,15 +128,27 @@
             switch(type) {
                 case 'students':
                     showNotification('Opening student list...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../student-management.html';
+                    }, 1000);
                     break;
                 case 'courses':
                     showNotification('Opening course management...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../course-management.html';
+                    }, 1000);
                     break;
                 case 'attendance':
                     showNotification('Opening attendance records...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../academic-reports.html';
+                    }, 1000);
                     break;
                 case 'grades':
                     showNotification('Opening grade submission...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../academic-reports.html';
+                    }, 1000);
                     break;
             }
         }
@@ -145,21 +157,21 @@
         function manageStudents() {
             showNotification('Opening student management...', 'info');
             setTimeout(() => {
-                window.location.href = 'student-management.html';
+                window.location.href = '../student-management.html';
             }, 1000);
         }
 
         function courseManagement() {
             showNotification('Opening course management...', 'info');
             setTimeout(() => {
-                window.location.href = 'course-management.html';
+                window.location.href = '../course-management.html';
             }, 1000);
         }
 
         function academicReports() {
             showNotification('Generating academic reports...', 'info');
             setTimeout(() => {
-                window.location.href = 'academic-reports.html';
+                window.location.href = '../academic-reports.html';
             }, 1000);
         }
 

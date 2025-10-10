@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Reports - ITHM CMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/tailwind-built.css">
+    <script src="assets/js/demo-data.js"></script>
+    <script src="assets/js/navigation.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-indigo-600">ITHM CMS</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="history.back()" class="text-sm text-gray-500 hover:text-gray-700">← Back</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-900">System Reports</h1>
+            <p class="text-xl text-gray-600 mt-2">Generate comprehensive system reports</p>
+        </div>
+
+        <!-- Report Options -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">User Activity Report</h3>
+                <p class="text-sm text-gray-600 mb-4">Track user login and activity patterns</p>
+                <button onclick="generateUserActivityReport()" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700">
+                    Generate Report
+                </button>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">System Performance</h3>
+                <p class="text-sm text-gray-600 mb-4">Monitor system performance metrics</p>
+                <button onclick="generateSystemPerformanceReport()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700">
+                    Generate Report
+                </button>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Audit Log</h3>
+                <p class="text-sm text-gray-600 mb-4">System audit and security logs</p>
+                <button onclick="generateAuditLogReport()" class="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700">
+                    Generate Report
+                </button>
+            </div>
+        </div>
+
+        <!-- System Statistics -->
+        <div class="bg-white shadow-xl rounded-2xl p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">System Statistics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-indigo-600">1,250</div>
+                    <div class="text-sm text-gray-600">Total Users</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-green-600">98.5%</div>
+                    <div class="text-sm text-gray-600">System Uptime</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-yellow-600">45</div>
+                    <div class="text-sm text-gray-600">Active Sessions</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-purple-600">3.2s</div>
+                    <div class="text-sm text-gray-600">Avg Response Time</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function generateUserActivityReport() {
+            showNotification('Generating user activity report...', 'info');
+            setTimeout(() => {
+                showNotification('User activity report generated successfully!', 'success');
+            }, 2000);
+        }
+
+        function generateSystemPerformanceReport() {
+            showNotification('Generating system performance report...', 'info');
+            setTimeout(() => {
+                showNotification('System performance report generated successfully!', 'success');
+            }, 2000);
+        }
+
+        function generateAuditLogReport() {
+            showNotification('Generating audit log report...', 'info');
+            setTimeout(() => {
+                showNotification('Audit log report generated successfully!', 'success');
+            }, 2000);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('System Reports page loaded');
+        });
+    </script>
+</body>
+</html>
