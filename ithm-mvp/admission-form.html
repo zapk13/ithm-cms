@@ -537,98 +537,96 @@
         }
 
         function generatePDF() {
-            console.log('Starting PDF generation...');
+            console.log('=== PDF GENERATION STARTED ===');
             
-            // Try multiple ways to access jsPDF
-            let jsPDF = null;
-            let doc = null;
-            
-            // Method 1: Try window.jspdf
-            if (typeof window.jspdf !== 'undefined') {
-                console.log('Using window.jspdf');
-                jsPDF = window.jspdf.jsPDF;
-            }
-            // Method 2: Try window.jsPDF
-            else if (typeof window.jsPDF !== 'undefined') {
-                console.log('Using window.jsPDF');
-                jsPDF = window.jsPDF;
-            }
-            // Method 3: Try global jsPDF
-            else if (typeof jsPDF !== 'undefined') {
-                console.log('Using global jsPDF');
-                jsPDF = window.jsPDF;
-            }
-            else {
-                console.error('jsPDF library not found');
-                alert('PDF library not loaded. Please refresh the page and try again.');
-                return;
-            }
-            
+            // Simple approach - just create a basic PDF
             try {
+                // Check if jsPDF is available
+                if (typeof window.jspdf === 'undefined' && typeof window.jsPDF === 'undefined') {
+                    alert('PDF library not loaded. Trying alternative method...');
+                    generateHTMLPDF();
+                    return;
+                }
+                
+                // Use whichever jsPDF is available
+                let jsPDF = window.jspdf ? window.jspdf.jsPDF : window.jsPDF;
+                
                 console.log('Creating PDF document...');
-                doc = new jsPDF();
-                console.log('PDF document created successfully');
-            
+                const doc = new jsPDF();
+                
                 // Add title
                 doc.setFontSize(20);
                 doc.text('Admission Application Form', 20, 20);
                 doc.setFontSize(12);
                 doc.text('Institute of Tourism and Hospitality Management', 20, 30);
                 
-                // Add form data
+                // Get form data
                 const formData = new FormData(document.getElementById('admissionForm'));
                 const data = Object.fromEntries(formData);
-                console.log('Form data collected:', data);
                 
                 let y = 50;
                 
-                // Add basic form data first
-                addFormDataToPDF(doc, data, y);
+                // Add personal information
+                doc.setFontSize(14);
+                doc.text('Personal Information:', 20, y);
+                y += 10;
                 
-                // Try to add photo if available
-                const photoInput = document.getElementById('passport-photo');
-                if (photoInput && photoInput.files && photoInput.files[0]) {
-                    console.log('Photo file found, attempting to add to PDF...');
-                    try {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            try {
-                                const img = new Image();
-                                img.onload = function() {
-                                    // Add the image to PDF
-                                    doc.addImage(e.target.result, 'JPEG', 140, 50, 60, 60);
-                                    console.log('Image added to PDF');
-                                    
-                                    // Save the PDF
-                                    doc.save('admission-application.pdf');
-                                    showNotification('PDF generated successfully with photo!', 'success');
-                                };
-                                img.src = e.target.result;
-                            } catch (error) {
-                                console.error('Error adding image to PDF:', error);
-                                // Save without image
-                                doc.save('admission-application.pdf');
-                                showNotification('PDF generated without photo due to image error', 'warning');
-                            }
-                        };
-                        reader.readAsDataURL(photoInput.files[0]);
-                    } catch (error) {
-                        console.error('Error processing photo:', error);
-                        // Save without image
-                        doc.save('admission-application.pdf');
-                        showNotification('PDF generated without photo', 'warning');
-                    }
-                } else {
-                    console.log('No photo uploaded, saving PDF without photo');
-                    // Save the PDF
-                    doc.save('admission-application.pdf');
-                    showNotification('PDF generated successfully!', 'success');
-                }
+                doc.setFontSize(10);
+                doc.text(`Name: ${data.full_name || 'Not provided'}`, 20, y);
+                y += 5;
+                doc.text(`CNIC: ${data.cnic || 'Not provided'}`, 20, y);
+                y += 5;
+                doc.text(`Email: ${data.email || 'Not provided'}`, 20, y);
+                y += 5;
+                doc.text(`Phone: ${data.phone || 'Not provided'}`, 20, y);
+                y += 5;
+                doc.text(`Date of Birth: ${data.date_of_birth || 'Not provided'}`, 20, y);
+                y += 10;
+                
+                // Add guardian information
+                doc.setFontSize(14);
+                doc.text('Guardian Information:', 20, y);
+                y += 10;
+                
+                doc.setFontSize(10);
+                doc.text(`Guardian Name: ${data.guardian_name || 'Not provided'}`, 20, y);
+                y += 5;
+                doc.text(`Relation: ${data.guardian_relation || 'Not provided'}`, 20, y);
+                y += 5;
+                doc.text(`Guardian Phone: ${data.guardian_phone || 'Not provided'}`, 20, y);
+                y += 10;
+                
+                // Add academic information
+                doc.setFontSize(14);
+                doc.text('Academic Information:', 20, y);
+                y += 10;
+                
+                doc.setFontSize(10);
+                doc.text(`Matric Marks: ${data.matric_marks || 'Not provided'}/${data.matric_total || 'Not provided'}`, 20, y);
+                y += 5;
+                doc.text(`Intermediate Marks: ${data.intermediate_marks || 'Not provided'}/${data.intermediate_total || 'Not provided'}`, 20, y);
+                y += 10;
+                
+                // Add photo placeholder
+                doc.setFontSize(10);
+                doc.text('Passport Photo: [Photo would be here]', 140, 50);
+                
+                // Add timestamp
+                doc.setFontSize(8);
+                doc.text(`Generated on: ${new Date().toLocaleString()}`, 20, y + 20);
+                
+                // Save the PDF
+                console.log('Saving PDF...');
+                doc.save('admission-application.pdf');
+                
+                console.log('=== PDF SAVED SUCCESSFULLY ===');
+                alert('PDF generated and downloaded successfully!');
                 
             } catch (error) {
-                console.error('Error in generatePDF function:', error);
-                showNotification('Error generating PDF: ' + error.message, 'error');
+                console.error('PDF Generation Error:', error);
                 alert('Error generating PDF: ' + error.message);
+                console.log('Trying HTML PDF method...');
+                generateHTMLPDF();
             }
         }
         
@@ -966,12 +964,14 @@
         
         // Alternative HTML-to-PDF method
         function generateHTMLPDF() {
-            console.log('Using HTML-to-PDF method...');
+            console.log('=== HTML PDF METHOD STARTED ===');
             
             try {
                 // Get form data
                 const formData = new FormData(document.getElementById('admissionForm'));
                 const data = Object.fromEntries(formData);
+                
+                console.log('Form data collected:', data);
                 
                 // Create HTML content
                 const htmlContent = `
@@ -981,9 +981,9 @@
                         <title>Admission Application Form</title>
                         <style>
                             body { font-family: Arial, sans-serif; margin: 20px; }
-                            .header { text-align: center; margin-bottom: 30px; }
+                            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; }
                             .section { margin-bottom: 20px; }
-                            .field { margin-bottom: 10px; }
+                            .field { margin-bottom: 8px; }
                             .label { font-weight: bold; }
                             .photo { float: right; width: 100px; height: 100px; border: 1px solid #ccc; }
                         </style>
@@ -996,27 +996,27 @@
                         
                         <div class="section">
                             <h3>Personal Information</h3>
-                            <div class="field"><span class="label">Name:</span> ${data.full_name || ''}</div>
-                            <div class="field"><span class="label">CNIC:</span> ${data.cnic || ''}</div>
-                            <div class="field"><span class="label">Date of Birth:</span> ${data.date_of_birth || ''}</div>
-                            <div class="field"><span class="label">Gender:</span> ${data.gender || ''}</div>
-                            <div class="field"><span class="label">Phone:</span> ${data.phone || ''}</div>
-                            <div class="field"><span class="label">Email:</span> ${data.email || ''}</div>
-                            <div class="field"><span class="label">Address:</span> ${data.address || ''}</div>
+                            <div class="field"><span class="label">Name:</span> ${data.full_name || 'Not provided'}</div>
+                            <div class="field"><span class="label">CNIC:</span> ${data.cnic || 'Not provided'}</div>
+                            <div class="field"><span class="label">Date of Birth:</span> ${data.date_of_birth || 'Not provided'}</div>
+                            <div class="field"><span class="label">Gender:</span> ${data.gender || 'Not provided'}</div>
+                            <div class="field"><span class="label">Phone:</span> ${data.phone || 'Not provided'}</div>
+                            <div class="field"><span class="label">Email:</span> ${data.email || 'Not provided'}</div>
+                            <div class="field"><span class="label">Address:</span> ${data.address || 'Not provided'}</div>
                         </div>
                         
                         <div class="section">
                             <h3>Guardian Information</h3>
-                            <div class="field"><span class="label">Guardian Name:</span> ${data.guardian_name || ''}</div>
-                            <div class="field"><span class="label">Relation:</span> ${data.guardian_relation || ''}</div>
-                            <div class="field"><span class="label">Phone:</span> ${data.guardian_phone || ''}</div>
-                            <div class="field"><span class="label">Occupation:</span> ${data.guardian_occupation || ''}</div>
+                            <div class="field"><span class="label">Guardian Name:</span> ${data.guardian_name || 'Not provided'}</div>
+                            <div class="field"><span class="label">Relation:</span> ${data.guardian_relation || 'Not provided'}</div>
+                            <div class="field"><span class="label">Phone:</span> ${data.guardian_phone || 'Not provided'}</div>
+                            <div class="field"><span class="label">Occupation:</span> ${data.guardian_occupation || 'Not provided'}</div>
                         </div>
                         
                         <div class="section">
                             <h3>Academic Information</h3>
-                            <div class="field"><span class="label">Matric Marks:</span> ${data.matric_marks || ''}/${data.matric_total || ''}</div>
-                            <div class="field"><span class="label">Intermediate Marks:</span> ${data.intermediate_marks || ''}/${data.intermediate_total || ''}</div>
+                            <div class="field"><span class="label">Matric Marks:</span> ${data.matric_marks || 'Not provided'}/${data.matric_total || 'Not provided'}</div>
+                            <div class="field"><span class="label">Intermediate Marks:</span> ${data.intermediate_marks || 'Not provided'}/${data.intermediate_total || 'Not provided'}</div>
                         </div>
                         
                         <div style="clear: both;"></div>
@@ -1027,16 +1027,24 @@
                     </html>
                 `;
                 
+                console.log('Opening print window...');
+                
                 // Create a new window with the HTML content
-                const printWindow = window.open('', '_blank');
+                const printWindow = window.open('', '_blank', 'width=800,height=600');
+                if (!printWindow) {
+                    alert('Popup blocked! Please allow popups for this site and try again.');
+                    return;
+                }
+                
                 printWindow.document.write(htmlContent);
                 printWindow.document.close();
                 
                 // Wait for content to load, then print
-                printWindow.onload = function() {
+                setTimeout(() => {
                     printWindow.print();
-                    showNotification('PDF generation initiated via print dialog!', 'success');
-                };
+                    console.log('=== PRINT DIALOG OPENED ===');
+                    alert('Print dialog opened! Use "Save as PDF" to save the document.');
+                }, 1000);
                 
             } catch (error) {
                 console.error('Error in HTML PDF generation:', error);
