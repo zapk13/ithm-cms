@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Financial Information - ITHM CMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/tailwind-built.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="assets/js/demo-data.js"></script>
+    <script src="assets/js/navigation.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-indigo-600">ITHM CMS</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="generateFinancialReport()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        Generate Report
+                    </button>
+                    <button onclick="history.back()" class="text-sm text-gray-500 hover:text-gray-700">← Back</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-900">Student Financial Information</h1>
+            <p class="text-xl text-gray-600 mt-2">View and manage student financial records</p>
+        </div>
+
+        <!-- Student Selection -->
+        <div class="bg-white shadow-xl rounded-2xl p-6 mb-8">
+            <div class="flex items-center space-x-4">
+                <div class="flex-1">
+                    <label for="studentSelect" class="block text-sm font-medium text-gray-700 mb-2">Select Student</label>
+                    <select id="studentSelect" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" onchange="loadStudentFinancialInfo()">
+                        <option value="">-- Select a Student --</option>
+                    </select>
+                </div>
+                <div class="flex-1">
+                    <label for="courseSelect" class="block text-sm font-medium text-gray-700 mb-2">Select Course</label>
+                    <select id="courseSelect" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" onchange="loadStudentFinancialInfo()">
+                        <option value="">-- Select a Course --</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Summary -->
+        <div id="financialSummary" class="hidden">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Total Fee</h3>
+                    <p class="text-3xl font-bold text-indigo-600" id="totalFee">PKR 0</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Paid Amount</h3>
+                    <p class="text-3xl font-bold text-green-600" id="paidAmount">PKR 0</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Outstanding</h3>
+                    <p class="text-3xl font-bold text-red-600" id="outstandingAmount">PKR 0</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Next Due</h3>
+                    <p class="text-3xl font-bold text-yellow-600" id="nextDueAmount">PKR 0</p>
+                </div>
+            </div>
+
+            <!-- Fee Breakdown -->
+            <div class="bg-white shadow-xl rounded-2xl p-8 mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Fee Breakdown</h2>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                        <span class="text-gray-700">Admission Fee</span>
+                        <span class="font-semibold text-gray-900" id="admissionFee">PKR 0</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                        <span class="text-gray-700">Tuition Fee</span>
+                        <span class="font-semibold text-gray-900" id="tuitionFee">PKR 0</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                        <span class="text-gray-700">Security Deposit</span>
+                        <span class="font-semibold text-gray-900" id="securityDeposit">PKR 0</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                        <span class="text-gray-700">Other Charges</span>
+                        <span class="font-semibold text-gray-900" id="otherCharges">PKR 0</span>
+                    </div>
+                    <div class="border-t border-gray-300 pt-4 flex justify-between items-center">
+                        <span class="text-lg font-bold text-gray-900">Total</span>
+                        <span class="text-lg font-bold text-indigo-600" id="totalAmount">PKR 0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment History -->
+            <div class="bg-white shadow-xl rounded-2xl p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Payment History</h2>
+                    <button onclick="generateFeeVoucher()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+                        Generate Fee Voucher
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentHistory" class="bg-white divide-y divide-gray-200">
+                            <!-- Payment history will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let selectedStudent = null;
+        let selectedCourse = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            populateStudentSelect();
+            populateCourseSelect();
+        });
+
+        function populateStudentSelect() {
+            const select = document.getElementById('studentSelect');
+            if (select && typeof demoData !== 'undefined' && demoData.users) {
+                demoData.users.filter(user => user.role === 'student').forEach(student => {
+                    const option = document.createElement('option');
+                    option.value = student.id;
+                    option.textContent = `${student.first_name} ${student.last_name} (${student.email})`;
+                    select.appendChild(option);
+                });
+            }
+        }
+
+        function populateCourseSelect() {
+            const select = document.getElementById('courseSelect');
+            if (select && typeof demoData !== 'undefined' && demoData.courses) {
+                demoData.courses.forEach(course => {
+                    const option = document.createElement('option');
+                    option.value = course.id;
+                    option.textContent = `${course.name} (${course.code})`;
+                    select.appendChild(option);
+                });
+            }
+        }
+
+        function loadStudentFinancialInfo() {
+            const studentId = document.getElementById('studentSelect').value;
+            const courseId = document.getElementById('courseSelect').value;
+
+            if (!studentId || !courseId) {
+                document.getElementById('financialSummary').classList.add('hidden');
+                return;
+            }
+
+            selectedStudent = demoData.users.find(user => user.id == studentId);
+            selectedCourse = demoData.courses.find(course => course.id == courseId);
+
+            if (selectedStudent && selectedCourse) {
+                updateFinancialSummary();
+                updatePaymentHistory();
+                document.getElementById('financialSummary').classList.remove('hidden');
+            }
+        }
+
+        function updateFinancialSummary() {
+            if (!selectedCourse) return;
+
+            const totalFee = selectedCourse.total_fee;
+            const paidAmount = Math.floor(totalFee * 0.6); // Simulate 60% paid
+            const outstanding = totalFee - paidAmount;
+            const nextDue = Math.floor(outstanding * 0.5); // Simulate 50% of outstanding as next due
+
+            document.getElementById('totalFee').textContent = formatCurrency(totalFee);
+            document.getElementById('paidAmount').textContent = formatCurrency(paidAmount);
+            document.getElementById('outstandingAmount').textContent = formatCurrency(outstanding);
+            document.getElementById('nextDueAmount').textContent = formatCurrency(nextDue);
+
+            // Update fee breakdown
+            document.getElementById('admissionFee').textContent = formatCurrency(selectedCourse.admission_fee);
+            document.getElementById('tuitionFee').textContent = formatCurrency(selectedCourse.tuition_fee);
+            document.getElementById('securityDeposit').textContent = formatCurrency(selectedCourse.security_deposit);
+            document.getElementById('otherCharges').textContent = formatCurrency(selectedCourse.other_charges);
+            document.getElementById('totalAmount').textContent = formatCurrency(totalFee);
+        }
+
+        function updatePaymentHistory() {
+            const tbody = document.getElementById('paymentHistory');
+            const payments = [
+                {
+                    date: '2024-01-15',
+                    description: 'Admission Fee',
+                    amount: Math.floor(selectedCourse.admission_fee),
+                    method: 'Bank Transfer',
+                    status: 'Paid'
+                },
+                {
+                    date: '2024-02-01',
+                    description: 'Tuition Fee - Semester 1',
+                    amount: Math.floor(selectedCourse.tuition_fee * 0.3),
+                    method: 'Cash',
+                    status: 'Paid'
+                },
+                {
+                    date: '2024-03-01',
+                    description: 'Security Deposit',
+                    amount: selectedCourse.security_deposit,
+                    method: 'Bank Transfer',
+                    status: 'Pending'
+                }
+            ];
+
+            tbody.innerHTML = payments.map(payment => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${payment.date}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${payment.description}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${formatCurrency(payment.amount)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${payment.method}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${payment.status === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">
+                            ${payment.status}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="viewPayment('${payment.date}')" class="text-indigo-600 hover:text-indigo-900">View</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function generateFeeVoucher() {
+            if (!selectedStudent || !selectedCourse) {
+                showNotification('Please select both a student and course first.', 'warning');
+                return;
+            }
+
+            showNotification('Generating fee voucher...', 'info');
+            setTimeout(() => {
+                window.location.href = `fee-voucher.html?student=${selectedStudent.id}&course=${selectedCourse.id}`;
+            }, 1000);
+        }
+
+        function generateFinancialReport() {
+            if (!selectedStudent || !selectedCourse) {
+                showNotification('Please select both a student and course first.', 'warning');
+                return;
+            }
+
+            showNotification('Generating financial report...', 'info');
+            setTimeout(() => {
+                generateFinancialReportPDF();
+            }, 2000);
+        }
+
+        function generateFinancialReportPDF() {
+            if (typeof window.jspdf === 'undefined') {
+                alert('PDF library not loaded. Please refresh the page and try again.');
+                return;
+            }
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                let y = 20;
+                doc.setFontSize(20);
+                doc.text('Student Financial Report - ITHM CMS', 20, y);
+                y += 10;
+                doc.setFontSize(12);
+                doc.text('Institute of Tourism and Hospitality Management', 20, y);
+                y += 20;
+
+                doc.setFontSize(14);
+                doc.text('Student Information:', 20, y);
+                y += 8;
+                doc.setFontSize(10);
+                doc.text(`Name: ${selectedStudent.first_name} ${selectedStudent.last_name}`, 20, y);
+                y += 5;
+                doc.text(`Email: ${selectedStudent.email}`, 20, y);
+                y += 5;
+                doc.text(`Phone: ${selectedStudent.phone}`, 20, y);
+                y += 10;
+
+                doc.setFontSize(14);
+                doc.text('Course Information:', 20, y);
+                y += 8;
+                doc.setFontSize(10);
+                doc.text(`Course: ${selectedCourse.name}`, 20, y);
+                y += 5;
+                doc.text(`Code: ${selectedCourse.code}`, 20, y);
+                y += 5;
+                doc.text(`Duration: ${selectedCourse.duration}`, 20, y);
+                y += 10;
+
+                doc.setFontSize(14);
+                doc.text('Financial Summary:', 20, y);
+                y += 8;
+                doc.setFontSize(10);
+                doc.text(`Total Fee: ${formatCurrency(selectedCourse.total_fee)}`, 20, y);
+                y += 5;
+                doc.text(`Paid Amount: ${formatCurrency(Math.floor(selectedCourse.total_fee * 0.6))}`, 20, y);
+                y += 5;
+                doc.text(`Outstanding: ${formatCurrency(Math.floor(selectedCourse.total_fee * 0.4))}`, 20, y);
+                y += 20;
+
+                doc.setFontSize(10);
+                doc.text(`Report Generated On: ${new Date().toLocaleDateString()}`, 20, y);
+
+                doc.save(`financial-report-${selectedStudent.first_name}-${selectedCourse.code}.pdf`);
+                showNotification('Financial report PDF generated successfully!', 'success');
+
+            } catch (error) {
+                console.error('Error generating financial report PDF:', error);
+                alert('Error generating PDF: ' + error.message);
+            }
+        }
+
+        function viewPayment(date) {
+            showNotification(`Viewing payment details for ${date}`, 'info');
+        }
+
+        function formatCurrency(amount) {
+            return `PKR ${amount.toLocaleString()}`;
+        }
+    </script>
+</body>
+</html>

@@ -174,6 +174,26 @@
             loadVoucherData();
             calculateTotal();
             setupEventListeners();
+            
+            // Check for URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const studentId = urlParams.get('student');
+            const courseId = urlParams.get('course');
+            
+            if (studentId) {
+                const studentSelect = document.querySelector('select[name="student_id"]');
+                if (studentSelect) {
+                    studentSelect.value = studentId;
+                    loadStudentData();
+                }
+            }
+            if (courseId) {
+                const courseSelect = document.querySelector('select[name="course_id"]');
+                if (courseSelect) {
+                    courseSelect.value = courseId;
+                    loadCourseData();
+                }
+            }
         });
 
         function setupEventListeners() {

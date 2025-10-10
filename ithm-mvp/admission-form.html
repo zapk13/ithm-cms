@@ -31,6 +31,73 @@
     <script src="assets/js/navigation.js"></script>
 </head>
 <body class="bg-gray-50">
+    <script>
+        // Check user role and access permissions
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = JSON.parse(localStorage.getItem('demoUser') || '{}');
+            const urlParams = new URLSearchParams(window.location.search);
+            const mode = urlParams.get('mode');
+            
+            // Check if user has access to admission form
+            if (!currentUser.role || (!['student', 'admin', 'super_admin'].includes(currentUser.role))) {
+                showNotification('Access denied. You do not have permission to access this page.', 'error');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+                return;
+            }
+            
+            // Set form mode based on user role
+            if (currentUser.role === 'admin' || currentUser.role === 'super_admin') {
+                setupAdminMode();
+            } else {
+                setupStudentMode();
+            }
+        });
+        
+        function setupAdminMode() {
+            // Admin can fill form for any student
+            document.title = 'Admission Form - Admin Mode';
+            const header = document.querySelector('header h1');
+            if (header) {
+                header.textContent = 'Admission Form - Admin Mode';
+            }
+            
+            // Add student selection dropdown
+            const form = document.querySelector('form');
+            if (form) {
+                const studentSelect = document.createElement('div');
+                studentSelect.className = 'mb-6';
+                studentSelect.innerHTML = `
+                    <label for="studentSelect" class="block text-sm font-medium text-gray-700 mb-2">Select Student</label>
+                    <select id="studentSelect" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="">-- Select a Student --</option>
+                    </select>
+                `;
+                form.insertBefore(studentSelect, form.firstChild);
+                
+                // Populate student dropdown
+                populateStudentDropdown();
+            }
+        }
+        
+        function setupStudentMode() {
+            // Student fills form for themselves
+            document.title = 'Admission Form - Student Mode';
+        }
+        
+        function populateStudentDropdown() {
+            const select = document.getElementById('studentSelect');
+            if (select && typeof demoData !== 'undefined' && demoData.users) {
+                demoData.users.filter(user => user.role === 'student').forEach(student => {
+                    const option = document.createElement('option');
+                    option.value = student.id;
+                    option.textContent = `${student.first_name} ${student.last_name} (${student.email})`;
+                    select.appendChild(option);
+                });
+            }
+        }
+    </script>
     <!-- Header -->
     <header class="bg-white shadow-sm border-b">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

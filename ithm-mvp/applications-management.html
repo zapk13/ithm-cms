@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applications Management - ITHM CMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/tailwind-built.css">
+    <script src="assets/js/demo-data.js"></script>
+    <script src="assets/js/navigation.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-indigo-600">ITHM CMS</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="history.back()" class="text-sm text-gray-500 hover:text-gray-700">← Back</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-900">Applications Management</h1>
+            <p class="text-xl text-gray-600 mt-2">Review and manage student applications</p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="mb-6">
+            <div class="border-b border-gray-200">
+                <nav class="-mb-px flex space-x-8">
+                    <button onclick="filterApplications('all')" class="filter-tab active py-2 px-1 border-b-2 font-medium text-sm" data-filter="all">
+                        All Applications
+                    </button>
+                    <button onclick="filterApplications('pending')" class="filter-tab py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-filter="pending">
+                        Pending Review
+                    </button>
+                    <button onclick="filterApplications('approved')" class="filter-tab py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-filter="approved">
+                        Approved
+                    </button>
+                    <button onclick="filterApplications('rejected')" class="filter-tab py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-filter="rejected">
+                        Rejected
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Applications List -->
+        <div class="bg-white shadow-xl rounded-2xl p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Student Applications</h2>
+                <div class="flex space-x-4">
+                    <button onclick="exportApplications()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                        Export
+                    </button>
+                    <button onclick="refreshApplications()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+                        Refresh
+                    </button>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Program</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applied Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="applicationsTable" class="bg-white divide-y divide-gray-200">
+                        <!-- Applications will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentFilter = 'all';
+        let applications = [];
+
+        // Sample applications data
+        const sampleApplications = [
+            {
+                id: 1,
+                student_name: 'Ahmed Khan',
+                student_email: 'ahmed.khan@email.com',
+                program: 'Hotel Management',
+                applied_date: '2024-01-15',
+                status: 'pending',
+                documents: ['CNIC', 'Matric Certificate', 'Photo'],
+                cnic: '12345-1234567-1',
+                phone: '+92-300-1234567'
+            },
+            {
+                id: 2,
+                student_name: 'Fatima Ali',
+                student_email: 'fatima.ali@email.com',
+                program: 'Tourism Management',
+                applied_date: '2024-01-20',
+                status: 'approved',
+                documents: ['CNIC', 'FSC Certificate', 'Photo'],
+                cnic: '12345-1234567-2',
+                phone: '+92-300-1234568'
+            },
+            {
+                id: 3,
+                student_name: 'Muhammad Hassan',
+                student_email: 'hassan@email.com',
+                program: 'Culinary Arts',
+                applied_date: '2024-02-01',
+                status: 'rejected',
+                documents: ['CNIC', 'Matric Certificate'],
+                cnic: '12345-1234567-3',
+                phone: '+92-300-1234569'
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            applications = [...sampleApplications];
+            renderApplications();
+        });
+
+        function filterApplications(filter) {
+            currentFilter = filter;
+            
+            // Update tab styles
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active', 'border-indigo-500', 'text-indigo-600');
+                tab.classList.add('border-transparent', 'text-gray-500');
+            });
+            
+            const activeTab = document.querySelector(`[data-filter="${filter}"]`);
+            activeTab.classList.add('active', 'border-indigo-500', 'text-indigo-600');
+            activeTab.classList.remove('border-transparent', 'text-gray-500');
+            
+            renderApplications();
+        }
+
+        function renderApplications() {
+            const tbody = document.getElementById('applicationsTable');
+            let filteredApplications = applications;
+            
+            if (currentFilter !== 'all') {
+                filteredApplications = applications.filter(app => app.status === currentFilter);
+            }
+            
+            tbody.innerHTML = filteredApplications.map(app => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-10 w-10">
+                                <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                                    <span class="text-sm font-medium text-indigo-600">${app.student_name.split(' ').map(n => n[0]).join('')}</span>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">${app.student_name}</div>
+                                <div class="text-sm text-gray-500">${app.student_email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${app.program}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${app.applied_date}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusClass(app.status)}">
+                            ${getStatusText(app.status)}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="viewApplication(${app.id})" class="text-indigo-600 hover:text-indigo-900 mr-3">View</button>
+                        <button onclick="reviewApplication(${app.id})" class="text-green-600 hover:text-green-900 mr-3">Review</button>
+                        <button onclick="generatePDF(${app.id})" class="text-blue-600 hover:text-blue-900">PDF</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function getStatusClass(status) {
+            switch(status) {
+                case 'pending': return 'bg-yellow-100 text-yellow-800';
+                case 'approved': return 'bg-green-100 text-green-800';
+                case 'rejected': return 'bg-red-100 text-red-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+
+        function getStatusText(status) {
+            switch(status) {
+                case 'pending': return 'Pending Review';
+                case 'approved': return 'Approved';
+                case 'rejected': return 'Rejected';
+                default: return 'Unknown';
+            }
+        }
+
+        function viewApplication(id) {
+            const app = applications.find(a => a.id === id);
+            if (app) {
+                showNotification(`Viewing application for ${app.student_name}`, 'info');
+                // Open application detail modal
+                showApplicationModal(app);
+            }
+        }
+
+        function reviewApplication(id) {
+            const app = applications.find(a => a.id === id);
+            if (app) {
+                showNotification(`Opening review for ${app.student_name}`, 'info');
+                // Open review modal
+                showReviewModal(app);
+            }
+        }
+
+        function generatePDF(id) {
+            const app = applications.find(a => a.id === id);
+            if (app) {
+                showNotification(`Generating PDF for ${app.student_name}`, 'info');
+                setTimeout(() => {
+                    showNotification('PDF generated successfully!', 'success');
+                }, 2000);
+            }
+        }
+
+        function showApplicationModal(app) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl p-8 max-w-2xl mx-4 shadow-2xl max-h-96 overflow-y-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-900">Application Details</h3>
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Student Name</label>
+                            <p class="text-gray-900">${app.student_name}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Email</label>
+                            <p class="text-gray-900">${app.student_email}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">CNIC</label>
+                            <p class="text-gray-900">${app.cnic}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Phone</label>
+                            <p class="text-gray-900">${app.phone}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Program</label>
+                            <p class="text-gray-900">${app.program}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Documents</label>
+                            <p class="text-gray-900">${app.documents.join(', ')}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Status</label>
+                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusClass(app.status)}">
+                                ${getStatusText(app.status)}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showReviewModal(app) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl p-8 max-w-md mx-4 shadow-2xl">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-900">Review Application</h3>
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Decision</label>
+                            <select id="reviewDecision" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="pending">Pending Review</option>
+                                <option value="approved">Approve</option>
+                                <option value="rejected">Reject</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Comments</label>
+                            <textarea id="reviewComments" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Add review comments..."></textarea>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                                Cancel
+                            </button>
+                            <button onclick="submitReview(${app.id})" class="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                                Submit Review
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function submitReview(appId) {
+            const decision = document.getElementById('reviewDecision').value;
+            const comments = document.getElementById('reviewComments').value;
+            
+            // Update application status
+            const app = applications.find(a => a.id === appId);
+            if (app) {
+                app.status = decision;
+                app.review_comments = comments;
+                app.reviewed_date = new Date().toISOString().split('T')[0];
+                
+                showNotification(`Application ${decision} successfully`, 'success');
+                renderApplications();
+                
+                // Close modal
+                document.querySelector('.fixed.inset-0').remove();
+            }
+        }
+
+        function exportApplications() {
+            showNotification('Exporting applications...', 'info');
+            setTimeout(() => {
+                showNotification('Applications exported successfully!', 'success');
+            }, 2000);
+        }
+
+        function refreshApplications() {
+            showNotification('Refreshing applications...', 'info');
+            setTimeout(() => {
+                renderApplications();
+                showNotification('Applications refreshed!', 'success');
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
