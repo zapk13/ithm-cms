@@ -27,6 +27,7 @@
     </script>
     <!-- <link rel="stylesheet" href="assets/css/tailwind-built.css"> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
     <script src="assets/js/demo-data.js"></script>
     <script src="assets/js/navigation.js"></script>
 </head>
@@ -116,6 +117,9 @@
                     </button>
                     <button onclick="testPhotoUpload()" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition-all duration-200">
                         Test Photo
+                    </button>
+                    <button onclick="testSimplePDF()" class="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-purple-700 transition-all duration-200">
+                        Test PDF
                     </button>
                     <button onclick="saveForm()" class="bg-green-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-green-700 transition-all duration-200 shadow-lg hover:shadow-xl">
                         Save Form
@@ -529,15 +533,26 @@
         }
 
         function generatePDF() {
+            console.log('Starting PDF generation...');
+            
             // Check if jsPDF is available
             if (typeof window.jspdf === 'undefined') {
+                console.error('jsPDF library not loaded');
+                // Try alternative approach
+                if (typeof window.jsPDF !== 'undefined') {
+                    console.log('Using alternative jsPDF reference');
+                    return generatePDFAlternative();
+                }
                 alert('PDF library not loaded. Please refresh the page and try again.');
                 return;
             }
             
             try {
+                console.log('jsPDF library found, creating PDF...');
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
+                
+                console.log('PDF document created successfully');
             
                 // Add title
                 doc.setFontSize(20);
@@ -548,20 +563,25 @@
                 // Add form data
                 const formData = new FormData(document.getElementById('admissionForm'));
                 const data = Object.fromEntries(formData);
+                console.log('Form data collected:', data);
                 
                 let y = 50;
                 
                 // Add passport photo if available
                 const photoInput = document.getElementById('passport-photo');
+                console.log('Photo input found:', photoInput);
                 
                 if (photoInput && photoInput.files && photoInput.files[0]) {
+                    console.log('Photo file found:', photoInput.files[0]);
                     showNotification('Processing photo for PDF...', 'info');
                     
                     const reader = new FileReader();
                     reader.onload = function(e) {
+                        console.log('Photo file read successfully');
                         try {
                             const img = new Image();
                             img.onload = function() {
+                                console.log('Image loaded successfully');
                                 // Calculate dimensions to fit in a 2x2 inch space
                                 const maxWidth = 60;
                                 const maxHeight = 60;
@@ -581,6 +601,7 @@
                                 
                                 // Add the image to PDF
                                 doc.addImage(e.target.result, 'JPEG', photoX, photoY, imgWidth, imgHeight);
+                                console.log('Image added to PDF');
                                 
                                 // Add photo label
                                 doc.setFontSize(10);
@@ -590,8 +611,10 @@
                                 addFormDataToPDF(doc, data, y);
                                 
                                 // Save the PDF
+                                console.log('Saving PDF...');
                                 doc.save('admission-application.pdf');
                                 showNotification('PDF generated successfully with photo!', 'success');
+                                console.log('PDF saved successfully');
                             };
                             img.onerror = function() {
                                 console.error('Error loading image for PDF');
@@ -618,6 +641,7 @@
                     };
                     reader.readAsDataURL(photoInput.files[0]);
                 } else {
+                    console.log('No photo uploaded');
                     // No photo uploaded, add placeholder text
                     doc.setFontSize(10);
                     doc.text('Passport Photo: Not uploaded', 140, y);
@@ -627,13 +651,16 @@
                     addFormDataToPDF(doc, data, y);
                     
                     // Save the PDF
+                    console.log('Saving PDF without photo...');
                     doc.save('admission-application.pdf');
                     showNotification('PDF generated without photo. Please upload a photo for complete PDF.', 'warning');
+                    console.log('PDF saved successfully without photo');
                 }
                 
             } catch (error) {
                 console.error('Error in generatePDF function:', error);
                 showNotification('Error generating PDF: ' + error.message, 'error');
+                alert('Error generating PDF: ' + error.message);
             }
         }
         
@@ -932,6 +959,83 @@
                 });
             } else {
                 showNotification('No photo uploaded. Please select a photo first.', 'warning');
+            }
+        }
+        
+        // Simple test PDF generation
+        function testSimplePDF() {
+            console.log('Testing simple PDF generation...');
+            
+            if (typeof window.jspdf === 'undefined') {
+                alert('jsPDF library not loaded!');
+                return;
+            }
+            
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                doc.setFontSize(20);
+                doc.text('Test PDF Generation', 20, 20);
+                doc.setFontSize(12);
+                doc.text('This is a test PDF to verify jsPDF is working.', 20, 30);
+                doc.text('Generated at: ' + new Date().toLocaleString(), 20, 40);
+                
+                doc.save('test-pdf.pdf');
+                showNotification('Test PDF generated successfully!', 'success');
+                console.log('Test PDF generated successfully');
+            } catch (error) {
+                console.error('Error generating test PDF:', error);
+                alert('Error generating test PDF: ' + error.message);
+            }
+        }
+        
+        // Alternative PDF generation method
+        function generatePDFAlternative() {
+            console.log('Using alternative PDF generation method...');
+            
+            try {
+                const doc = new window.jsPDF();
+                
+                // Add title
+                doc.setFontSize(20);
+                doc.text('Admission Application Form', 20, 20);
+                doc.setFontSize(12);
+                doc.text('Institute of Tourism and Hospitality Management', 20, 30);
+                
+                // Add form data
+                const formData = new FormData(document.getElementById('admissionForm'));
+                const data = Object.fromEntries(formData);
+                
+                let y = 50;
+                
+                // Add basic form data
+                doc.setFontSize(14);
+                doc.text('Personal Information:', 20, y);
+                y += 10;
+                
+                doc.setFontSize(10);
+                doc.text(`Name: ${data.full_name || ''}`, 20, y);
+                y += 5;
+                doc.text(`CNIC: ${data.cnic || ''}`, 20, y);
+                y += 5;
+                doc.text(`Email: ${data.email || ''}`, 20, y);
+                y += 5;
+                doc.text(`Phone: ${data.phone || ''}`, 20, y);
+                y += 10;
+                
+                // Add photo placeholder
+                doc.setFontSize(10);
+                doc.text('Passport Photo: [Photo would be here]', 140, 50);
+                
+                // Save the PDF
+                doc.save('admission-application.pdf');
+                showNotification('PDF generated successfully (alternative method)!', 'success');
+                console.log('PDF generated successfully using alternative method');
+                
+            } catch (error) {
+                console.error('Error in alternative PDF generation:', error);
+                alert('Error generating PDF: ' + error.message);
             }
         }
         
