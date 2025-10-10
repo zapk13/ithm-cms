@@ -114,6 +114,9 @@
                         </svg>
                         Generate PDF
                     </button>
+                    <button onclick="testPhotoUpload()" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition-all duration-200">
+                        Test Photo
+                    </button>
                     <button onclick="saveForm()" class="bg-green-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-green-700 transition-all duration-200 shadow-lg hover:shadow-xl">
                         Save Form
                     </button>
@@ -430,6 +433,13 @@
                     if (typeof showNotification === 'function') {
                         showNotification('Photo uploaded successfully! It will be included in the PDF.', 'success');
                     }
+                    
+                    // Debug: Log photo info
+                    console.log('Photo uploaded:', {
+                        name: input.files[0].name,
+                        size: input.files[0].size,
+                        type: input.files[0].type
+                    });
                 };
                 reader.readAsDataURL(input.files[0]);
             }
@@ -529,91 +539,101 @@
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
             
-            // Add title
-            doc.setFontSize(20);
-            doc.text('Admission Application Form', 20, 20);
-            doc.setFontSize(12);
-            doc.text('Institute of Tourism and Hospitality Management', 20, 30);
-            
-            // Add form data
-            const formData = new FormData(document.getElementById('admissionForm'));
-            const data = Object.fromEntries(formData);
-            
-            let y = 50;
-            
-            // Add passport photo if available
-            const photoInput = document.getElementById('passport-photo');
-            
-            if (photoInput && photoInput.files && photoInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const img = new Image();
-                        img.onload = function() {
-                            // Calculate dimensions to fit in a 2x2 inch space
-                            const maxWidth = 60;
-                            const maxHeight = 60;
-                            let imgWidth = img.width;
-                            let imgHeight = img.height;
-                            
-                            // Scale image to fit
-                            if (imgWidth > maxWidth || imgHeight > maxHeight) {
-                                const ratio = Math.min(maxWidth / imgWidth, maxHeight / imgHeight);
-                                imgWidth *= ratio;
-                                imgHeight *= ratio;
-                            }
-                            
-                            // Position photo on the right side
-                            const photoX = 140;
-                            const photoY = y;
-                            
-                            // Add the image to PDF
-                            doc.addImage(e.target.result, 'JPEG', photoX, photoY, imgWidth, imgHeight);
-                            
-                            // Add photo label
-                            doc.setFontSize(10);
-                            doc.text('Passport Photo:', photoX, photoY + imgHeight + 5);
-                            
-                            // Continue with form data
-                            addFormDataToPDF(doc, data, y);
-                            
-                            // Save the PDF
-                            doc.save('admission-application.pdf');
-                        };
-                        img.onerror = function() {
+                // Add title
+                doc.setFontSize(20);
+                doc.text('Admission Application Form', 20, 20);
+                doc.setFontSize(12);
+                doc.text('Institute of Tourism and Hospitality Management', 20, 30);
+                
+                // Add form data
+                const formData = new FormData(document.getElementById('admissionForm'));
+                const data = Object.fromEntries(formData);
+                
+                let y = 50;
+                
+                // Add passport photo if available
+                const photoInput = document.getElementById('passport-photo');
+                
+                if (photoInput && photoInput.files && photoInput.files[0]) {
+                    showNotification('Processing photo for PDF...', 'info');
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const img = new Image();
+                            img.onload = function() {
+                                // Calculate dimensions to fit in a 2x2 inch space
+                                const maxWidth = 60;
+                                const maxHeight = 60;
+                                let imgWidth = img.width;
+                                let imgHeight = img.height;
+                                
+                                // Scale image to fit
+                                if (imgWidth > maxWidth || imgHeight > maxHeight) {
+                                    const ratio = Math.min(maxWidth / imgWidth, maxHeight / imgHeight);
+                                    imgWidth *= ratio;
+                                    imgHeight *= ratio;
+                                }
+                                
+                                // Position photo on the right side
+                                const photoX = 140;
+                                const photoY = y;
+                                
+                                // Add the image to PDF
+                                doc.addImage(e.target.result, 'JPEG', photoX, photoY, imgWidth, imgHeight);
+                                
+                                // Add photo label
+                                doc.setFontSize(10);
+                                doc.text('Passport Photo:', photoX, photoY + imgHeight + 5);
+                                
+                                // Continue with form data
+                                addFormDataToPDF(doc, data, y);
+                                
+                                // Save the PDF
+                                doc.save('admission-application.pdf');
+                                showNotification('PDF generated successfully with photo!', 'success');
+                            };
+                            img.onerror = function() {
+                                console.error('Error loading image for PDF');
+                                showNotification('Error loading photo, generating PDF without photo', 'warning');
+                                // Continue without image
+                                addFormDataToPDF(doc, data, y);
+                                doc.save('admission-application.pdf');
+                            };
+                            img.src = e.target.result;
+                        } catch (error) {
+                            console.error('Error processing image:', error);
+                            showNotification('Error processing photo, generating PDF without photo', 'warning');
                             // Continue without image
                             addFormDataToPDF(doc, data, y);
                             doc.save('admission-application.pdf');
-                        };
-                        img.src = e.target.result;
-                    } catch (error) {
+                        }
+                    };
+                    reader.onerror = function() {
+                        console.error('Error reading photo file');
+                        showNotification('Error reading photo file, generating PDF without photo', 'warning');
                         // Continue without image
                         addFormDataToPDF(doc, data, y);
                         doc.save('admission-application.pdf');
-                    }
-                };
-                reader.onerror = function() {
-                    // Continue without image
+                    };
+                    reader.readAsDataURL(photoInput.files[0]);
+                } else {
+                    // No photo uploaded, add placeholder text
+                    doc.setFontSize(10);
+                    doc.text('Passport Photo: Not uploaded', 140, y);
+                    doc.text('(Please upload photo for complete PDF)', 140, y + 5);
+                    
+                    // Continue with form data
                     addFormDataToPDF(doc, data, y);
+                    
+                    // Save the PDF
                     doc.save('admission-application.pdf');
-                };
-                reader.readAsDataURL(photoInput.files[0]);
-            } else {
-                // No photo uploaded, add placeholder text
-                doc.setFontSize(10);
-                doc.text('Passport Photo: Not uploaded', 140, y);
-                doc.text('(Please upload photo for complete PDF)', 140, y + 5);
+                    showNotification('PDF generated without photo. Please upload a photo for complete PDF.', 'warning');
+                }
                 
-                // Continue with form data
-                addFormDataToPDF(doc, data, y);
-                
-                // Save the PDF
-                doc.save('admission-application.pdf');
-            }
-            
             } catch (error) {
                 console.error('Error in generatePDF function:', error);
-                alert('Error generating PDF: ' + error.message);
+                showNotification('Error generating PDF: ' + error.message, 'error');
             }
         }
         
@@ -897,6 +917,23 @@
         
         // Initialize real-time validation
         setupRealTimeValidation();
+        
+        // Test function to check photo upload
+        function testPhotoUpload() {
+            const photoInput = document.getElementById('passport-photo');
+            if (photoInput && photoInput.files && photoInput.files[0]) {
+                const file = photoInput.files[0];
+                showNotification(`Photo detected: ${file.name} (${file.size} bytes, ${file.type})`, 'success');
+                console.log('Photo file details:', {
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    lastModified: file.lastModified
+                });
+            } else {
+                showNotification('No photo uploaded. Please select a photo first.', 'warning');
+            }
+        }
         
         document.getElementById('admissionForm').addEventListener('submit', function(e) {
             e.preventDefault();
