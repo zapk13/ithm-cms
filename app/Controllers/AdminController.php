@@ -473,6 +473,21 @@ class AdminController extends Controller
             $this->json(['error' => 'Invalid request'], 400);
         }
         
+        // Normalize empty numeric fields to 0 so blank inputs are treated as zero
+        $numericFields = [
+            'admission_fee',
+            'tuition_fee',
+            'semester_fee',
+            'monthly_fee',
+            'exam_fee',
+            'other_charges'
+        ];
+        foreach ($numericFields as $field) {
+            if (!isset($_POST[$field]) || $_POST[$field] === '' || $_POST[$field] === null) {
+                $_POST[$field] = 0;
+            }
+        }
+        
         $rules = [
             'course_id' => 'required|exists:courses,id',
             'campus_id' => 'required|exists:campuses,id',
