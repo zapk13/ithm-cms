@@ -1,0 +1,21 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Logs & runtime
+storage/logs/
+storage/uploads/
+
+# Local env/config overrides (keep template/config in repo)
+.env
+
+# Archives / exports
+*.zip
+
+# PHPUnit cache (if any)
+.phpunit.result.cache
+
