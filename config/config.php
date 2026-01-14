@@ -16,3 +16,14 @@ define('ROLE_SYSTEM_ADMIN', 1);
 define('ROLE_MAIN_CAMPUS_ADMIN', 2);
 define('ROLE_SUB_CAMPUS_ADMIN', 3);
 define('ROLE_STUDENT', 4);
+
+// Admission document types used in admin & student flows
+if (!defined('DOCUMENT_TYPES')) {
+    define('DOCUMENT_TYPES', [
+        'photo',
+        'cnic_front',
+        'cnic_back',
+        'matric_certificate',
+        'inter_certificate',
+    ]);
+}

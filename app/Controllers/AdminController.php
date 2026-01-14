@@ -419,16 +419,17 @@ class AdminController extends Controller
      */
     public function feeStructures(): void
     {
+        // Always load campuses and courses for dropdowns
+        $courses = $this->courseModel->getForDropdown();
+        $campuses = $this->campusModel->getForDropdown();
+
+        // Fee structures list may fail on older DB schema – guard it
         try {
             $feeStructures = $this->feeStructureModel->getAllWithDetails();
-            $courses = $this->courseModel->getForDropdown();
-            $campuses = $this->campusModel->getForDropdown();
         } catch (\Throwable $e) {
             // If the underlying tables/columns are missing (older DB schema),
             // fail gracefully and show an empty state instead of a 500 error.
             $feeStructures = [];
-            $courses = [];
-            $campuses = [];
         }
         
         $this->render('admin.fees.structures', [
