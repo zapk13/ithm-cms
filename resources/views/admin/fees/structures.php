@@ -177,6 +177,7 @@ function feeStructuresPage() {
     return {
         showModal: false,
         saving: false,
+        csrfToken: '<?= $_SESSION[CSRF_TOKEN_NAME] ?? '' ?>',
         form: {
             id: null,
             course_id: '', campus_id: '', shift: 'morning', admission_fee: 0, tuition_fee: 0,
@@ -215,7 +216,8 @@ function feeStructuresPage() {
         async saveStructure() {
             this.saving = true;
             try {
-                const result = await window.api.post('<?= BASE_URL ?>/admin/fee-structures', this.form);
+                const payload = { ...this.form, _token: this.csrfToken };
+                const result = await window.api.post('<?= BASE_URL ?>/admin/fee-structures', payload);
                 if (result.success) {
                     showToast(result.message);
                     this.showModal = false;
@@ -235,7 +237,9 @@ function feeStructuresPage() {
             }
             this.saving = true;
             try {
-                const result = await window.api.post(`<?= BASE_URL ?>/admin/fee-structures/${id}/delete`, {});
+                const result = await window.api.post(`<?= BASE_URL ?>/admin/fee-structures/${id}/delete`, {
+                    _token: this.csrfToken
+                });
                 if (result.success) {
                     showToast(result.message);
                     setTimeout(() => location.reload(), 800);

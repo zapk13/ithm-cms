@@ -500,15 +500,16 @@ class AdminController extends Controller
             'is_active' => 1
         ];
         
-        // If ID is provided, update existing structure
+        // If ID is provided, try to update existing structure; otherwise create/update by unique key
         if ($this->input('id')) {
             $existing = $this->feeStructureModel->find((int)$this->input('id'));
             if ($existing) {
                 $this->feeStructureModel->update((int)$this->input('id'), $data);
                 $id = (int)$this->input('id');
             } else {
-                $this->json(['error' => 'Fee structure not found'], 404);
-                return;
+                // If the referenced record no longer exists (e.g. different DB),
+                // fall back to createOrUpdate based on course/campus/shift.
+                $id = $this->feeStructureModel->createOrUpdate($data);
             }
         } else {
             $id = $this->feeStructureModel->createOrUpdate($data);
