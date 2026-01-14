@@ -419,9 +419,17 @@ class AdminController extends Controller
      */
     public function feeStructures(): void
     {
-        $feeStructures = $this->feeStructureModel->getAllWithDetails();
-        $courses = $this->courseModel->getForDropdown();
-        $campuses = $this->campusModel->getForDropdown();
+        try {
+            $feeStructures = $this->feeStructureModel->getAllWithDetails();
+            $courses = $this->courseModel->getForDropdown();
+            $campuses = $this->campusModel->getForDropdown();
+        } catch (\Throwable $e) {
+            // If the underlying tables/columns are missing (older DB schema),
+            // fail gracefully and show an empty state instead of a 500 error.
+            $feeStructures = [];
+            $courses = [];
+            $campuses = [];
+        }
         
         $this->render('admin.fees.structures', [
             'title' => 'Fee Structures',
@@ -1607,16 +1615,29 @@ class AdminController extends Controller
     {
         $user = $this->user();
         
-        $stats = [
-            'terms' => $this->examTermModel->count(),
-            'scheduled' => $this->examModel->count("status = 'scheduled'"),
-            'completed' => $this->examModel->count("status = 'completed'"),
-            'registrations' => $this->examRegistrationModel->count()
-        ];
-        
-        $recentExams = array_slice($this->examModel->all(), 0, 10);
-        $terms = $this->examTermModel->all();
-        $courses = $this->courseModel->getActive();
+        try {
+            $stats = [
+                'terms' => $this->examTermModel->count(),
+                'scheduled' => $this->examModel->count("status = 'scheduled'"),
+                'completed' => $this->examModel->count("status = 'completed'"),
+                'registrations' => $this->examRegistrationModel->count()
+            ];
+            
+            $recentExams = array_slice($this->examModel->all(), 0, 10);
+            $terms = $this->examTermModel->all();
+            $courses = $this->courseModel->getActive();
+        } catch (\Throwable $e) {
+            // Handle missing exams/terms tables on older databases
+            $stats = [
+                'terms' => 0,
+                'scheduled' => 0,
+                'completed' => 0,
+                'registrations' => 0
+            ];
+            $recentExams = [];
+            $terms = [];
+            $courses = [];
+        }
         
         $this->render('admin.exams.index', [
             'title' => 'Exams Management',
@@ -1715,14 +1736,25 @@ class AdminController extends Controller
     {
         $user = $this->user();
         
-        $stats = [
-            'total_results' => $this->courseResultModel->count(),
-            'published' => $this->courseResultModel->count("status IN ('passed','failed')"),
-            'in_progress' => $this->courseResultModel->count("status = 'in_progress'"),
-            'failed' => $this->courseResultModel->count("status = 'failed'")
-        ];
-        
-        $recentResults = array_slice($this->courseResultModel->all(), 0, 10);
+        try {
+            $stats = [
+                'total_results' => $this->courseResultModel->count(),
+                'published' => $this->courseResultModel->count("status IN ('passed','failed')"),
+                'in_progress' => $this->courseResultModel->count("status = 'in_progress'"),
+                'failed' => $this->courseResultModel->count("status = 'failed'")
+            ];
+            
+            $recentResults = array_slice($this->courseResultModel->all(), 0, 10);
+        } catch (\Throwable $e) {
+            // Handle missing course_results table on older databases
+            $stats = [
+                'total_results' => 0,
+                'published' => 0,
+                'in_progress' => 0,
+                'failed' => 0
+            ];
+            $recentResults = [];
+        }
         
         $this->render('admin.results.index', [
             'title' => 'Results Management',
@@ -1739,15 +1771,27 @@ class AdminController extends Controller
     {
         $user = $this->user();
         
-        $stats = [
-            'sessions' => $this->attendanceSessionModel->count(),
-            'completed' => $this->attendanceSessionModel->count("status = 'completed'"),
-            'scheduled' => $this->attendanceSessionModel->count("status = 'scheduled'"),
-            'records' => $this->attendanceRecordModel->count()
-        ];
-        
-        $recentSessions = array_slice($this->attendanceSessionModel->all(), 0, 10);
-        $courses = $this->courseModel->getActive();
+        try {
+            $stats = [
+                'sessions' => $this->attendanceSessionModel->count(),
+                'completed' => $this->attendanceSessionModel->count("status = 'completed'"),
+                'scheduled' => $this->attendanceSessionModel->count("status = 'scheduled'"),
+                'records' => $this->attendanceRecordModel->count()
+            ];
+            
+            $recentSessions = array_slice($this->attendanceSessionModel->all(), 0, 10);
+            $courses = $this->courseModel->getActive();
+        } catch (\Throwable $e) {
+            // Handle missing attendance tables on older databases
+            $stats = [
+                'sessions' => 0,
+                'completed' => 0,
+                'scheduled' => 0,
+                'records' => 0
+            ];
+            $recentSessions = [];
+            $courses = [];
+        }
         
         $this->render('admin.attendance.index', [
             'title' => 'Class Attendance',
