@@ -500,19 +500,27 @@ class AdminController extends Controller
             'is_active' => 1
         ];
         
-        // If ID is provided, try to update existing structure; otherwise create/update by unique key
-        if ($this->input('id')) {
-            $existing = $this->feeStructureModel->find((int)$this->input('id'));
-            if ($existing) {
-                $this->feeStructureModel->update((int)$this->input('id'), $data);
-                $id = (int)$this->input('id');
+        try {
+            // If ID is provided, try to update existing structure; otherwise create/update by unique key
+            if ($this->input('id')) {
+                $existing = $this->feeStructureModel->find((int)$this->input('id'));
+                if ($existing) {
+                    $this->feeStructureModel->update((int)$this->input('id'), $data);
+                    $id = (int)$this->input('id');
+                } else {
+                    // If the referenced record no longer exists (e.g. different DB),
+                    // fall back to createOrUpdate based on course/campus/shift.
+                    $id = $this->feeStructureModel->createOrUpdate($data);
+                }
             } else {
-                // If the referenced record no longer exists (e.g. different DB),
-                // fall back to createOrUpdate based on course/campus/shift.
                 $id = $this->feeStructureModel->createOrUpdate($data);
             }
-        } else {
-            $id = $this->feeStructureModel->createOrUpdate($data);
+        } catch (\Throwable $e) {
+            $message = APP_ENV === 'production'
+                ? 'Failed to save fee structure. Please contact IT support.'
+                : ('Failed to save fee structure: ' . $e->getMessage());
+            
+            $this->json(['error' => $message], 500);
         }
         
         $this->json(['success' => true, 'id' => $id, 'message' => 'Fee structure saved successfully']);
