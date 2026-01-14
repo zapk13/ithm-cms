@@ -7,6 +7,10 @@
 // Start output buffering
 ob_start();
 
+// Load environment (.env) first so config/database can read secrets
+require_once __DIR__ . '/../config/env.php';
+loadEnv(__DIR__ . '/../.env');
+
 // Load configuration
 require_once __DIR__ . '/../config/config.php';
 
@@ -62,6 +66,17 @@ spl_autoload_register(function ($class) {
         require $file;
     }
 });
+
+// Harden session cookies before starting the session
+$secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'domain' => '',
+    'secure' => $secure,
+    'httponly' => true,
+    'samesite' => 'Lax',
+]);
 
 // Start session
 session_start();

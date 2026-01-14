@@ -1,5 +1,7 @@
 <?php
-define('BASE_URL', 'https://cms.ithm.edu.pk');
+// Application URL (prefer APP_URL from environment, fall back to production URL)
+$baseUrl = getenv('APP_URL') ?: 'https://cms.ithm.edu.pk';
+define('BASE_URL', rtrim($baseUrl, '/'));
 define('ITEMS_PER_PAGE', 20);
 define('UPLOADS_PATH', __DIR__ . '/../storage/uploads');
 define('LOGS_PATH', __DIR__ . '/../storage/logs');
